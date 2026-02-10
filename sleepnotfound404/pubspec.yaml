@@ -1,0 +1,39 @@
+name: sleepnotfound404
+description: AI-powered career guidance platform for secondary students.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.10.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase 2026 Core
+  firebase_core: ^4.4.0
+  firebase_auth: ^6.1.4
+  cloud_firestore: ^6.1.2
+  firebase_storage: ^13.0.6
+
+  # AI & Environment
+  google_generative_ai: ^0.4.7
+  flutter_dotenv: ^6.0.0      # Added for API key security
+
+  # UI & Utilities
+  file_picker: ^10.3.10
+  provider: ^6.1.2
+  lottie: ^3.3.2
+  flutter_spinkit: ^5.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0       # Updated to 2026 stable version
+
+flutter:
+  uses-material-design: true
+
+  # CRITICAL: You must register the .env file here to use it in code
+  assets:
+    - .env
