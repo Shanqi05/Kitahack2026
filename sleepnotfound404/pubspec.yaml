@@ -18,7 +18,7 @@ dependencies:
 
   # AI & Environment
   google_generative_ai: ^0.4.7
-  flutter_dotenv: ^6.0.0      # Added for API key security
+  flutter_dotenv: ^6.0.0
 
   # UI & Utilities
   file_picker: ^10.3.10
@@ -29,11 +29,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0       # Updated to 2026 stable version
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
 
-  # CRITICAL: You must register the .env file here to use it in code
+  # Assets for app
   assets:
     - .env
+    - assets/images/
+    - assets/animations/
