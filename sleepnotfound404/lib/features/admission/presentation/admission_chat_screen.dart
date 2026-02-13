@@ -77,10 +77,19 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
     _scrollToBottom();
 
     try {
-      // Get response from Gemini (or fallback if not initialized)
-      final response = _gemini != null
-          ? await _gemini!.sendMessage(text)
-          : _getFallbackResponse(text);
+      String response;
+
+      // Try to get response from Gemini if available
+      if (_gemini != null) {
+        response = await _gemini!.sendMessage(text);
+      } else {
+        // If GeminiService is not available, use a simple fallback
+        response =
+            "I'm having trouble connecting to the AI service right now. "
+            "However, based on your interests in ${widget.interests.join(", ")}, "
+            "I can suggest exploring courses and universities that align with these fields. "
+            "Would you like recommendations on specific programs?";
+      }
 
       setState(() {
         _messages.add(
@@ -93,7 +102,7 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
       setState(() {
         _messages.add(
           Message(
-            text: 'Sorry, I encountered an error. Please try again.',
+            text: 'Sorry, I encountered an error: $e',
             isUser: false,
             timestamp: DateTime.now(),
           ),
@@ -103,22 +112,6 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
     }
 
     _scrollToBottom();
-  }
-
-  String _getFallbackResponse(String message) {
-    final lowerMessage = message.toLowerCase();
-
-    if (lowerMessage.contains('course') || lowerMessage.contains('program')) {
-      return "Great question! Based on your interests, I recommend exploring programs in ${widget.interests.join(", ")}. These fields have excellent job prospects and align well with modern career paths.";
-    } else if (lowerMessage.contains('career') ||
-        lowerMessage.contains('job')) {
-      return "The tech industry offers many exciting career paths! You could consider roles like Software Developer, Data Analyst, UX Designer, or Product Manager. Each has unique challenges and rewards.";
-    } else if (lowerMessage.contains('university') ||
-        lowerMessage.contains('uni')) {
-      return "When choosing a university, consider factors like: program reputation, internship opportunities, campus culture, and post-graduation employment rates. I recommend researching programs that align with your interests.";
-    } else {
-      return "That's an interesting question! I'm here to help guide you through your career exploration. Feel free to ask about specific fields, universities, or career paths.";
-    }
   }
 
   void _scrollToBottom() {
