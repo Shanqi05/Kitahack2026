@@ -1,0 +1,117 @@
+[
+  {
+    "id": "CS",
+    "name": "Computer Science",
+    "field": "IT",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "DS",
+    "name": "Data Science",
+    "field": "IT",
+    "level": ["Degree","Foundation"]
+  },
+  {
+    "id": "IT",
+    "name": "Information Technology",
+    "field": "IT",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "MECH",
+    "name": "Mechanical Engineering",
+    "field": "Engineering",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "ELEC",
+    "name": "Electrical Engineering",
+    "field": "Engineering",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "CIVIL",
+    "name": "Civil Engineering",
+    "field": "Engineering",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "ARCH",
+    "name": "Architecture",
+    "field": "Engineering",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "ART",
+    "name": "Fine Arts",
+    "field": "Arts",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "DESIGN",
+    "name": "Graphic Design",
+    "field": "Arts",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "HBP",
+    "name": "Hospitality & Business Professional",
+    "field": "HBP",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "COMM",
+    "name": "Communication Studies",
+    "field": "Communication",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "PSY",
+    "name": "Psychology",
+    "field": "Psychology",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "DENT",
+    "name": "Dentistry",
+    "field": "Health Science",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "MED",
+    "name": "Medicine",
+    "field": "Health Science",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "NURS",
+    "name": "Nursing",
+    "field": "Health Science",
+    "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "PHAR",
+    "name": "Pharmacy",
+    "field": "Health Science",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "BIO",
+    "name": "Biotechnology",
+    "field": "Science",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "CHEM",
+    "name": "Chemistry",
+    "field": "Science",
+    "level": ["Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "PHYS",
+    "name": "Physics",
+    "field": "Science",
+    "level": ["Degree","Foundation","A-Level"]
+  }
+
+]

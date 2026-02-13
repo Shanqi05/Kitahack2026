@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'firebase_options.dart'; // Ensure you ran 'flutterfire configure'
-import 'package:sleepnotfound404/features/home/home_screen.dart';
+import 'core/theme/app_theme.dart';
+import 'features/home/presentation/home_screen.dart';
+import 'services/firebase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Load .env and Firebase
-  await dotenv.load(fileName: ".env");
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
-  runApp(const SleepNotFoundApp());
+
+  // Initialize Firebase
+  await FirebaseService().initialize();
+
+  runApp(const SleepNotFound404App());
 }
 
-class SleepNotFoundApp extends StatelessWidget {
-  const SleepNotFoundApp({super.key});
+class SleepNotFound404App extends StatelessWidget {
+  const SleepNotFound404App({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'SleepNotFound404',
       debugShowCheckedModeBanner: false,
-      title: 'Career Path Finder',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF673AB7), // Deep Purple
-        fontFamily: 'Roboto',
-      ),
+      theme: AppTheme.lightTheme,
       home: const HomeScreen(),
     );
   }

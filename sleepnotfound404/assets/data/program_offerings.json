@@ -1,0 +1,182 @@
+[
+  {
+    "university_id": "UM",
+    "course_id": "CS",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 92,
+    "annual_fee": 8000,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "UM",
+    "course_id": "IT",
+    "level": "Diploma",
+    "entry_mode": ["UPU"],
+    "min_merit": 85,
+    "annual_fee": 7500,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "UM",
+    "course_id": "MECH",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 88,
+    "annual_fee": 8200,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UM",
+    "course_id": "ELEC",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 87,
+    "annual_fee": 8200,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UKM",
+    "course_id": "CS",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 91,
+    "annual_fee": 7800,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "UKM",
+    "course_id": "MECH",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 86,
+    "annual_fee": 8000,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "USM",
+    "course_id": "DS",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 90,
+    "annual_fee": 7500,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "USM",
+    "course_id": "ART",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 80,
+    "annual_fee": 8500,
+    "interest_field": "Arts"
+  },
+  {
+    "university_id": "UPM",
+    "course_id": "BIO",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 82,
+    "annual_fee": 7500,
+    "interest_field": "Science"
+  },
+  {
+    "university_id": "UPM",
+    "course_id": "CHEM",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 81,
+    "annual_fee": 7300,
+    "interest_field": "Science"
+  },
+  {
+    "university_id": "TAY",
+    "course_id": "CS",
+    "level": "Foundation",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 40000,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "TAY",
+    "course_id": "DESIGN",
+    "level": "Diploma",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 42000,
+    "interest_field": "Arts"
+  },
+  {
+    "university_id": "HELP",
+    "course_id": "HBP",
+    "level": "Foundation",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 30000,
+    "interest_field": "HBP"
+  },
+  {
+    "university_id": "MONASH",
+    "course_id": "MECH",
+    "level": "Foundation",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 40000,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "SUNWAY",
+    "course_id": "COMM",
+    "level": "Diploma",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 38000,
+    "interest_field": "Communication"
+  },
+  {
+    "university_id": "INTI",
+    "course_id": "PSY",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 36000,
+    "interest_field": "Psychology"
+  },
+  {
+    "university_id": "UCSI",
+    "course_id": "PSY",
+    "level": "Foundation",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 30000,
+    "interest_field": "Psychology"
+  },
+  {
+    "university_id": "UMS",
+    "course_id": "NURS",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 85,
+    "annual_fee": 7200,
+    "interest_field": "Health Science"
+  },
+  {
+    "university_id": "UMS",
+    "course_id": "PHYS",
+    "level": "Degree",
+    "entry_mode": ["UPU"],
+    "min_merit": 81,
+    "annual_fee": 7500,
+    "interest_field": "Science"
+  },
+  {
+    "university_id": "KDU",
+    "course_id": "DESIGN",
+    "level": "Diploma",
+    "entry_mode": ["UPU"],
+    "min_merit": null,
+    "annual_fee": 32000,
+    "interest_field": "Arts"
+  }
+]
