@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'interest_selection_screen.dart';
 
 class GradeInputScreen extends StatefulWidget {
   final String qualification;
   final bool upu;
+  final PlatformFile? resumeFile;
 
-  const GradeInputScreen({super.key, required this.qualification, required this.upu});
+  const GradeInputScreen({
+    super.key,
+    required this.qualification,
+    required this.upu,
+    this.resumeFile,
+  });
 
   @override
   State<GradeInputScreen> createState() => _GradeInputScreenState();
@@ -122,7 +129,6 @@ class _GradeInputScreenState extends State<GradeInputScreen> with TickerProvider
                     ),
                     const SizedBox(height: 30),
                     ...subjects.asMap().entries.map((entry) {
-                      int index = entry.key;
                       var subject = entry.value;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
@@ -146,6 +152,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> with TickerProvider
                                             qualification: widget.qualification,
                                             upu: widget.upu,
                                             grades: grades,
+                                            resumeFile: widget.resumeFile,
                                           ),
                                   transitionsBuilder: (context, animation,
                                       secondaryAnimation, child) {

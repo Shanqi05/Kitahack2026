@@ -1,70 +1,137 @@
-import '../models/student_profile.dart';
 import '../models/course_model.dart';
 import '../models/university_model.dart';
-import '../models/recommendation_result.dart';
+import '../models/program_model.dart';
 import 'course_repository.dart';
-import '../../../core/utils/merit_calculator.dart'; 
+
+class RecommendedProgram {
+  final String courseName;
+  final String courseId;
+  final String universityName;
+  final String universityId;
+  final String location;
+  final String level;
+  final double annualFee;
+  final String interestField;
+  final int? minMerit;
+  final double matchScore;
+
+  RecommendedProgram({
+    required this.courseName,
+    required this.courseId,
+    required this.universityName,
+    required this.universityId,
+    required this.location,
+    required this.level,
+    required this.annualFee,
+    required this.interestField,
+    this.minMerit,
+    required this.matchScore,
+  });
+}
 
 class AdmissionEngine {
   final CourseRepository repository;
 
   AdmissionEngine({required this.repository});
 
-  /// Recommend courses and universities based on student profile
-  Future<RecommendationResult> recommend(StudentProfile student) async {
-    // Load programs from repository
+  /// Recommend courses based on student profile
+  List<RecommendedProgram> getRecommendations({
+    required String qualification,
+    required bool upu,
+    required Map<String, String> grades,
+    required List<String> interests,
+    double? budget,
+  }) {
     final programs = repository.programs;
 
-    // 1️⃣ Filter programs by student interests
-    List programsFiltered = programs.where((p) {
-      final interestMatch = student.interests.contains(p.interestField);
-      final upuMatch = !student.upu || p.entryMode.contains("UPU") || (!student.upu && !p.entryMode.contains("UPU"));
-      return interestMatch && upuMatch;
+    // Filter programs by interests and entry mode
+    List<ProgramModel> programsFiltered = programs.where((p) {
+      final interestMatch = interests.contains(p.interestField);
+      final entryModeMatch = upu ? p.entryMode.contains("UPU") : !p.entryMode.contains("UPU");
+      return interestMatch && entryModeMatch;
     }).toList();
 
-    // 2️⃣ Filter by merit if applying via UPU
-    if (student.upu) {
-      programsFiltered = programsFiltered.where((p) {
-        if (p.minMerit == null) return true; // skip private uni
-        final merit = MeritCalculator.calculateMerit(
-          spmGrades: student.spmGrades,
-          stpmGrades: student.stpmGrades,
-          preUniGrades: student.preUniGrades,
+    // Filter by budget if provided
+    if (budget != null) {
+      programsFiltered = programsFiltered.where((p) => p.annualFee <= budget).toList();
+    }
+
+    // Create a map of universities and courses for quick lookup
+    final universitiesMap = {
+      for (var uni in repository.universities) uni.id: uni
+    };
+    final coursesMap = {
+      for (var course in repository.courses) course.id: course
+    };
+
+    // Convert to recommended programs and score them
+    List<RecommendedProgram> recommendations = [];
+
+    for (var program in programsFiltered) {
+      final course = coursesMap[program.courseId];
+      final university = universitiesMap[program.universityId];
+
+      if (course != null && university != null) {
+        double matchScore = _calculateMatchScore(
+          interests,
+          program.interestField,
+          program.level,
+          program.annualFee,
+          budget,
         );
-        return merit >= p.minMerit!;
-      }).toList();
-    }
 
-    // 3️⃣ Filter by budget if provided
-    if (student.budget != null) {
-      programsFiltered = programsFiltered.where((p) => p.annualFee <= student.budget!).toList();
-    }
-
-    // 4️⃣ Pick top 3 courses
-    final Map<String, CourseModel> courseMap = {for (var c in repository.courses) c.id: c};
-    final topCourses = <CourseModel>[];
-    final universitiesPerCourse = <String, List<UniversityModel>>{};
-
-    for (var p in programsFiltered) {
-      if (topCourses.length >= 3) break;
-
-      // Add course if not already selected
-      if (!topCourses.any((c) => c.id == p.courseId)) {
-        final course = courseMap[p.courseId];
-        if (course != null) {
-          topCourses.add(course);
-
-          // Find universities offering this course
-          universitiesPerCourse[p.courseId] = repository.universities
-              .where((u) => programsFiltered.any((fp) => fp.courseId == p.courseId && fp.universityId == u.id))
-              .toList();
-        }
+        recommendations.add(
+          RecommendedProgram(
+            courseName: course.name,
+            courseId: course.id,
+            universityName: university.name,
+            universityId: university.id,
+            location: university.location,
+            level: program.level,
+            annualFee: program.annualFee,
+            interestField: program.interestField,
+            minMerit: program.minMerit,
+            matchScore: matchScore,
+          ),
+        );
       }
     }
 
-    return RecommendationResult(
-      recommendedCourses: topCourses,
-      universitiesPerCourse: universitiesPerCourse,
-    );
+    // Sort by match score (highest first) and return top 10
+    recommendations.sort((a, b) => b.matchScore.compareTo(a.matchScore));
+    return recommendations.take(10).toList();
+  }
+
+  double _calculateMatchScore(
+    List<String> interests,
+    String programField,
+    String level,
+    double fee,
+    double? budget,
+  ) {
+    double score = 0.0;
+
+    // Check if program field matches interests
+    if (interests.contains(programField)) {
+      score += 50;
+    }
+
+    // Prefer degree level
+    if (level.toLowerCase() == 'degree') {
+      score += 15;
+    } else if (level.toLowerCase() == 'diploma' ||
+        level.toLowerCase() == 'foundation') {
+      score += 10;
+    }
+
+    // Add budget bonus if within range
+    if (budget != null && fee <= budget) {
+      score += 25;
+    }
+
+    // Base score
+    score += 10;
+
+    return score;
   }
 }

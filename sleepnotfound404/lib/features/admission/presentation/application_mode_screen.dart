@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'grade_input_screen.dart';
 
 class ApplicationModeScreen extends StatefulWidget {
   final String qualification;
-  const ApplicationModeScreen({super.key, required this.qualification});
+  final PlatformFile? resumeFile;
+
+  const ApplicationModeScreen({
+    super.key,
+    required this.qualification,
+    this.resumeFile,
+  });
 
   @override
   State<ApplicationModeScreen> createState() => _ApplicationModeScreenState();
@@ -106,6 +113,7 @@ class _ApplicationModeScreenState extends State<ApplicationModeScreen> with Tick
                               GradeInputScreen(
                                 qualification: widget.qualification,
                                 upu: true,
+                                resumeFile: widget.resumeFile,
                               ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
@@ -131,6 +139,7 @@ class _ApplicationModeScreenState extends State<ApplicationModeScreen> with Tick
                               GradeInputScreen(
                                 qualification: widget.qualification,
                                 upu: false,
+                                resumeFile: widget.resumeFile,
                               ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'budget_input_screen.dart';
+import 'package:file_picker/file_picker.dart';
+import 'admission_chat_screen.dart';
 
 class InterestSelectionScreen extends StatefulWidget {
   final String qualification;
   final bool upu;
   final Map<String, String> grades;
+  final PlatformFile? resumeFile;
 
   const InterestSelectionScreen({
     super.key,
     required this.qualification,
     required this.upu,
     required this.grades,
+    this.resumeFile,
   });
 
   @override
@@ -125,11 +128,12 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
                                 PageRouteBuilder(
                                   pageBuilder: (context, animation,
                                       secondaryAnimation) {
-                                    return BudgetInputScreen(
+                                    return AdmissionChatScreen(
                                       qualification: widget.qualification,
                                       upu: widget.upu,
                                       grades: widget.grades,
                                       interests: selected,
+                                      resumeFile: widget.resumeFile,
                                     );
                                   },
                                   transitionsBuilder: (context, animation,
@@ -158,7 +162,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
                         elevation: 8,
                       ),
                       child: const Text(
-                        'Continue',
+                        'Chat with Academic Consultant',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

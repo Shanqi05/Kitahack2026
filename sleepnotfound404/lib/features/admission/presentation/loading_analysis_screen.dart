@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'result_screen.dart';
 import 'dart:async';
 
@@ -8,6 +9,7 @@ class LoadingAnalysisScreen extends StatefulWidget {
   final Map<String, String> grades;
   final List<String> interests;
   final double? budget;
+  final PlatformFile? resumeFile;
 
   const LoadingAnalysisScreen({
     super.key,
@@ -16,6 +18,7 @@ class LoadingAnalysisScreen extends StatefulWidget {
     required this.grades,
     required this.interests,
     this.budget,
+    this.resumeFile,
   });
 
   @override
@@ -37,6 +40,7 @@ class _LoadingAnalysisScreenState extends State<LoadingAnalysisScreen> {
             grades: widget.grades,
             interests: widget.interests,
             budget: widget.budget,
+            resumeFile: widget.resumeFile,
           ),
         ),
       );

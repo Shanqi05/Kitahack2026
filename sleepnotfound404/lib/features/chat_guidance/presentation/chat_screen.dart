@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import '../../../services/gemini_service.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -14,8 +13,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final List<Map<String, dynamic>> _messages = [];
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
-  PlatformFile? _selectedFile;
-  bool _showUploadOption = false;
 
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -34,12 +31,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     );
     _fadeController.forward();
 
-    // Add initial greeting with upload option
+    // Add initial greeting
     _messages.add({
       'role': 'ai',
-      'text': 'Hello! 👋 I\'m your AI Career Counselor. How can I help you today?\n\nYou can:\n• Ask about career paths and university programs\n• Upload your resume for analysis\n• Get personalized course recommendations',
+      'text': 'Hello! 👋 I\'m your AI Career Counselor. How can I help you today? Feel free to ask about career paths, university programs, or course recommendations!',
       'timestamp': DateTime.now(),
-      'showUpload': true,
     });
   }
 
@@ -49,97 +45,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _scrollController.dispose();
     _fadeController.dispose();
     super.dispose();
-  }
-
-  void _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx'],
-    );
-
-    if (result != null && result.files.isNotEmpty) {
-      setState(() => _selectedFile = result.files.first);
-      _showUploadConfirmation();
-    }
-  }
-
-  void _showUploadConfirmation() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Resume Selected'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('File: ${_selectedFile!.name}'),
-            const SizedBox(height: 8),
-            Text(
-              'Size: ${(_selectedFile!.size / 1024 / 1024).toStringAsFixed(2)} MB',
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() => _selectedFile = null);
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _analyzeResume();
-            },
-            child: const Text('Analyze'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _analyzeResume() async {
-    if (_selectedFile == null) return;
-
-    final fileToAnalyze = _selectedFile;
-    setState(() {
-      _messages.add({
-        'role': 'user',
-        'text': '📄 Resume uploaded: ${_selectedFile!.name}',
-        'timestamp': DateTime.now(),
-      });
-      _isLoading = true;
-      _selectedFile = null;
-    });
-
-    _scrollToBottom();
-
-    try {
-      final gemini = GeminiService();
-      final analysis = await gemini.analyzeResume(fileToAnalyze!);
-
-      setState(() {
-        _messages.add({
-          'role': 'ai',
-          'text': analysis,
-          'timestamp': DateTime.now(),
-        });
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _messages.add({
-          'role': 'ai',
-          'text': 'Sorry, I encountered an error analyzing your resume. Please try again.',
-          'timestamp': DateTime.now(),
-        });
-        _isLoading = false;
-      });
-    }
-
-    _scrollToBottom();
   }
 
   void _sendMessage() async {
@@ -365,37 +270,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                       ],
                                     ),
                                   ),
-                                  if (msg['showUpload'] == true)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12),
-                                      child: ElevatedButton.icon(
-                                        onPressed: _pickFile,
-                                        icon: const Icon(
-                                          Icons.upload_file_rounded,
-                                          size: 20,
-                                        ),
-                                        label: const Text(
-                                          'Upload Resume',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xFF673AB7),
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 10,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                 ],
                               ),
                             ),

@@ -19,6 +19,7 @@ dependencies:
   # AI & Environment
   google_generative_ai: ^0.4.7
   flutter_dotenv: ^6.0.0
+  http: ^1.1.0
 
   # UI & Utilities
   file_picker: ^10.3.10
@@ -39,3 +40,4 @@ flutter:
     - .env
     - assets/images/
     - assets/animations/
+    - assets/data/

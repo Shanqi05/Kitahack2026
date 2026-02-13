@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'loading_analysis_screen.dart';
 
 class BudgetInputScreen extends StatefulWidget {
@@ -6,6 +7,7 @@ class BudgetInputScreen extends StatefulWidget {
   final bool upu;
   final Map<String, String> grades;
   final List<String> interests;
+  final PlatformFile? resumeFile;
 
   const BudgetInputScreen({
     super.key,
@@ -13,6 +15,7 @@ class BudgetInputScreen extends StatefulWidget {
     required this.upu,
     required this.grades,
     required this.interests,
+    this.resumeFile,
   });
 
   @override
@@ -181,6 +184,7 @@ class _BudgetInputScreenState extends State<BudgetInputScreen>
                                 grades: widget.grades,
                                 interests: widget.interests,
                                 budget: budget,
+                                resumeFile: widget.resumeFile,
                               );
                             },
                             transitionsBuilder: (context, animation,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'application_mode_screen.dart';
+import 'resume_upload_screen.dart';
 
 class QualificationScreen extends StatefulWidget {
   const QualificationScreen({super.key});
@@ -120,7 +120,7 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  ApplicationModeScreen(qualification: title),
+                  ResumeUploadAdmissionScreen(qualification: title),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(opacity: animation, child: child);
               },
@@ -153,7 +153,7 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        ApplicationModeScreen(qualification: title),
+                        ResumeUploadAdmissionScreen(qualification: title),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       return FadeTransition(opacity: animation, child: child);
                     },

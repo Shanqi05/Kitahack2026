@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sleepnotfound404/features/career_analysis/presentation/upload_screen.dart';
 import 'package:sleepnotfound404/features/chat_guidance/presentation/chat_screen.dart';
 import 'package:sleepnotfound404/features/admission/presentation/qualification_screen.dart';
 
@@ -171,27 +170,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ),
         const SizedBox(height: 20),
-        _buildActionCard(
-          context,
-          icon: Icons.upload_file_rounded,
-          title: 'Upload Resume',
-          description: 'Upload your resume for AI analysis',
-          gradient: [const Color(0xFF673AB7), const Color(0xFF9575CD)],
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const ResumeUploadScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                transitionDuration: const Duration(milliseconds: 500),
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 16),
+
         _buildActionCard(
           context,
           icon: Icons.chat_bubble_outline_rounded,
