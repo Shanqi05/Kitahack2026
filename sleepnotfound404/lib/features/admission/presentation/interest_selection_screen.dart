@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'admission_chat_screen.dart';
+import 'budget_input_screen.dart';
 
 class InterestSelectionScreen extends StatefulWidget {
   final String qualification;
@@ -30,13 +31,13 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
     {
       "name": "Health & Biomedical",
       "short": "HBP",
-      "icon": Icons.medical_services
+      "icon": Icons.medical_services,
     },
     {"name": "Psychology", "short": "Psych", "icon": Icons.psychology},
     {
       "name": "Health Science",
       "short": "Health",
-      "icon": Icons.health_and_safety
+      "icon": Icons.health_and_safety,
     },
   ];
   final selected = <String>[];
@@ -50,9 +51,10 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
   }
 
@@ -98,18 +100,14 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
                     const SizedBox(height: 8),
                     Text(
                       'Select at least one field of interest to get personalized recommendations',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 30),
                     Wrap(
                       spacing: 12,
                       runSpacing: 12,
                       children: interests.map((interest) {
-                        final isSelected =
-                            selected.contains(interest["short"]);
+                        final isSelected = selected.contains(interest["short"]);
                         return _buildInterestCard(
                           interest["name"] as String,
                           interest["short"] as String,
@@ -119,55 +117,130 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
                       }).toList(),
                     ),
                     const SizedBox(height: 40),
-                    ElevatedButton(
-                      onPressed: selected.isEmpty
-                          ? null
-                          : () {
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                      secondaryAnimation) {
-                                    return AdmissionChatScreen(
-                                      qualification: widget.qualification,
-                                      upu: widget.upu,
-                                      grades: widget.grades,
-                                      interests: selected,
-                                      resumeFile: widget.resumeFile,
-                                    );
-                                  },
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) {
+                                        return BudgetInputScreen(
+                                          qualification: widget.qualification,
+                                          upu: widget.upu,
+                                          grades: widget.grades,
+                                          interests: selected,
+                                          resumeFile: widget.resumeFile,
+                                        );
+                                      },
+                                  transitionsBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                        child,
+                                      ) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                  transitionDuration: const Duration(
+                                    milliseconds: 400,
+                                  ),
                                 ),
                               );
                             },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF673AB7),
-                        foregroundColor: Colors.white,
-                        disabledBackgroundColor: Colors.grey[300],
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 40,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF673AB7),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 20,
+                              ),
+                              side: const BorderSide(
+                                color: Color(0xFF673AB7),
+                                width: 2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text(
+                              'Skip',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: selected.isEmpty
+                                ? null
+                                : () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                            ) {
+                                              return AdmissionChatScreen(
+                                                qualification:
+                                                    widget.qualification,
+                                                upu: widget.upu,
+                                                grades: widget.grades,
+                                                interests: selected,
+                                                resumeFile: widget.resumeFile,
+                                              );
+                                            },
+                                        transitionsBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child,
+                                            ) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
+                                        transitionDuration: const Duration(
+                                          milliseconds: 400,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF673AB7),
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor: Colors.grey[300],
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 20,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 8,
+                            ),
+                            child: const Text(
+                              'Chat with Academic Consultant',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                        elevation: 8,
-                      ),
-                      child: const Text(
-                        'Chat with Academic Consultant',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      ],
                     ),
                     const SizedBox(height: 30),
                   ]),

@@ -25,7 +25,7 @@ class AdmissionChatScreen extends StatefulWidget {
 }
 
 class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
-  final GeminiService _gemini = GeminiService();
+  GeminiService? _gemini;
   final TextEditingController _messageController = TextEditingController();
   final List<Message> _messages = [];
   bool _isLoading = false;
@@ -34,6 +34,16 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Initialize GeminiService with error handling
+    try {
+      _gemini = GeminiService();
+      debugPrint('GeminiService initialized successfully');
+    } catch (e) {
+      debugPrint('Error initializing GeminiService: $e');
+      _gemini = null;
+    }
+
     // Initial greeting message from academic consultant
     _messages.add(
       Message(
@@ -57,11 +67,9 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
 
     // Add user message
     setState(() {
-      _messages.add(Message(
-        text: text,
-        isUser: true,
-        timestamp: DateTime.now(),
-      ));
+      _messages.add(
+        Message(text: text, isUser: true, timestamp: DateTime.now()),
+      );
       _isLoading = true;
     });
 
@@ -69,29 +77,48 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
     _scrollToBottom();
 
     try {
-      // Get response from Gemini
-      final response = await _gemini.sendMessage(text);
+      // Get response from Gemini (or fallback if not initialized)
+      final response = _gemini != null
+          ? await _gemini!.sendMessage(text)
+          : _getFallbackResponse(text);
 
       setState(() {
-        _messages.add(Message(
-          text: response,
-          isUser: false,
-          timestamp: DateTime.now(),
-        ));
+        _messages.add(
+          Message(text: response, isUser: false, timestamp: DateTime.now()),
+        );
         _isLoading = false;
       });
     } catch (e) {
+      debugPrint('Error sending message: $e');
       setState(() {
-        _messages.add(Message(
-          text: 'Sorry, I encountered an error. Please try again.',
-          isUser: false,
-          timestamp: DateTime.now(),
-        ));
+        _messages.add(
+          Message(
+            text: 'Sorry, I encountered an error. Please try again.',
+            isUser: false,
+            timestamp: DateTime.now(),
+          ),
+        );
         _isLoading = false;
       });
     }
 
     _scrollToBottom();
+  }
+
+  String _getFallbackResponse(String message) {
+    final lowerMessage = message.toLowerCase();
+
+    if (lowerMessage.contains('course') || lowerMessage.contains('program')) {
+      return "Great question! Based on your interests, I recommend exploring programs in ${widget.interests.join(", ")}. These fields have excellent job prospects and align well with modern career paths.";
+    } else if (lowerMessage.contains('career') ||
+        lowerMessage.contains('job')) {
+      return "The tech industry offers many exciting career paths! You could consider roles like Software Developer, Data Analyst, UX Designer, or Product Manager. Each has unique challenges and rewards.";
+    } else if (lowerMessage.contains('university') ||
+        lowerMessage.contains('uni')) {
+      return "When choosing a university, consider factors like: program reputation, internship opportunities, campus culture, and post-graduation employment rates. I recommend researching programs that align with your interests.";
+    } else {
+      return "That's an interesting question! I'm here to help guide you through your career exploration. Feel free to ask about specific fields, universities, or career paths.";
+    }
   }
 
   void _scrollToBottom() {
@@ -132,8 +159,11 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
                           ),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
                       transitionDuration: const Duration(milliseconds: 400),
                     ),
                   );
@@ -208,10 +238,7 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
             if (_isLoading)
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: SpinKitWave(
-                  color: const Color(0xFF673AB7),
-                  size: 40,
-                ),
+                child: SpinKitWave(color: const Color(0xFF673AB7), size: 40),
               ),
             Container(
               padding: const EdgeInsets.all(16),
@@ -288,9 +315,5 @@ class Message {
   final bool isUser;
   final DateTime timestamp;
 
-  Message({
-    required this.text,
-    required this.isUser,
-    required this.timestamp,
-  });
+  Message({required this.text, required this.isUser, required this.timestamp});
 }

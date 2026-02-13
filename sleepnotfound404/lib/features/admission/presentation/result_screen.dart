@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../data/course_repository.dart';
 import '../data/admission_engine.dart';
+import '../models/student_profile.dart';
 
 class ResultScreen extends StatefulWidget {
   final String qualification;
@@ -37,16 +38,18 @@ class _ResultScreenState extends State<ResultScreen> {
   Future<List<RecommendedProgram>> _loadRecommendations() async {
     final repository = CourseRepository();
     await repository.loadData();
-    
-    final engine = AdmissionEngine(repository: repository);
-    final recommendations = engine.getRecommendations(
+
+    final student = StudentProfile(
       qualification: widget.qualification,
-      upu: widget.upu,
-      grades: widget.grades,
-      interests: widget.interests,
+      isUpu: widget.upu,
+      interest: widget.interests,
+      spmGrades: widget.grades,
       budget: widget.budget,
     );
-    
+
+    final engine = AdmissionEngine(repository: repository);
+    final recommendations = engine.getRecommendations(student);
+
     return recommendations;
   }
 
@@ -61,19 +64,15 @@ class _ResultScreenState extends State<ResultScreen> {
         future: _getRecommendations,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
-          
+
           if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
-          
+
           final recommendations = snapshot.data ?? [];
-          
+
           return Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -100,10 +99,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'Based on your profile and interests',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 30),
                       Container(
@@ -131,7 +127,10 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            _buildInfoRow('Qualification', widget.qualification),
+                            _buildInfoRow(
+                              'Qualification',
+                              widget.qualification,
+                            ),
                             const SizedBox(height: 12),
                             _buildInfoRow(
                               'Application Mode',
@@ -142,14 +141,13 @@ class _ResultScreenState extends State<ResultScreen> {
                               'Interests',
                               widget.interests.join(', '),
                             ),
-                            if (widget.budget != null)
-                              ...[
-                                const SizedBox(height: 12),
-                                _buildInfoRow(
-                                  'Budget',
-                                  'RM ${widget.budget?.toStringAsFixed(0)}',
-                                ),
-                              ],
+                            if (widget.budget != null) ...[
+                              const SizedBox(height: 12),
+                              _buildInfoRow(
+                                'Budget',
+                                'RM ${widget.budget?.toStringAsFixed(0)}',
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -196,14 +194,22 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               ),
                               const SizedBox(height: 12),
-                              ...recommendations.take(3).toList().asMap().entries.map((e) {
-                                final index = e.key + 1;
-                                final course = e.value;
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: _buildCourseCard(index, course),
-                                );
-                              }).toList(),
+                              ...recommendations
+                                  .take(3)
+                                  .toList()
+                                  .asMap()
+                                  .entries
+                                  .map((e) {
+                                    final index = e.key + 1;
+                                    final course = e.value;
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 12,
+                                      ),
+                                      child: _buildCourseCard(index, course),
+                                    );
+                                  })
+                                  .toList(),
                             ],
                           ],
                         ),
@@ -217,8 +223,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xFF673AB7).withOpacity(0.1),
+                                color: const Color(0xFF673AB7).withOpacity(0.1),
                                 blurRadius: 16,
                                 offset: const Offset(0, 4),
                               ),
@@ -323,9 +328,7 @@ class _ResultScreenState extends State<ResultScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFF673AB7).withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFF673AB7).withOpacity(0.2),
-        ),
+        border: Border.all(color: const Color(0xFF673AB7).withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,10 +371,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     const SizedBox(height: 4),
                     Text(
                       course.universityName,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -386,10 +386,7 @@ class _ResultScreenState extends State<ResultScreen> {
             children: [
               Text(
                 course.location,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.grey[500],
-                ),
+                style: TextStyle(fontSize: 11, color: Colors.grey[500]),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

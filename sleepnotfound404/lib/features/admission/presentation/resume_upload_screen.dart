@@ -12,7 +12,8 @@ class ResumeUploadAdmissionScreen extends StatefulWidget {
       _ResumeUploadAdmissionScreenState();
 }
 
-class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScreen>
+class _ResumeUploadAdmissionScreenState
+    extends State<ResumeUploadAdmissionScreen>
     with TickerProviderStateMixin {
   PlatformFile? selectedFile;
   late AnimationController _fadeController;
@@ -25,9 +26,10 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
   }
 
@@ -84,10 +86,7 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                     const SizedBox(height: 8),
                     Text(
                       'Share your resume to help us give you even better course recommendations. You can skip this step if you prefer.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 40),
                     GestureDetector(
@@ -117,10 +116,12 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                                       Container(
                                         padding: const EdgeInsets.all(16),
                                         decoration: BoxDecoration(
-                                          color: const Color(0xFF673AB7)
-                                              .withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          color: const Color(
+                                            0xFF673AB7,
+                                          ).withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         child: const Icon(
                                           Icons.cloud_upload_rounded,
@@ -154,8 +155,9 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
                                           color: Colors.green[100],
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         child: Icon(
                                           Icons.check_circle,
@@ -185,6 +187,7 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                                       ),
                                     ],
                                   ),
+                          ),
                         ),
                       ),
                     ),
@@ -228,29 +231,33 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                      secondaryAnimation) {
-                                    return ApplicationModeScreen(
-                                      qualification: widget.qualification,
-                                    );
-                                  },
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) {
+                                        return ApplicationModeScreen(
+                                          qualification: widget.qualification,
+                                        );
+                                      },
+                                  transitionsBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                        child,
+                                      ) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                  transitionDuration: const Duration(
+                                    milliseconds: 400,
+                                  ),
                                 ),
                               );
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: const Color(0xFF673AB7),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               side: const BorderSide(
                                 color: Color(0xFF673AB7),
                                 width: 2,
@@ -277,23 +284,33 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                                     Navigator.push(
                                       context,
                                       PageRouteBuilder(
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) {
-                                          return ApplicationModeScreen(
-                                            qualification:
-                                                widget.qualification,
-                                            resumeFile: selectedFile,
-                                          );
-                                        },
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: child,
-                                          );
-                                        },
-                                        transitionDuration:
-                                            const Duration(milliseconds: 400),
+                                        pageBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                            ) {
+                                              return ApplicationModeScreen(
+                                                qualification:
+                                                    widget.qualification,
+                                                resumeFile: selectedFile,
+                                              );
+                                            },
+                                        transitionsBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child,
+                                            ) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
+                                        transitionDuration: const Duration(
+                                          milliseconds: 400,
+                                        ),
                                       ),
                                     );
                                   },
@@ -301,9 +318,7 @@ class _ResumeUploadAdmissionScreenState extends State<ResumeUploadAdmissionScree
                               backgroundColor: const Color(0xFF673AB7),
                               foregroundColor: Colors.white,
                               disabledBackgroundColor: Colors.grey[300],
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
