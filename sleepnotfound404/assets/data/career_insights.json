@@ -1,0 +1,44 @@
+[
+  {
+    "id": "IT",
+    "title": "Information Technology",
+    "insight": "You have a strong potential in the digital world. With your interest in IT, you are well-positioned for the fast-growing tech industry in Malaysia.",
+    "careers": ["Software Engineer", "Data Analyst", "Cybersecurity Specialist", "UI/UX Designer"],
+    "advice": "Focus on building a portfolio. Participate in hackathons and learn languages like Python, Java, or Dart."
+  },
+  {
+    "id": "Engineering",
+    "title": "Engineering",
+    "insight": "Engineering requires strong problem-solving skills and a logical mind. Your profile suggests you are ready to tackle complex challenges.",
+    "careers": ["Civil Engineer", "Mechanical Engineer", "Electrical Engineer", "Robotics Engineer"],
+    "advice": "Strong grades in Math and Physics are crucial. Consider getting involved in STEM workshops or robotics clubs."
+  },
+  {
+    "id": "BF",
+    "title": "Business & Finance",
+    "insight": "The corporate world awaits! Your interest suggests you have good leadership potential and an eye for economic trends.",
+    "careers": ["Accountant", "Financial Analyst", "Marketing Manager", "Entrepreneur"],
+    "advice": "Develop your communication skills. Look for internships in startups or established firms to understand business operations."
+  },
+  {
+    "id": "HBP",
+    "title": "Health & Biomedical",
+    "insight": "A career in healthcare is noble and demanding. Your interest indicates a passion for science and helping others.",
+    "careers": ["Doctor", "Pharmacist", "Biomedical Scientist", "Nurse"],
+    "advice": "Biology and Chemistry are your best friends. Volunteer at local clinics or hospitals to gain real-world perspective."
+  },
+  {
+    "id": "Psych",
+    "title": "Psychology",
+    "insight": "Understanding the human mind is a fascinating journey. You likely have high empathy and analytical skills.",
+    "careers": ["Clinical Psychologist", "HR Specialist", "Counsellor", "Market Researcher"],
+    "advice": "Read widely on human behavior. Strong statistics knowledge will also help in research-based psychology."
+  },
+  {
+    "id": "Health",
+    "title": "Health Science",
+    "insight": "Allied health is a vital part of the medical ecosystem. You play a key role in patient recovery and wellbeing.",
+    "careers": ["Physiotherapist", "Nutritionist", "Occupational Therapist", "Radiographer"],
+    "advice": "Focus on practical skills and biology. Communication is key when dealing with patients' rehabilitation."
+  }
+]

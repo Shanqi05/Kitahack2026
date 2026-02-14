@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'admission_chat_screen.dart';
-import 'budget_input_screen.dart';
+import 'result_screen.dart'; // Import ResultScreen
 
 class InterestSelectionScreen extends StatefulWidget {
   final String qualification;
   final bool upu;
-  final Map<String, String> grades;
+  final Map<String, String> grades; // Receive grades from previous screen
   final PlatformFile? resumeFile;
 
   const InterestSelectionScreen({
@@ -18,27 +17,17 @@ class InterestSelectionScreen extends StatefulWidget {
   });
 
   @override
-  State<InterestSelectionScreen> createState() =>
-      _InterestSelectionScreenState();
+  State<InterestSelectionScreen> createState() => _InterestSelectionScreenState();
 }
 
-class _InterestSelectionScreenState extends State<InterestSelectionScreen>
-    with TickerProviderStateMixin {
+class _InterestSelectionScreenState extends State<InterestSelectionScreen> with TickerProviderStateMixin {
   final interests = [
     {"name": "Information Technology", "short": "IT", "icon": Icons.computer},
     {"name": "Engineering", "short": "Engineering", "icon": Icons.build},
     {"name": "Business & Finance", "short": "BF", "icon": Icons.trending_up},
-    {
-      "name": "Health & Biomedical",
-      "short": "HBP",
-      "icon": Icons.medical_services,
-    },
+    {"name": "Health & Biomedical", "short": "HBP", "icon": Icons.medical_services},
     {"name": "Psychology", "short": "Psych", "icon": Icons.psychology},
-    {
-      "name": "Health Science",
-      "short": "Health",
-      "icon": Icons.health_and_safety,
-    },
+    {"name": "Health Science", "short": "Health", "icon": Icons.health_and_safety},
   ];
   final selected = <String>[];
   late AnimationController _fadeController;
@@ -47,14 +36,8 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
   @override
   void initState() {
     super.initState();
-    _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-    _fadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
+    _fadeController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
   }
 
@@ -82,168 +65,70 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
               end: Alignment.bottomRight,
             ),
           ),
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.all(20),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                    const SizedBox(height: 10),
-                    const Text(
-                      'What Interests You?',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF673AB7),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'What Interests You?',
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Select at least one field of interest to get personalized recommendations',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 30),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: interests.map((interest) {
-                        final isSelected = selected.contains(interest["short"]);
-                        return _buildInterestCard(
-                          interest["name"] as String,
-                          interest["short"] as String,
-                          interest["icon"] as IconData,
-                          isSelected,
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 40),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                        return BudgetInputScreen(
-                                          qualification: widget.qualification,
-                                          upu: widget.upu,
-                                          grades: widget.grades,
-                                          interests: selected,
-                                          resumeFile: widget.resumeFile,
-                                        );
-                                      },
-                                  transitionsBuilder:
-                                      (
-                                        context,
-                                        animation,
-                                        secondaryAnimation,
-                                        child,
-                                      ) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: child,
-                                        );
-                                      },
-                                  transitionDuration: const Duration(
-                                    milliseconds: 400,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFF673AB7),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 20,
-                              ),
-                              side: const BorderSide(
-                                color: Color(0xFF673AB7),
-                                width: 2,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            child: const Text(
-                              'Skip',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Select at least one field to get recommendations',
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 30),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: interests.map((interest) {
+                          final isSelected = selected.contains(interest["short"]);
+                          return _buildInterestCard(
+                            interest["name"] as String,
+                            interest["short"] as String,
+                            interest["icon"] as IconData,
+                            isSelected,
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -5))]),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: selected.isEmpty ? null : () {
+                      // Navigate to ResultScreen with all collected data
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultScreen(
+                            qualification: widget.qualification,
+                            upu: widget.upu,
+                            grades: widget.grades,
+                            interests: selected, // Pass selected interests
+                            resumeFile: widget.resumeFile,
+                            budget: null,
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: selected.isEmpty
-                                ? null
-                                : () {
-                                    Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder:
-                                            (
-                                              context,
-                                              animation,
-                                              secondaryAnimation,
-                                            ) {
-                                              return AdmissionChatScreen(
-                                                qualification:
-                                                    widget.qualification,
-                                                upu: widget.upu,
-                                                grades: widget.grades,
-                                                interests: selected,
-                                                resumeFile: widget.resumeFile,
-                                              );
-                                            },
-                                        transitionsBuilder:
-                                            (
-                                              context,
-                                              animation,
-                                              secondaryAnimation,
-                                              child,
-                                            ) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                        transitionDuration: const Duration(
-                                          milliseconds: 400,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF673AB7),
-                              foregroundColor: Colors.white,
-                              disabledBackgroundColor: Colors.grey[300],
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 20,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 8,
-                            ),
-                            child: const Text(
-                              'Chat with Academic Consultant',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF673AB7),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
-                    const SizedBox(height: 30),
-                  ]),
+                    child: const Text('View Recommendations', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  ),
                 ),
               ),
             ],
@@ -253,71 +138,23 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
     );
   }
 
-  Widget _buildInterestCard(
-    String name,
-    String shortName,
-    IconData icon,
-    bool isSelected,
-  ) {
+  Widget _buildInterestCard(String name, String shortName, IconData icon, bool isSelected) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isSelected ? selected.remove(shortName) : selected.add(shortName);
-        });
-      },
+      onTap: () => setState(() => isSelected ? selected.remove(shortName) : selected.add(shortName)),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          gradient: isSelected
-              ? const LinearGradient(
-                  colors: [Color(0xFF673AB7), Color(0xFF9575CD)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
-              : LinearGradient(
-                  colors: [
-                    Colors.white,
-                    const Color(0xFF673AB7).withOpacity(0.05),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected
-                ? const Color(0xFF673AB7)
-                : const Color(0xFF673AB7).withOpacity(0.2),
-            width: isSelected ? 2 : 1,
-          ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: const Color(0xFF673AB7).withOpacity(0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : [],
+          color: isSelected ? const Color(0xFF673AB7) : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: isSelected ? const Color(0xFF673AB7) : Colors.grey[300]!),
+          boxShadow: isSelected ? [BoxShadow(color: const Color(0xFF673AB7).withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))] : [],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 28,
-              color: isSelected ? Colors.white : const Color(0xFF673AB7),
-            ),
+            Icon(icon, size: 30, color: isSelected ? Colors.white : const Color(0xFF673AB7)),
             const SizedBox(height: 8),
-            Text(
-              name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : const Color(0xFF673AB7),
-              ),
-            ),
+            Text(name, style: TextStyle(color: isSelected ? Colors.white : Colors.black87, fontWeight: FontWeight.w500)),
           ],
         ),
       ),

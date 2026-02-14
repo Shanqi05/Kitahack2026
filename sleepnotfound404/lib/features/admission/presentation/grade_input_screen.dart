@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../../../widgets/grade_input_field.dart';
+import '../../../../widgets/custom_button.dart';
 import 'interest_selection_screen.dart';
 
 class GradeInputScreen extends StatefulWidget {
@@ -18,180 +20,85 @@ class GradeInputScreen extends StatefulWidget {
   State<GradeInputScreen> createState() => _GradeInputScreenState();
 }
 
-class _GradeInputScreenState extends State<GradeInputScreen> with TickerProviderStateMixin {
-  final Map<String, String> grades = {};
-  late AnimationController _fadeController;
-  late Animation<double> _fadeAnimation;
+class _GradeInputScreenState extends State<GradeInputScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, String> _grades = {};
 
-  final subjects = [
-    {"name": "Bahasa Melayu", "short": "BM", "icon": Icons.language},
-    {"name": "English", "short": "BI", "icon": Icons.translate},
-    {"name": "Mathematics", "short": "Math", "icon": Icons.calculate},
-    {"name": "Science", "short": "Science", "icon": Icons.science},
-  ];
+  // Define subjects based on qualification
+  final Map<String, List<String>> _subjectsByQualification = {
+    'SPM': ['Bahasa Melayu', 'English', 'Mathematics', 'History', 'Science', 'Add Maths', 'Physics', 'Chemistry', 'Biology'],
+    'STPM': ['Pengajian Am', 'Mathematics T', 'Physics', 'Chemistry', 'Biology'],
+    'Matriculation': ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science'],
+    'UEC': ['Chinese', 'English', 'Mathematics', 'Advanced Maths', 'Physics', 'Chemistry'],
+    'IGCSE': ['English', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Business Studies'],
+  };
 
-  @override
-  void initState() {
-    super.initState();
-    _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
-    _fadeController.forward();
-
-    for (var subject in subjects) {
-      grades[subject['short'] as String] = '';
+  // Get grade options based on qualification
+  List<String> get _gradeOptions {
+    if (widget.qualification == 'SPM' || widget.qualification == 'IGCSE') {
+      return ['A+', 'A', 'A-', 'B+', 'B', 'C+', 'C', 'D', 'E', 'G'];
+    } else if (widget.qualification == 'STPM' || widget.qualification == 'Matriculation') {
+      return ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'F'];
+    } else if (widget.qualification == 'UEC') {
+      return ['A1', 'A2', 'B3', 'B4', 'B5', 'B6', 'C7', 'C8', 'F9'];
     }
-  }
-
-  @override
-  void dispose() {
-    _fadeController.dispose();
-    super.dispose();
-  }
-
-  bool get _allGradesFilled {
-    return subjects.every((subject) => grades[subject['short']]!.isNotEmpty);
+    return ['A', 'B', 'C', 'D', 'F'];
   }
 
   @override
   Widget build(BuildContext context) {
+    final subjects = _subjectsByQualification[widget.qualification] ??
+        ['Subject 1', 'Subject 2', 'Subject 3', 'Subject 4', 'Subject 5'];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Enter Your Grades"),
+        title: Text("${widget.qualification} Grades"),
         backgroundColor: const Color(0xFF673AB7),
         elevation: 0,
       ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFF5F7FA), Color(0xFFEDE7F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF5F7FA), Color(0xFFEDE7F6)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.all(20),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF673AB7).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Qualification: ${widget.qualification}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF673AB7),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Application: ${widget.upu ? 'UPU' : 'Direct/Private'}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF673AB7),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'Enter Your Grades',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF673AB7),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Your grades help us recommend the best courses',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    ...subjects.asMap().entries.map((entry) {
-                      var subject = entry.value;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _buildGradeInput(
-                          subject['name'] as String,
-                          subject['short'] as String,
-                          subject['icon'] as IconData,
-                        ),
-                      );
-                    }).toList(),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: _allGradesFilled
-                          ? () {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) =>
-                                          InterestSelectionScreen(
-                                            qualification: widget.qualification,
-                                            upu: widget.upu,
-                                            grades: grades,
-                                            resumeFile: widget.resumeFile,
-                                          ),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
-                                ),
-                              );
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF673AB7),
-                        foregroundColor: Colors.white,
-                        disabledBackgroundColor: Colors.grey[300],
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 40,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 8,
-                      ),
-                      child: const Text(
-                        'Continue',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                  ]),
-                ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              const Text(
+                'Enter Your Results',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
               ),
+              const SizedBox(height: 8),
+              Text(
+                'Select your grade for each subject',
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 24),
+
+              // Generate dropdowns for each subject
+              ...subjects.map((subject) => GradeInputField(
+                subject: subject,
+                value: _grades[subject],
+                gradeOptions: _gradeOptions,
+                onChanged: (value) {
+                  setState(() {
+                    if (value != null) _grades[subject] = value;
+                  });
+                },
+              )),
+
+              const SizedBox(height: 30),
+              CustomButton(
+                text: "Next: Select Interests",
+                onPressed: _submitGrades,
+                isLoading: false,
+              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -199,65 +106,20 @@ class _GradeInputScreenState extends State<GradeInputScreen> with TickerProvider
     );
   }
 
-  Widget _buildGradeInput(String name, String shortName, IconData icon) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color(0xFF673AB7).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: const Color(0xFF673AB7),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF673AB7),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          decoration: InputDecoration(
-            hintText: 'Enter grade for $shortName',
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color(0xFF673AB7),
-                width: 2,
-              ),
-            ),
+  void _submitGrades() {
+    if (_formKey.currentState!.validate()) {
+      // Navigate to InterestSelectionScreen passing the collected grades
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => InterestSelectionScreen(
+            qualification: widget.qualification,
+            upu: widget.upu,
+            grades: _grades, // Pass grades forward
+            resumeFile: widget.resumeFile,
           ),
-          onChanged: (value) => setState(() => grades[shortName] = value),
         ),
-      ],
-    );
+      );
+    }
   }
 }

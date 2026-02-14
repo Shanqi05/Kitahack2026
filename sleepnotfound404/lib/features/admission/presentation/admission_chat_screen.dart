@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:sleepnotfound404/services/gemini_service.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+// Use relative import to ensure the file is found
+import '../../../services/gemini_service.dart';
 import 'budget_input_screen.dart';
 
 class AdmissionChatScreen extends StatefulWidget {
@@ -44,11 +45,11 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
       _gemini = null;
     }
 
-    // Initial greeting message from academic consultant
+    // Initial greeting message from academic consultant (Your original message)
     _messages.add(
       Message(
         text:
-            'Hi! 👋 I\'m your Academic Consultant. Based on your interests in ${widget.interests.join(", ")}, I\'m here to help you explore the perfect course for your future.\n\nFeel free to ask me anything about these courses, careers, or university life!',
+        'Hi! 👋 I\'m your Academic Consultant. Based on your interests in ${widget.interests.join(", ")}, I\'m here to help you explore the perfect course for your future.\n\nFeel free to ask me anything about these courses, careers, or university life!',
         isUser: false,
         timestamp: DateTime.now(),
       ),
@@ -65,7 +66,7 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
   void _sendMessage(String text) async {
     if (text.isEmpty) return;
 
-    // Add user message
+    // Add user message to UI
     setState(() {
       _messages.add(
         Message(text: text, isUser: true, timestamp: DateTime.now()),
@@ -81,11 +82,28 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
 
       // Try to get response from Gemini if available
       if (_gemini != null) {
-        response = await _gemini!.sendMessage(text);
+        // --- Context Injection ---
+        // We wrap the user's question with their profile data so the AI knows the context.
+        // This is hidden from the UI but sent to the API.
+        String contextPrompt = """
+You are an academic counselor for a student in Malaysia.
+Student Profile:
+- Qualification: ${widget.qualification}
+- Interests: ${widget.interests.join(', ')}
+- Grades: ${widget.grades.toString()}
+- Application Mode: ${widget.upu ? 'UPU (Public Uni)' : 'Private Uni'}
+
+The student asks: "$text"
+
+Please provide a helpful, encouraging, and specific answer based on their profile. Keep it concise.
+""";
+
+        // Send the context-aware prompt
+        response = await _gemini!.sendMessage(contextPrompt);
       } else {
-        // If GeminiService is not available, use a simple fallback
+        // If GeminiService is not available, use a simple fallback (Your original message)
         response =
-            "I'm having trouble connecting to the AI service right now. "
+        "I'm having trouble connecting to the AI service right now. "
             "However, based on your interests in ${widget.interests.join(", ")}, "
             "I can suggest exploring courses and universities that align with these fields. "
             "Would you like recommendations on specific programs?";
@@ -152,11 +170,11 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
                           ),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
                       transitionDuration: const Duration(milliseconds: 400),
                     ),
                   );
@@ -169,7 +187,7 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
                     horizontal: 16,
                   ),
                 ),
-                child: const Text('Get Results'),
+                child: const Text('Next'), // Changed "Get Results" to "Next" to fit flow logic
               ),
             ),
           ),
@@ -202,11 +220,20 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
                         horizontal: 16,
                         vertical: 12,
                       ),
+                      // Added max width constraint to prevent messages from spanning full width
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.75,
+                      ),
                       decoration: BoxDecoration(
                         color: message.isUser
                             ? const Color(0xFF673AB7)
                             : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(16),
+                          topRight: const Radius.circular(16),
+                          bottomLeft: Radius.circular(message.isUser ? 16 : 4),
+                          bottomRight: Radius.circular(message.isUser ? 4 : 16),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.05),
@@ -231,7 +258,7 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
             if (_isLoading)
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: SpinKitWave(color: const Color(0xFF673AB7), size: 40),
+                child: SpinKitThreeBounce(color: const Color(0xFF673AB7), size: 24),
               ),
             Container(
               padding: const EdgeInsets.all(16),
@@ -250,27 +277,18 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: _messageController,
+                      // Allow sending by pressing "Enter" on keyboard
+                      onSubmitted: (value) {
+                        if (!_isLoading) _sendMessage(value);
+                      },
                       decoration: InputDecoration(
                         hintText: 'Ask me anything...',
                         hintStyle: TextStyle(color: Colors.grey[400]),
+                        filled: true,
+                        fillColor: Colors.grey[50],
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300] ?? Colors.grey,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300] ?? Colors.grey,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF673AB7),
-                            width: 2,
-                          ),
+                          borderSide: BorderSide.none,
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -281,16 +299,16 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  FloatingActionButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () => _sendMessage(_messageController.text),
+                  CircleAvatar(
                     backgroundColor: const Color(0xFF673AB7),
-                    disabledElevation: 0,
-                    elevation: 4,
-                    child: Icon(
-                      Icons.send_rounded,
-                      color: _isLoading ? Colors.grey : Colors.white,
+                    child: IconButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () => _sendMessage(_messageController.text),
+                      icon: const Icon(
+                        Icons.send_rounded,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
