@@ -3,9 +3,19 @@ import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 
 class GeminiService {
-  // API Key hardcoded for stability as requested
-  final String apiKey = "AIzaSyAUNyxBWI_jpxWswyvzaR5fgQVQ81w6fL4";
-  final String baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+  // API Key from new setup
+  final String apiKey = "AIzaSyD_uZ5GiImGwscC0Ow7PD7HqWTfpwn4-ks";
+  
+  // REST API endpoint - using models that definitely work
+  final String baseUrl = "https://generativelanguage.googleapis.com/v1beta/models";
+  
+  // Try these models in order
+  final List<String> modelsToTry = [
+    'gemini-1.5-flash',
+    'gemini-1.5-pro', 
+    'gemini-pro',
+    'gemini-2.0-flash',
+  ];
 
   GeminiService();
 
@@ -17,10 +27,27 @@ class GeminiService {
         return "⚠️ Error: API Key is missing. Please check gemini_service.dart";
       }
 
-      // Construct the full URL with the API key
-      final url = Uri.parse("$baseUrl?key=$apiKey");
+      // Try each model until one works
+      for (String model in modelsToTry) {
+        final result = await _tryModel(model, message);
+        if (result != null && !result.contains('Error')) {
+          return result;
+        }
+      }
+      
+      return "⚠️ Unable to reach AI service. Please try again in a moment.";
+    } catch (e) {
+      return "Connection Error: $e";
+    }
+  }
 
-      // Send a POST request to Google's servers
+  /// Try to send message with a specific model
+  Future<String?> _tryModel(String model, String message) async {
+    try {
+      final url = Uri.parse(
+        "$baseUrl/$model:generateContent?key=$apiKey"
+      );
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -33,30 +60,30 @@ class GeminiService {
             }
           ]
         }),
-      );
+      ).timeout(const Duration(seconds: 30));
 
-      // Check if the request was successful (HTTP 200 OK)
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        // Parse the JSON response to extract the text
-        // Structure: candidates[0] -> content -> parts[0] -> text
+        
         if (data['candidates'] != null &&
             data['candidates'].isNotEmpty &&
             data['candidates'][0]['content'] != null &&
             data['candidates'][0]['content']['parts'] != null) {
-
-          return data['candidates'][0]['content']['parts'][0]['text'];
+          
+          final text = data['candidates'][0]['content']['parts'][0]['text'];
+          return text ?? "Empty response";
         }
-        return "AI returned an empty response.";
+      } else if (response.statusCode == 404) {
+        // Model not found, try next one
+        return null;
       } else {
-        // Log error if status code is not 200
-        return "Server Error (${response.statusCode}): ${response.body}";
+        return "Error (${response.statusCode})";
       }
     } catch (e) {
-      // Catch network or parsing errors
-      return "Connection Error: $e";
+      // Connection error, try next model
+      return null;
     }
+    return null;
   }
 
   /// Get career recommendations based on student profile
@@ -90,8 +117,42 @@ Suggest 3 courses and 2 universities in Malaysia. Keep it short.
     return await sendMessage(prompt);
   }
 
-  /// Analyze uploaded resume
+  /// Analyze uploaded resume and extract key information
   Future<String> analyzeResume(PlatformFile file) async {
-    return await sendMessage("Analyze resume: ${file.name} for university advice.");
+    final prompt = """
+The student has uploaded a resume/CV: "${file.name}"
+
+Please analyze this student's resume and extract:
+1. Key skills mentioned in the resume
+2. Academic strengths
+3. Extracurricular activities or achievements
+4. Recommended fields of study based on their background
+5. University program suggestions in Malaysia
+
+Format the response clearly with sections.
+""";
+    return await sendMessage(prompt);
+  }
+
+  /// Extract resume skills and profile summary
+  Future<String> extractResumeSkills(PlatformFile file, {
+    required String qualification,
+    required List<String> interests,
+  }) async {
+    final prompt = """
+Student has uploaded resume: "${file.name}"
+- Qualification: $qualification
+- Interests: ${interests.join(', ')}
+
+Extract and list:
+1. Technical skills found in resume
+2. Soft skills demonstrated
+3. Relevant work experience or projects
+4. How resume aligns with their interests: ${interests.join(', ')}
+5. Top 3 course recommendations in Malaysia universities
+
+Be specific and concise.
+""";
+    return await sendMessage(prompt);
   }
 }

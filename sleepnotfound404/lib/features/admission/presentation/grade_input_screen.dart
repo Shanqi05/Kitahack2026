@@ -23,12 +23,16 @@ class GradeInputScreen extends StatefulWidget {
 class _GradeInputScreenState extends State<GradeInputScreen> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _grades = {};
+  final List<String> _selectedSubjects = [];
+  double? _cgpa;
 
   // Define subjects based on qualification
   final Map<String, List<String>> _subjectsByQualification = {
     'SPM': ['Bahasa Melayu', 'English', 'Mathematics', 'History', 'Science', 'Add Maths', 'Physics', 'Chemistry', 'Biology'],
     'STPM': ['Pengajian Am', 'Mathematics T', 'Physics', 'Chemistry', 'Biology'],
     'Matriculation': ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science'],
+    'Asasi': ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Business', 'IT'],
+    'Diploma': ['Mathematics', 'Physics', 'Chemistry', 'Engineering', 'Business', 'IT'],
     'UEC': ['Chinese', 'English', 'Mathematics', 'Advanced Maths', 'Physics', 'Chemistry'],
     'IGCSE': ['English', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Business Studies'],
   };
@@ -45,11 +49,113 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
     return ['A', 'B', 'C', 'D', 'F'];
   }
 
+  // Check if CGPA is required (all except SPM)
+  bool get _requiresCGPA => widget.qualification != 'SPM';
+
+  @override
+  void initState() {
+    super.initState();
+    final defaultSubjects = _subjectsByQualification[widget.qualification] ?? [];
+    _selectedSubjects.addAll(defaultSubjects.take(5)); // Start with first 5 subjects
+  }
+
+  void _addSubject() {
+    final TextEditingController subjectController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add Subject'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Enter your subject name:',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: subjectController,
+                decoration: InputDecoration(
+                  hintText: 'e.g., English, Physics, Chemistry',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                ),
+                onSubmitted: (value) {
+                  if (value.trim().isNotEmpty) {
+                    final subject = value.trim();
+                    if (_selectedSubjects.contains(subject)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$subject is already added'),
+                          backgroundColor: Colors.orange[700],
+                        ),
+                      );
+                      return;
+                    }
+                    setState(() {
+                      _selectedSubjects.add(subject);
+                    });
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final subject = subjectController.text.trim();
+              if (subject.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('Please enter a subject name'),
+                    backgroundColor: Colors.red[700],
+                  ),
+                );
+                return;
+              }
+              if (_selectedSubjects.contains(subject)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('$subject is already added'),
+                    backgroundColor: Colors.orange[700],
+                  ),
+                );
+                return;
+              }
+              setState(() {
+                _selectedSubjects.add(subject);
+              });
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF673AB7),
+            ),
+            child: const Text('Add Subject'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _removeSubject(String subject) {
+    setState(() {
+      _selectedSubjects.remove(subject);
+      _grades.remove(subject);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final subjects = _subjectsByQualification[widget.qualification] ??
-        ['Subject 1', 'Subject 2', 'Subject 3', 'Subject 4', 'Subject 5'];
-
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.qualification} Grades"),
@@ -80,19 +186,97 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Generate dropdowns for each subject
-              ...subjects.map((subject) => GradeInputField(
-                subject: subject,
-                value: _grades[subject],
-                gradeOptions: _gradeOptions,
-                onChanged: (value) {
-                  setState(() {
-                    if (value != null) _grades[subject] = value;
-                  });
-                },
+              // Display selected subjects with grades
+              ..._selectedSubjects.map((subject) => Dismissible(
+                key: ValueKey(subject),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  color: Colors.red.withOpacity(0.7),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                onDismissed: (_) => _removeSubject(subject),
+                child: GradeInputField(
+                  subject: subject,
+                  value: _grades[subject],
+                  gradeOptions: _gradeOptions,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value != null) _grades[subject] = value;
+                    });
+                  },
+                ),
               )),
 
-              const SizedBox(height: 30),
+              // Add button for more subjects
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: ElevatedButton.icon(
+                  onPressed: _addSubject,
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add More Subject'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF673AB7).withOpacity(0.1),
+                    foregroundColor: const Color(0xFF673AB7),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Color(0xFF673AB7), width: 1.5),
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // CGPA Field (only for non-SPM qualifications)
+              if (_requiresCGPA) ...[
+                const Text(
+                  'Enter Your CGPA',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'CGPA (e.g., 3.5)',
+                    hintText: '0.0 - 4.0',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your CGPA';
+                    }
+                    final cgpa = double.tryParse(value);
+                    if (cgpa == null || cgpa < 0 || cgpa > 4.0) {
+                      return 'Please enter a valid CGPA (0.0 - 4.0)';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      _cgpa = double.tryParse(value);
+                    });
+                  },
+                ),
+                const SizedBox(height: 30),
+              ],
+
               CustomButton(
                 text: "Next: Select Interests",
                 onPressed: _submitGrades,
@@ -108,6 +292,34 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
 
   void _submitGrades() {
     if (_formKey.currentState!.validate()) {
+      // Validate that at least one grade is entered
+      if (_grades.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Please select at least one grade'),
+            backgroundColor: Colors.red[700],
+          ),
+        );
+        return;
+      }
+
+      // For non-SPM, validate CGPA is entered
+      if (_requiresCGPA && (_cgpa == null)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Please enter your CGPA'),
+            backgroundColor: Colors.red[700],
+          ),
+        );
+        return;
+      }
+
+      // Add CGPA to grades map if exists
+      Map<String, String> finalGrades = Map.from(_grades);
+      if (_cgpa != null) {
+        finalGrades['CGPA'] = _cgpa.toString();
+      }
+
       // Navigate to InterestSelectionScreen passing the collected grades
       Navigator.push(
         context,
@@ -115,7 +327,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
           builder: (context) => InterestSelectionScreen(
             qualification: widget.qualification,
             upu: widget.upu,
-            grades: _grades, // Pass grades forward
+            grades: finalGrades,
             resumeFile: widget.resumeFile,
           ),
         ),

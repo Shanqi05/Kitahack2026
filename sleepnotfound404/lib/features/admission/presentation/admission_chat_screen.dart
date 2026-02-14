@@ -10,6 +10,7 @@ class AdmissionChatScreen extends StatefulWidget {
   final bool upu;
   final Map<String, String> grades;
   final List<String> interests;
+  final double? budget;
   final PlatformFile? resumeFile;
 
   const AdmissionChatScreen({
@@ -18,6 +19,7 @@ class AdmissionChatScreen extends StatefulWidget {
     required this.upu,
     required this.grades,
     required this.interests,
+    this.budget,
     this.resumeFile,
   });
 
@@ -49,7 +51,17 @@ class _AdmissionChatScreenState extends State<AdmissionChatScreen> {
     _messages.add(
       Message(
         text:
-        'Hi! 👋 I\'m your Academic Consultant. Based on your interests in ${widget.interests.join(", ")}, I\'m here to help you explore the perfect course for your future.\n\nFeel free to ask me anything about these courses, careers, or university life!',
+        'Hi! 👋 I\'m your Academic Consultant. Based on your profile:'
+        '\n• Qualification: ${widget.qualification}'
+        '\n• Interests in: ${widget.interests.join(", ")}'
+        '${widget.budget != null ? '\n• Budget: RM \$${widget.budget!.toStringAsFixed(0)}/year' : ''}'
+        '\n\nI\'m here to help you find the perfect course and university in Malaysia.'
+        '\n\nFeel free to ask me about:'
+        '\n- Course recommendations'
+        '\n- University options within your budget'
+        '\n- Career paths'
+        '\n- Scholarship opportunities'
+        '\n- Program requirements',
         isUser: false,
         timestamp: DateTime.now(),
       ),
@@ -90,12 +102,18 @@ You are an academic counselor for a student in Malaysia.
 Student Profile:
 - Qualification: ${widget.qualification}
 - Interests: ${widget.interests.join(', ')}
-- Grades: ${widget.grades.toString()}
+- Grades: ${widget.grades.entries.where((e) => e.key != 'CGPA').map((e) => '${e.key}: ${e.value}').join(', ')}
+- CGPA: ${widget.grades['CGPA'] ?? 'Not provided'}
 - Application Mode: ${widget.upu ? 'UPU (Public Uni)' : 'Private Uni'}
+- Budget: ${widget.budget != null ? 'RM \$${widget.budget!.toStringAsFixed(0)}/year' : 'Not specified'}
+- Resume: ${widget.resumeFile != null ? widget.resumeFile!.name : 'Not provided'}
 
 The student asks: "$text"
 
-Please provide a helpful, encouraging, and specific answer based on their profile. Keep it concise.
+Please provide a helpful, encouraging, and specific answer based on their profile. 
+If they ask about schools or universities, suggest Malaysian institutions within their budget.
+If they ask about programs, recommend courses that match their interests and qualifications.
+Keep responses concise and actionable.
 """;
 
         // Send the context-aware prompt

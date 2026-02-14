@@ -5,6 +5,7 @@ import '../data/admission_engine.dart';
 import '../models/student_profile.dart';
 // Use local JSON service for insights
 import '../data/career_insight_service.dart';
+import 'admission_chat_screen.dart';
 
 class ResultScreen extends StatefulWidget {
   final String qualification;
@@ -298,13 +299,43 @@ class _ResultScreenState extends State<ResultScreen> {
 
               const SizedBox(height: 30),
 
-              // Back Button
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+              // Consult AI Advisor Button
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdmissionChatScreen(
+                        qualification: widget.qualification,
+                        upu: widget.upu,
+                        grades: widget.grades,
+                        interests: widget.interests,
+                        budget: widget.budget,
+                        resumeFile: widget.resumeFile,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.chat_bubble_outline),
+                label: const Text('Consult AI Advisor'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF673AB7),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  minimumSize: const Size(double.infinity, 56),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Back Button
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[400],
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  minimumSize: const Size(double.infinity, 56),
                 ),
                 child: const Text('Back to Home'),
               ),
