@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'result_screen.dart'; // Import ResultScreen
+// Import BudgetInputScreen to navigate there next
+import 'budget_input_screen.dart';
 
 class InterestSelectionScreen extends StatefulWidget {
   final String qualification;
   final bool upu;
-  final Map<String, String> grades; // Receive grades from previous screen
+  final Map<String, String> grades;
   final PlatformFile? resumeFile;
 
   const InterestSelectionScreen({
@@ -21,6 +22,7 @@ class InterestSelectionScreen extends StatefulWidget {
 }
 
 class _InterestSelectionScreenState extends State<InterestSelectionScreen> with TickerProviderStateMixin {
+  // Hardcoded list of interests with icons
   final interests = [
     {"name": "Information Technology", "short": "IT", "icon": Icons.computer},
     {"name": "Engineering", "short": "Engineering", "icon": Icons.build},
@@ -29,6 +31,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> with 
     {"name": "Psychology", "short": "Psych", "icon": Icons.psychology},
     {"name": "Health Science", "short": "Health", "icon": Icons.health_and_safety},
   ];
+
   final selected = <String>[];
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -36,6 +39,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> with 
   @override
   void initState() {
     super.initState();
+    // Animation setup
     _fadeController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
@@ -101,22 +105,24 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> with 
               ),
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -5))]),
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -5))]
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: selected.isEmpty ? null : () {
-                      // Navigate to ResultScreen with all collected data
+                      // Navigate to BudgetInputScreen passing all data
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ResultScreen(
+                          builder: (context) => BudgetInputScreen(
                             qualification: widget.qualification,
                             upu: widget.upu,
                             grades: widget.grades,
                             interests: selected, // Pass selected interests
                             resumeFile: widget.resumeFile,
-                            budget: null,
                           ),
                         ),
                       );
@@ -127,7 +133,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> with 
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
-                    child: const Text('View Recommendations', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    child: const Text('Next: Set Budget', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import '../data/course_repository.dart';
 import '../data/admission_engine.dart';
 import '../models/student_profile.dart';
-// Use local JSON service
+// Use local JSON service for insights
 import '../data/career_insight_service.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -30,14 +30,14 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   late Future<List<RecommendedProgram>> _getRecommendations;
-  // Use List<InsightModel> for local data
+  // Future for local JSON insights
   late Future<List<InsightModel>> _getInsights;
 
   @override
   void initState() {
     super.initState();
     _getRecommendations = _loadRecommendations();
-    // Load local insights
+    // Load local insights based on interests
     _getInsights = CareerInsightService().getMatchedInsights(widget.interests);
   }
 
@@ -100,7 +100,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
               const SizedBox(height: 24),
 
-              // --- 1. Profile Summary ---
+              // --- 1. Enhanced Profile Summary ---
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: _cardDecoration(),
@@ -117,19 +117,63 @@ class _ResultScreenState extends State<ResultScreen> {
                     ),
                     const SizedBox(height: 16),
                     _buildInfoRow('Qualification', widget.qualification),
-                    const SizedBox(height: 12),
-                    _buildInfoRow('Interests', widget.interests.join(', ')),
-                    if (widget.budget != null) ...[
-                      const SizedBox(height: 12),
-                      _buildInfoRow('Budget', 'RM ${widget.budget?.toStringAsFixed(0)}'),
-                    ],
+                    _buildInfoRow('Mode', widget.upu ? 'UPU (Public)' : 'Private'),
+                    // Show the selected budget
+                    _buildInfoRow('Budget', 'RM ${widget.budget?.toStringAsFixed(0)} / year'),
+
+                    const Divider(height: 24),
+                    const Text("Grades:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                    const SizedBox(height: 8),
+                    // Display all entered grades
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: widget.grades.entries.map((entry) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey[300]!),
+                          ),
+                          child: Text(
+                            "${entry.key}: ${entry.value}",
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ],
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // --- 2. Personal Insights (Local JSON) ---
+              // --- 2. Smart Insights (Based on Budget & Grades) ---
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF673AB7).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF673AB7).withOpacity(0.3)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.auto_graph, color: Color(0xFF673AB7)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        _generateSmartInsight(), // Generates advice based on logic
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF4527A0)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // --- 3. Personal Insights (Cards from JSON) ---
               FutureBuilder<List<InsightModel>>(
                 future: _getInsights,
                 builder: (context, snapshot) {
@@ -175,7 +219,6 @@ class _ResultScreenState extends State<ResultScreen> {
                               style: TextStyle(fontWeight: FontWeight.bold)
                           ),
                           const SizedBox(height: 4),
-                          // Fixed: Removed runSpacing to avoid error
                           Wrap(
                             spacing: 8,
                             children: insight.careers.map((c) => Chip(
@@ -210,7 +253,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 },
               ),
 
-              // --- 3. Matched Courses ---
+              // --- 4. Matched Courses ---
               FutureBuilder<List<RecommendedProgram>>(
                 future: _getRecommendations,
                 builder: (context, snapshot) {
@@ -275,6 +318,27 @@ class _ResultScreenState extends State<ResultScreen> {
 
   // --- Helper Methods ---
 
+  // Generates advice based on budget and grades
+  String _generateSmartInsight() {
+    double budget = widget.budget ?? 0;
+    bool highBudget = budget > 40000;
+    bool lowBudget = budget < 15000;
+
+    // Check for good grades (A or A+)
+    int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
+    bool goodGrades = aCount >= 3;
+
+    if (goodGrades && lowBudget) {
+      return "With your excellent grades (${aCount} As), you are a strong candidate for scholarships.";
+    } else if (highBudget) {
+      return "Your budget of RM ${budget.toStringAsFixed(0)} allows you to explore premium private university options.";
+    } else if (widget.upu) {
+      return "Focusing on UPU is a great strategy for cost-effective education with your current profile.";
+    } else {
+      return "Consider applying for PTPTN loans or financial aid to support your preferred course.";
+    }
+  }
+
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white,
@@ -290,19 +354,22 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Widget _buildInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
-        Expanded(
-          child: Text(
-            value,
-            textAlign: TextAlign.right,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-            overflow: TextOverflow.ellipsis,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
