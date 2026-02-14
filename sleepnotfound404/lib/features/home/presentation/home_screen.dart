@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sleepnotfound404/features/chat_guidance/presentation/chat_screen.dart';
 import 'package:sleepnotfound404/features/admission/presentation/qualification_screen.dart';
+import '../../career/presentation/career_list_screen.dart';
+import '../../scholarship/presentation/scholarship_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,6 +37,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // FAB for AI Chatbot
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatScreen()),
+          );
+        },
+        backgroundColor: Colors.white,
+        child: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF673AB7)),
+      ),
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Container(
@@ -57,7 +70,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   delegate: SliverChildListDelegate([
                     _buildWelcomeSection(),
                     const SizedBox(height: 30),
-                    _buildMainActions(context),
+
+                    // Updated Grid with Admission, Career, Scholarship
+                    _buildSelectionGrid(context),
+
                     const SizedBox(height: 40),
                     _buildFeaturesSection(),
                     const SizedBox(height: 40),
@@ -71,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // AppBar
+  // AppBar (Unchanged)
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
       expandedHeight: 200,
@@ -116,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Welcome section
+  // Welcome section (Unchanged)
   Widget _buildWelcomeSection() {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -156,8 +172,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Main action cards
-  Widget _buildMainActions(BuildContext context) {
+  // ✅ Updated Grid: Admission | Career | Scholarship
+  Widget _buildSelectionGrid(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -169,145 +185,99 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             color: Colors.white,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            // 1. Admission
+            Expanded(
+              child: _buildSmallOptionCard(
+                context,
+                title: "Admission",
+                icon: Icons.school_rounded,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const QualificationScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
 
-        _buildActionCard(
-          context,
-          icon: Icons.chat_bubble_outline_rounded,
-          title: 'Chat with Bot',
-          description: 'Answer questions to get personalized recommendations',
-          gradient: [const Color(0xFF512DA8), const Color(0xFF7E57C2)],
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const ChatScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
+            // 2. Career Insights (New)
+            Expanded(
+              child: _buildSmallOptionCard(
+                context,
+                title: "Career",
+                icon: Icons.work_rounded,
+                onTap: () {
+                  // Navigate to Career Screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CareerListScreen()),
+                  );
                 },
-                transitionDuration: const Duration(milliseconds: 500),
               ),
-            );
-          },
-        ),
-        const SizedBox(height: 30),
-        _buildActionCard(
-          context,
-          icon: Icons.school_rounded,
-          title: 'Start Admission Path',
-          description: 'Answer a few questions to get university course recommendations',
-          gradient: [const Color(0xFF7B1FA2), const Color(0xFF9C27B0)],
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const QualificationScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
+            ),
+            const SizedBox(width: 12),
+
+            // 3. Scholarship (New)
+            Expanded(
+              child: _buildSmallOptionCard(
+                context,
+                title: "Scholarship",
+                icon: Icons.monetization_on_rounded,
+                onTap: () {
+                  // Navigate to Scholarship Screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ScholarshipScreen()),
+                  );
                 },
-                transitionDuration: const Duration(milliseconds: 500),
               ),
-            );
-          },
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildActionCard(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String description,
-    required List<Color> gradient,
-    required VoidCallback onTap,
-  }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: gradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: gradient[0].withOpacity(0.35),
-                blurRadius: 25,
-                offset: const Offset(0, 12),
-              ),
-            ],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: onTap,
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.25),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.1),
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Icon(icon, size: 32, color: Colors.white),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            description,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.85),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_rounded,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ],
-                ),
+  // Helper widget (Unchanged)
+  Widget _buildSmallOptionCard(
+      BuildContext context, {
+        required String title,
+        required IconData icon,
+        required VoidCallback onTap,
+      }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white.withOpacity(0.2)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white, size: 30),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
-  // Features section
+  // Features section (Unchanged)
   Widget _buildFeaturesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

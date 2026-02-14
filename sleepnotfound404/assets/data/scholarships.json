@@ -1,0 +1,62 @@
+[
+  {
+    "id": "jpa",
+    "name": "JPA Scholarship (PIDN)",
+    "provider": "Jabatan Perkhidmatan Awam",
+    "amount": "Full Tuition + Living Allowance",
+    "deadline": "March 2026",
+    "criteria": "SPM 9A+ / STPM 3.75 CGPA",
+    "category": "Government",
+    "link": "https://esilav2.jpa.gov.my/"
+  },
+  {
+    "id": "khazanah",
+    "name": "Yayasan Khazanah Scholarship",
+    "provider": "Yayasan Khazanah",
+    "amount": "Full Coverage + Leadership Program",
+    "deadline": "April 2026",
+    "criteria": "Strong Leadership + Good Academic Record",
+    "category": "Private",
+    "link": "https://www.yayasankhazanah.com.my/"
+  },
+  {
+    "id": "maybank",
+    "name": "Maybank Group Scholarship",
+    "provider": "Maybank Foundation",
+    "amount": "RM 10,000 / year + Internship",
+    "deadline": "May 2026",
+    "criteria": "Family Income < RM 4,000",
+    "category": "Corporate",
+    "link": "https://www.maybankfoundation.com/"
+  },
+  {
+    "id": "shell",
+    "name": "Shell Malaysia Scholarship",
+    "provider": "Shell Malaysia",
+    "amount": "Full Scholarship",
+    "deadline": "June 2026",
+    "criteria": "Engineering / Sciences / Commercial",
+    "category": "Corporate",
+    "link": "https://www.shell.com.my/"
+  },
+  {
+    "id": "ptptn",
+    "name": "PTPTN Loan (WPP)",
+    "provider": "PTPTN",
+    "amount": "RM 1,500 Advance",
+    "deadline": "Open All Year",
+    "criteria": "B40 Students entering IPTA/IPTS",
+    "category": "Loan",
+    "link": "https://www.ptptn.gov.my/"
+  },
+  {
+    "id": "star",
+    "name": "The Star Education Fund",
+    "provider": "The Star Media Group",
+    "amount": "Partial / Full Tuition Fee Waiver",
+    "deadline": "July 2026",
+    "criteria": "Active in Co-curricular Activities",
+    "category": "Media",
+    "link": "https://www.thestar.com.my/edufund"
+  }
+]

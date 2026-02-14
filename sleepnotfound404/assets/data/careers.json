@@ -1,0 +1,62 @@
+[
+  {
+    "id": "se",
+    "title": "Software Engineer",
+    "category": "Technology",
+    "salary_range": "RM 3,500 - RM 12,000",
+    "demand": "High",
+    "description": "Designs and builds computer programs and mobile apps. High demand in fintech and e-commerce.",
+    "skills": ["Programming (Java/Flutter)", "Problem Solving", "System Design"],
+    "pathway": "Degree in CS / SE / IT"
+  },
+  {
+    "id": "doc",
+    "title": "Medical Doctor",
+    "category": "Healthcare",
+    "salary_range": "RM 5,000 - RM 15,000",
+    "demand": "Stable",
+    "description": "Diagnoses and treats patients. Requires long study duration but offers high job security.",
+    "skills": ["Biology", "Empathy", "Critical Thinking"],
+    "pathway": "MBBS / MD (5 years) + Housemanship"
+  },
+  {
+    "id": "acc",
+    "title": "Accountant",
+    "category": "Finance",
+    "salary_range": "RM 3,000 - RM 9,000",
+    "demand": "Medium",
+    "description": "Manages financial records and taxes. ACCA/CPA certification is highly valued.",
+    "skills": ["Mathematics", "Excel", "Attention to Detail"],
+    "pathway": "Degree in Accounting + Professional Papers"
+  },
+  {
+    "id": "mkt",
+    "title": "Digital Marketer",
+    "category": "Business",
+    "salary_range": "RM 2,800 - RM 7,500",
+    "demand": "High",
+    "description": "Promotes brands online using social media, SEO, and ads. Very dynamic field.",
+    "skills": ["Social Media", "Data Analysis", "Creativity"],
+    "pathway": "Degree in Marketing / Mass Comm / Business"
+  },
+  {
+    "id": "civ",
+    "title": "Civil Engineer",
+    "category": "Engineering",
+    "salary_range": "RM 3,200 - RM 8,500",
+    "demand": "Medium",
+    "description": "Designs infrastructure like roads, bridges, and buildings.",
+    "skills": ["Physics", "AutoCAD", "Project Management"],
+    "pathway": "Degree in Civil Engineering"
+  },
+  {
+    "id": "ds",
+    "title": "Data Scientist",
+    "category": "Technology",
+    "salary_range": "RM 4,500 - RM 14,000",
+    "demand": "Very High",
+    "description": "Analyzes complex data to help companies make decisions. The 'sexiest job' of the 21st century.",
+    "skills": ["Python", "Statistics", "Machine Learning"],
+    "pathway": "Degree in Data Science / Statistics / CS"
+  }
+]
