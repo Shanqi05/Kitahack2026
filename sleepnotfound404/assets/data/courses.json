@@ -3,7 +3,13 @@
     "id": "CS",
     "name": "Computer Science",
     "field": "IT",
-    "level": ["Diploma","Degree","Foundation","A-Level"]
+    "level": ["Diploma","Degree","Foundation","A-Level","Asasi"]
+  },
+  {
+    "id": "AI",
+    "name": "Artificial Intelligence",
+    "field": "IT",
+    "level": ["Degree","Foundation"]
   },
   {
     "id": "DS",
@@ -12,26 +18,44 @@
     "level": ["Degree","Foundation"]
   },
   {
+    "id": "CS_SEC",
+    "name": "Computer Science with Cybersecurity",
+    "field": "IT",
+    "level": ["Degree","Foundation"]
+  },
+  {
+    "id": "SOFTENG",
+    "name": "Software Engineering",
+    "field": "IT",
+    "level": ["Degree","Foundation"]
+  },
+  {
     "id": "IT",
     "name": "Information Technology",
     "field": "IT",
-    "level": ["Diploma","Degree","Foundation","A-Level"]
+    "level": ["Diploma","Degree","Foundation","A-Level","Asasi"]
   },
   {
     "id": "MECH",
     "name": "Mechanical Engineering",
     "field": "Engineering",
-    "level": ["Degree","Foundation","A-Level"]
+    "level": ["Degree","Foundation","A-Level","Asasi"]
   },
   {
     "id": "ELEC",
     "name": "Electrical Engineering",
     "field": "Engineering",
-    "level": ["Degree","Foundation","A-Level"]
+    "level": ["Degree","Foundation","A-Level","Asasi"]
   },
   {
     "id": "CIVIL",
     "name": "Civil Engineering",
+    "field": "Engineering",
+    "level": ["Degree","Foundation","A-Level","Asasi"]
+  },
+  {
+    "id": "CHEM_ENG",
+    "name": "Chemical Engineering",
     "field": "Engineering",
     "level": ["Degree","Foundation","A-Level"]
   },
@@ -56,8 +80,26 @@
   {
     "id": "HBP",
     "name": "Hospitality & Business Professional",
-    "field": "HBP",
+    "field": "Business",
     "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "BUS",
+    "name": "Business Administration",
+    "field": "Business",
+    "level": ["Diploma","Degree","Foundation"]
+  },
+  {
+    "id": "ACC",
+    "name": "Accounting",
+    "field": "Finance",
+    "level": ["Degree","Foundation"]
+  },
+  {
+    "id": "HM",
+    "name": "Hotel Management",
+    "field": "Business",
+    "level": ["Degree","Foundation"]
   },
   {
     "id": "COMM",
@@ -66,10 +108,22 @@
     "level": ["Diploma","Degree","Foundation","A-Level"]
   },
   {
+    "id": "COMM_DEGREE",
+    "name": "Bachelor of Communication",
+    "field": "Communication",
+    "level": ["Degree"]
+  },
+  {
     "id": "PSY",
     "name": "Psychology",
     "field": "Psychology",
     "level": ["Diploma","Degree","Foundation","A-Level"]
+  },
+  {
+    "id": "PSY_DEGREE",
+    "name": "Bachelor of Psychology",
+    "field": "Psychology",
+    "level": ["Degree"]
   },
   {
     "id": "DENT",
@@ -99,19 +153,48 @@
     "id": "BIO",
     "name": "Biotechnology",
     "field": "Science",
-    "level": ["Degree","Foundation","A-Level"]
+    "level": ["Degree","Foundation","A-Level","Asasi"]
   },
   {
     "id": "CHEM",
     "name": "Chemistry",
     "field": "Science",
-    "level": ["Degree","Foundation","A-Level"]
+    "level": ["Degree","Foundation","A-Level","Asasi"]
   },
   {
     "id": "PHYS",
     "name": "Physics",
     "field": "Science",
-    "level": ["Degree","Foundation","A-Level"]
+    "level": ["Degree","Foundation","A-Level","Asasi"]
+  },
+  {
+    "id": "ENVR",
+    "name": "Environmental Science",
+    "field": "Science",
+    "level": ["Degree","Foundation"]
+  },
+  {
+    "id": "AGRI",
+    "name": "Agriculture",
+    "field": "Science",
+    "level": ["Degree","Foundation"]
+  },
+  {
+    "id": "LAW",
+    "name": "Law",
+    "field": "Communication",
+    "level": ["Degree","Foundation"]
+  },
+  {
+    "id": "ENG",
+    "name": "General Engineering",
+    "field": "Engineering",
+    "level": ["Degree","Foundation","Asasi"]
+  },
+  {
+    "id": "BUSINESS",
+    "name": "Business Studies",
+    "field": "Business",
+    "level": ["Degree","Foundation"]
   }
-
 ]

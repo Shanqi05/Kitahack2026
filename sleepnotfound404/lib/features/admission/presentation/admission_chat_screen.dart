@@ -3,7 +3,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 // Use relative import to ensure the file is found
 import '../../../services/gemini_service.dart';
-import 'budget_input_screen.dart';
 
 class AdmissionChatScreen extends StatefulWidget {
   final String qualification;
@@ -12,6 +11,8 @@ class AdmissionChatScreen extends StatefulWidget {
   final List<String> interests;
   final double? budget;
   final PlatformFile? resumeFile;
+  final String? stream;
+  final String? diplomaField;
 
   const AdmissionChatScreen({
     super.key,
@@ -21,6 +22,8 @@ class AdmissionChatScreen extends StatefulWidget {
     required this.interests,
     this.budget,
     this.resumeFile,
+    this.stream,
+    this.diplomaField,
   });
 
   @override
@@ -173,30 +176,16 @@ Keep responses concise and actionable.
           Padding(
             padding: const EdgeInsets.all(16),
             child: Center(
-              child: ElevatedButton(
+              child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          BudgetInputScreen(
-                            qualification: widget.qualification,
-                            upu: widget.upu,
-                            grades: widget.grades,
-                            interests: widget.interests,
-                            resumeFile: widget.resumeFile,
-                          ),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                      transitionDuration: const Duration(milliseconds: 400),
-                    ),
+                    '/',
+                    (route) => false,
                   );
                 },
+                icon: const Icon(Icons.home),
+                label: const Text('Back to Home'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: const Color(0xFF673AB7),
@@ -205,7 +194,6 @@ Keep responses concise and actionable.
                     horizontal: 16,
                   ),
                 ),
-                child: const Text('Next'), // Changed "Get Results" to "Next" to fit flow logic
               ),
             ),
           ),

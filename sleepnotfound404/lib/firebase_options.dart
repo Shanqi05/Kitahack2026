@@ -1,12 +1,74 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' as io;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    return const FirebaseOptions(
-      apiKey: 'YOUR_API_KEY',
-      appId: 'YOUR_APP_ID',
-      messagingSenderId: 'YOUR_SENDER_ID',
-      projectId: 'YOUR_PROJECT_ID',
+    if (kIsWeb) {
+      return web;
+    }
+    if (io.Platform.isAndroid) {
+      return android;
+    }
+    if (io.Platform.isIOS) {
+      return ios;
+    }
+    if (io.Platform.isMacOS) {
+      return macos;
+    }
+    if (io.Platform.isWindows) {
+      return windows;
+    }
+    if (io.Platform.isLinux) {
+      return linux;
+    }
+    throw UnsupportedError(
+      'DefaultFirebaseOptions are not supported for this platform.',
     );
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyD_uZ5GiImGwscC0Ow7PD7HqWTfpwn4-ks',
+    appId: '1:1067526580765:web:a3b61a654dfdf285eef4f4',
+    messagingSenderId: '1067526580765',
+    projectId: 'sleepnotfound404-46ce5',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAPPgpEP5S4Tond4T-5rhHSdHxtl-bI704',
+    appId: '1:1067526580765:android:43747810c1becbbaeef4f4',
+    messagingSenderId: '1067526580765',
+    projectId: 'sleepnotfound404-46ce5',
+    storageBucket: 'sleepnotfound404-46ce5.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyC3rvG5F3R5m3R5m3R5m3R5m3R5m3R5m3',
+    appId: '1:1067526580765:ios:08cccfbd81f5b5a0eef4f4',
+    messagingSenderId: '1067526580765',
+    projectId: 'sleepnotfound404-46ce5',
+    storageBucket: 'sleepnotfound404-46ce5.firebasestorage.app',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyC3rvG5F3R5m3R5m3R5m3R5m3R5m3R5m3',
+    appId: '1:1067526580765:ios:08cccfbd81f5b5a0eef4f4',
+    messagingSenderId: '1067526580765',
+    projectId: 'sleepnotfound404-46ce5',
+    storageBucket: 'sleepnotfound404-46ce5.firebasestorage.app',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyD_uZ5GiImGwscC0Ow7PD7HqWTfpwn4-ks',
+    appId: '1:1067526580765:web:1e84cd04eb5b4f95eef4f4',
+    messagingSenderId: '1067526580765',
+    projectId: 'sleepnotfound404-46ce5',
+  );
+
+  static const FirebaseOptions linux = FirebaseOptions(
+    apiKey: 'AIzaSyD_uZ5GiImGwscC0Ow7PD7HqWTfpwn4-ks',
+    appId: '1:1067526580765:web:1e84cd04eb5b4f95eef4f4',
+    messagingSenderId: '1067526580765',
+    projectId: 'sleepnotfound404-46ce5',
+  );
 }

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 // Import BudgetInputScreen to navigate there next
 import 'budget_input_screen.dart';
+import 'admission_chat_screen.dart';
 
 class InterestSelectionScreen extends StatefulWidget {
   final String qualification;
   final bool upu;
   final Map<String, String> grades;
   final PlatformFile? resumeFile;
+  final String? stream; // Science, Commerce, Arts
 
   const InterestSelectionScreen({
     super.key,
@@ -15,6 +17,7 @@ class InterestSelectionScreen extends StatefulWidget {
     required this.upu,
     required this.grades,
     this.resumeFile,
+    this.stream,
   });
 
   @override
@@ -25,11 +28,17 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> with 
   // Hardcoded list of interests with icons
   final interests = [
     {"name": "Information Technology", "short": "IT", "icon": Icons.computer},
+    {"name": "Artificial Intelligence", "short": "AI", "icon": Icons.smart_toy},
+    {"name": "Data Science", "short": "Data Science", "icon": Icons.analytics},
     {"name": "Engineering", "short": "Engineering", "icon": Icons.build},
-    {"name": "Business & Finance", "short": "BF", "icon": Icons.trending_up},
-    {"name": "Health & Biomedical", "short": "HBP", "icon": Icons.medical_services},
-    {"name": "Psychology", "short": "Psych", "icon": Icons.psychology},
-    {"name": "Health Science", "short": "Health", "icon": Icons.health_and_safety},
+    {"name": "Business & Finance", "short": "Business", "icon": Icons.trending_up},
+    {"name": "Finance & Accounting", "short": "Finance", "icon": Icons.calculate},
+    {"name": "Health & Biomedical", "short": "Health Science", "icon": Icons.medical_services},
+    {"name": "Psychology", "short": "Psychology", "icon": Icons.psychology},
+    {"name": "Science", "short": "Science", "icon": Icons.science},
+    {"name": "Communication", "short": "Communication", "icon": Icons.mail},
+    {"name": "Arts & Design", "short": "Arts", "icon": Icons.palette},
+    {"name": "Law", "short": "Law", "icon": Icons.gavel},
   ];
 
   final selected = <String>[];
@@ -109,32 +118,69 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> with 
                     color: Colors.white,
                     boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -5))]
                 ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: selected.isEmpty ? null : () {
-                      // Navigate to BudgetInputScreen passing all data
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BudgetInputScreen(
-                            qualification: widget.qualification,
-                            upu: widget.upu,
-                            grades: widget.grades,
-                            interests: selected, // Pass selected interests
-                            resumeFile: widget.resumeFile,
-                          ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Chat with AI Consultant Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: selected.isEmpty ? null : () {
+                          // Navigate to AdmissionChatScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdmissionChatScreen(
+                                qualification: widget.qualification,
+                                upu: widget.upu,
+                                grades: widget.grades,
+                                interests: selected,
+                                resumeFile: widget.resumeFile,
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.chat_bubble_outline),
+                        label: const Text('Chat with AI Consultant'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF673AB7).withOpacity(0.1),
+                          foregroundColor: const Color(0xFF673AB7),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF673AB7),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
                     ),
-                    child: const Text('Next: Set Budget', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  ),
+                    const SizedBox(height: 12),
+                    // Next Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: selected.isEmpty ? null : () {
+                          // Navigate to BudgetInputScreen passing all data
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BudgetInputScreen(
+                                qualification: widget.qualification,
+                                upu: widget.upu,
+                                grades: widget.grades,
+                                interests: selected,
+                                resumeFile: widget.resumeFile,
+                                stream: widget.stream,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF673AB7),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        ),
+                        child: const Text('Next: Set Budget', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -25,14 +25,15 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
   final Map<String, String> _grades = {};
   final List<String> _selectedSubjects = [];
   double? _cgpa;
+  String? _selectedStream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
 
   // Define subjects based on qualification
   final Map<String, List<String>> _subjectsByQualification = {
-    'SPM': ['Bahasa Melayu', 'English', 'Mathematics', 'History', 'Science', 'Add Maths', 'Physics', 'Chemistry', 'Biology'],
-    'STPM': ['Pengajian Am', 'Mathematics T', 'Physics', 'Chemistry', 'Biology'],
-    'Matriculation': ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science'],
-    'Asasi': ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Business', 'IT'],
-    'Diploma': ['Mathematics', 'Physics', 'Chemistry', 'Engineering', 'Business', 'IT'],
+    'SPM': ['Bahasa Melayu', 'English', 'Mathematics', 'History'],
+    'STPM': ['Pengajian Am'],
+    'Matriculation': ['Mathematics'],
+    'Asasi': [],
+    'Diploma': [],
     'UEC': ['Chinese', 'English', 'Mathematics', 'Advanced Maths', 'Physics', 'Chemistry'],
     'IGCSE': ['English', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Business Studies'],
   };
@@ -51,6 +52,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
 
   // Check if CGPA is required (all except SPM)
   bool get _requiresCGPA => widget.qualification != 'SPM';
+
+  // Check if stream selection is required (STPM, Matriculation, Asasi)
+  bool get _requiresStreamSelection =>
+      ['STPM', 'Matriculation', 'Asasi'].contains(widget.qualification);
+
 
   @override
   void initState() {
@@ -230,6 +236,63 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
 
               const SizedBox(height: 24),
 
+              // Stream Selection (for STPM, Matriculation, Asasi)
+              if (_requiresStreamSelection) ...[
+                const Text(
+                  'Select Your Academic Stream',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: _selectedStream,
+                  items: const [
+                    DropdownMenuItem<String>(
+                      value: 'Science',
+                      child: Text('Science'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Commerce',
+                      child: Text('Commerce/Account'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Arts',
+                      child: Text('Arts'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedStream = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Academic Stream',
+                    hintText: 'Select your stream',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  ),
+                  validator: (value) {
+                    if (_requiresStreamSelection && (value == null || value.isEmpty)) {
+                      return 'Please select your academic stream';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+              ],
+
               // CGPA Field (only for non-SPM qualifications)
               if (_requiresCGPA) ...[
                 const Text(
@@ -314,13 +377,24 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
         return;
       }
 
+      // Validate stream is selected if required
+      if (_requiresStreamSelection && (_selectedStream == null || _selectedStream!.isEmpty)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Please select your academic stream'),
+            backgroundColor: Colors.red[700],
+          ),
+        );
+        return;
+      }
+
       // Add CGPA to grades map if exists
       Map<String, String> finalGrades = Map.from(_grades);
       if (_cgpa != null) {
         finalGrades['CGPA'] = _cgpa.toString();
       }
 
-      // Navigate to InterestSelectionScreen passing the collected grades
+      // Navigate to InterestSelectionScreen passing the collected grades and stream
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -329,6 +403,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
             upu: widget.upu,
             grades: finalGrades,
             resumeFile: widget.resumeFile,
+            stream: _selectedStream,
           ),
         ),
       );

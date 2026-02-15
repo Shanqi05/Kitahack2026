@@ -6,6 +6,8 @@ class StudentProfile {
   final Map<String, String>? stpmGrades; // optional
   final Map<String, String>? preUniGrades; // Matrikulasi / Asasi / Diploma
   final double? budget; // optional budget
+  final String? stream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
+  final String? diplomaField; // Field of diploma (for mapping to degree)
 
   StudentProfile({
     required this.qualification,
@@ -15,5 +17,7 @@ class StudentProfile {
     this.stpmGrades,
     this.preUniGrades,
     this.budget,
+    this.stream,
+    this.diplomaField,
   });
 }

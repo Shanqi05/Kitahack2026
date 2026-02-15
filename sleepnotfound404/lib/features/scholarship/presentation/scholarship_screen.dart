@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // For opening links (Optional)
 import '../data/scholarship_service.dart';
 
 class ScholarshipScreen extends StatefulWidget {
@@ -10,7 +9,6 @@ class ScholarshipScreen extends StatefulWidget {
 }
 
 class _ScholarshipScreenState extends State<ScholarshipScreen> {
-  late Future<List<ScholarshipModel>> _scholarshipsFuture;
   List<ScholarshipModel> _allScholarships = [];
   List<ScholarshipModel> _filteredScholarships = [];
   final TextEditingController _searchController = TextEditingController();

@@ -3,7 +3,6 @@ import 'package:file_picker/file_picker.dart';
 import '../data/course_repository.dart';
 import '../data/admission_engine.dart';
 import '../models/student_profile.dart';
-// Use local JSON service for insights
 import '../data/career_insight_service.dart';
 import 'admission_chat_screen.dart';
 
@@ -14,6 +13,8 @@ class ResultScreen extends StatefulWidget {
   final List<String> interests;
   final double? budget;
   final PlatformFile? resumeFile;
+  final String? stream;
+  final String? diplomaField;
 
   const ResultScreen({
     super.key,
@@ -23,6 +24,8 @@ class ResultScreen extends StatefulWidget {
     required this.interests,
     this.budget,
     this.resumeFile,
+    this.stream,
+    this.diplomaField,
   });
 
   @override
@@ -31,14 +34,12 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   late Future<List<RecommendedProgram>> _getRecommendations;
-  // Future for local JSON insights
   late Future<List<InsightModel>> _getInsights;
 
   @override
   void initState() {
     super.initState();
     _getRecommendations = _loadRecommendations();
-    // Load local insights based on interests
     _getInsights = CareerInsightService().getMatchedInsights(widget.interests);
   }
 
@@ -53,6 +54,8 @@ class _ResultScreenState extends State<ResultScreen> {
         interest: widget.interests,
         spmGrades: widget.grades,
         budget: widget.budget,
+        stream: widget.stream,
+        diplomaField: widget.diplomaField,
       );
 
       final engine = AdmissionEngine(repository: repository);
@@ -85,12 +88,12 @@ class _ResultScreenState extends State<ResultScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 'Your Future Path',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF673AB7),
+                  color: const Color(0xFF673AB7),
                 ),
               ),
               const SizedBox(height: 8),
@@ -101,80 +104,76 @@ class _ResultScreenState extends State<ResultScreen> {
 
               const SizedBox(height: 24),
 
-              // --- 1. Enhanced Profile Summary ---
+              // Grade Suitability Alert
+              _buildGradeValidationAlert(),
+
+              const SizedBox(height: 24),
+
+              // --- 1. User Strength ---
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: _cardDecoration(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Profile Summary',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF673AB7)
-                      ),
+                    Row(
+                      children: [
+                        const Icon(Icons.verified, color: Color(0xFF673AB7), size: 24),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Your Strength',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF673AB7),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    _buildInfoRow('Qualification', widget.qualification),
-                    _buildInfoRow('Mode', widget.upu ? 'UPU (Public)' : 'Private'),
-                    // Show the selected budget
-                    _buildInfoRow('Budget', 'RM ${widget.budget?.toStringAsFixed(0)} / year'),
-
-                    const Divider(height: 24),
-                    const Text("Grades:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                    const SizedBox(height: 8),
-                    // Display all entered grades
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: widget.grades.entries.map((entry) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey[300]!),
-                          ),
-                          child: Text(
-                            "${entry.key}: ${entry.value}",
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                          ),
-                        );
-                      }).toList(),
+                    const SizedBox(height: 12),
+                    Text(
+                      _generateUserStrengthSummary(),
+                      style: const TextStyle(fontSize: 14, height: 1.6),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
-              // --- 2. Smart Insights (Based on Budget & Grades) ---
+              // --- 2. Scholarship Opportunity ---
               Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF673AB7).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF673AB7).withOpacity(0.3)),
-                ),
-                child: Row(
+                padding: const EdgeInsets.all(20),
+                decoration: _cardDecoration(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.auto_graph, color: Color(0xFF673AB7)),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        _generateSmartInsight(), // Generates advice based on logic
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF4527A0)),
-                      ),
+                    Row(
+                      children: [
+                        const Icon(Icons.card_giftcard, color: Color(0xFF673AB7), size: 24),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Scholarship Opportunity',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF673AB7),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _generateScholarshipComment(),
+                      style: const TextStyle(fontSize: 14, height: 1.6),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
-              // --- 3. Personal Insights (Cards from JSON) ---
+              // --- 3. Career Insight ---
               FutureBuilder<List<InsightModel>>(
                 future: _getInsights,
                 builder: (context, snapshot) {
@@ -185,117 +184,67 @@ class _ResultScreenState extends State<ResultScreen> {
                   final insights = snapshot.data ?? [];
                   if (insights.isEmpty) return const SizedBox.shrink();
 
-                  return Column(
-                    children: insights.map((insight) => Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: const EdgeInsets.all(20),
-                      decoration: _cardDecoration().copyWith(
-                        border: Border.all(color: const Color(0xFF673AB7).withOpacity(0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.lightbulb, color: Color(0xFF673AB7)),
-                              const SizedBox(width: 10),
-                              Text(
-                                '${insight.title} Insights',
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF673AB7)
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                              insight.insight,
-                              style: const TextStyle(fontSize: 14, height: 1.5)
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                              "Recommended Careers:",
-                              style: TextStyle(fontWeight: FontWeight.bold)
-                          ),
-                          const SizedBox(height: 4),
-                          Wrap(
-                            spacing: 8,
-                            children: insight.careers.map((c) => Chip(
-                              label: Text(c, style: const TextStyle(fontSize: 12)),
-                              backgroundColor: const Color(0xFF673AB7).withOpacity(0.1),
-                            )).toList(),
-                          ),
-                          const SizedBox(height: 12),
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.amber.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.star, color: Colors.amber, size: 20),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                    child: Text(
-                                        insight.advice,
-                                        style: TextStyle(fontSize: 12, color: Colors.grey[800])
-                                    )
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )).toList(),
-                  );
-                },
-              ),
-
-              // --- 4. Matched Courses ---
-              FutureBuilder<List<RecommendedProgram>>(
-                future: _getRecommendations,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  final recommendations = snapshot.data ?? [];
-
                   return Container(
                     padding: const EdgeInsets.all(20),
                     decoration: _cardDecoration(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Matched Courses',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF673AB7)
-                          ),
+                          Row(
+                          children: [
+                            const Icon(Icons.lightbulb, color: Color(0xFF673AB7), size: 24),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Career Insights',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF673AB7),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        if (recommendations.isEmpty)
-                          const Text(
-                              'No direct matches found. Try adjusting criteria.',
-                              style: TextStyle(color: Colors.grey)
-                          )
-                        else
-                          ...recommendations.take(10).map((course) =>
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: _buildCourseCard(course),
-                              )
+                        const SizedBox(height: 12),
+                        ...insights.map((insight) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                insight.title,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF673AB7),
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                insight.insight,
+                                style: const TextStyle(fontSize: 13, height: 1.5),
+                              ),
+                              const SizedBox(height: 8),
+                              Wrap(
+                                spacing: 6,
+                                children: insight.careers.take(3).map((c) => Chip(
+                                  label: Text(c, style: const TextStyle(fontSize: 11)),
+                                  backgroundColor: const Color(0xFF673AB7).withOpacity(0.15),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                )).toList(),
+                              ),
+                            ],
                           ),
+                        )),
                       ],
                     ),
                   );
                 },
               ),
+
+              const SizedBox(height: 24),
+
+              // --- Matched Courses from JSON ---
+              _buildMatchedCoursesSection(),
 
               const SizedBox(height: 30),
 
@@ -312,6 +261,8 @@ class _ResultScreenState extends State<ResultScreen> {
                         interests: widget.interests,
                         budget: widget.budget,
                         resumeFile: widget.resumeFile,
+                        stream: widget.stream,
+                        diplomaField: widget.diplomaField,
                       ),
                     ),
                   );
@@ -328,16 +279,24 @@ class _ResultScreenState extends State<ResultScreen> {
 
               const SizedBox(height: 16),
 
-              // Back Button
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+              // Back to Home Button
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/',
+                    (route) => false,
+                  );
+                },
+                icon: const Icon(Icons.home),
+                label: const Text('Back to Home'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[400],
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
                   minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text('Back to Home'),
               ),
               const SizedBox(height: 30),
             ],
@@ -349,25 +308,206 @@ class _ResultScreenState extends State<ResultScreen> {
 
   // --- Helper Methods ---
 
-  // Generates advice based on budget and grades
-  String _generateSmartInsight() {
-    double budget = widget.budget ?? 0;
-    bool highBudget = budget > 40000;
-    bool lowBudget = budget < 15000;
-
-    // Check for good grades (A or A+)
+  // Generate User Strength Summary
+  String _generateUserStrengthSummary() {
     int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
-    bool goodGrades = aCount >= 3;
+    int goodGrades = widget.grades.values.where((g) => g == 'A' || g == 'A+' || g == 'B+').length;
 
-    if (goodGrades && lowBudget) {
-      return "With your excellent grades (${aCount} As), you are a strong candidate for scholarships.";
-    } else if (highBudget) {
-      return "Your budget of RM ${budget.toStringAsFixed(0)} allows you to explore premium private university options.";
-    } else if (widget.upu) {
-      return "Focusing on UPU is a great strategy for cost-effective education with your current profile.";
+    String summary = "";
+    if (aCount >= 4) {
+      summary = "Excellent academic performance! Your ${aCount} A grades demonstrate strong capability and commitment. ";
+    } else if (aCount >= 2) {
+      summary = "Good academic foundation with ${aCount} A grades. You're well-positioned for your interests. ";
+    } else if (goodGrades >= 3) {
+      summary = "Solid grades showing consistent performance. You have potential in your chosen fields. ";
     } else {
-      return "Consider applying for PTPTN loans or financial aid to support your preferred course.";
+      summary = "Your grades show ability. Focus on strengthening specific subjects related to your interests. ";
     }
+
+    summary += widget.interests.isNotEmpty 
+      ? "Your interests in ${widget.interests.join(', ')} align well for further specialization."
+      : "";
+
+    return summary;
+  }
+
+  // Generate Scholarship Comment
+  String _generateScholarshipComment() {
+    int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
+    double budget = widget.budget ?? 0;
+
+    if (aCount >= 5) {
+      return "Congratulations! With your excellent grades, you're eligible for top-tier scholarships like JPA, Petronas, and Yayasan Khazanah. These cover full tuition + living allowance.";
+    } else if (aCount >= 3 && budget < 30000) {
+      return "Your good grades qualify you for merit-based scholarships. Explore government and corporate scholarships to ease your financial burden.";
+    } else if (budget > 50000) {
+      return "With your higher budget, focus on quality institutions without heavy scholarship dependency. You can also explore partial scholarships.";
+    } else if (budget < 20000) {
+      return "Consider PTPTN loans, need-based scholarships, or cost-effective UPU options to support your education.";
+    } else {
+      return "You have various scholarship options available. Research institution-specific scholarships for your chosen programs.";
+    }
+  }
+
+  // Build Grade Validation Alert
+  Widget _buildGradeValidationAlert() {
+    List<String> alerts = _getGradeValidationAlerts();
+    
+    if (alerts.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.orange.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.orange.withOpacity(0.5), width: 2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 24),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Grade Compatibility Alert',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...alerts.map((alert) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                const Icon(Icons.check, size: 16, color: Colors.orange),
+                const SizedBox(width: 8),
+                Expanded(child: Text(alert, style: const TextStyle(fontSize: 13))),
+              ],
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  // Get Grade Validation Alerts
+  List<String> _getGradeValidationAlerts() {
+    List<String> alerts = [];
+    int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
+    int cCount = widget.grades.values.where((g) => g == 'C' || g == 'C+' || g == 'C-').length;
+
+    // Check Math/Science grades for engineering/IT
+    if (widget.interests.contains('Engineering') || widget.interests.contains('IT')) {
+      final mathGrade = widget.grades['Math'];
+      final scienceGrade = widget.grades['Physics'] ?? widget.grades['Chemistry'];
+      if (mathGrade == 'C' || mathGrade == 'C+' || scienceGrade == 'C' || scienceGrade == 'C+') {
+        alerts.add("⚠ Consider retaking Math/Science for strong Engineering/IT programs, or explore foundational courses.");
+      }
+    }
+
+    // Check overall grades
+    if (cCount >= 2) {
+      alerts.add("⚠ Your C grades may limit options for competitive programs. Consider retaking or adjusting your path.");
+    } else if (aCount == 0 && widget.grades.values.where((g) => g.startsWith('B')).isEmpty) {
+      alerts.add("⚠ Consider strengthening your grades before applying to highly selective programs.");
+    }
+
+    return alerts;
+  }
+
+  // Build Matched Courses Section from JSON
+  Widget _buildMatchedCoursesSection() {
+    return FutureBuilder<List<RecommendedProgram>>(
+      future: _getRecommendations,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final recommendations = snapshot.data ?? [];
+
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: _cardDecoration(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.school, color: Color(0xFF673AB7), size: 24),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Matched Courses',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF673AB7),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              if (recommendations.isEmpty)
+                const Text(
+                  'No matches found. Chat with AI Advisor for personalized guidance.',
+                  style: TextStyle(color: Colors.grey),
+                )
+              else
+                ...recommendations.take(8).map((course) =>
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _buildSimpleCourseCard(course),
+                  )
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Simplified Course Card
+  Widget _buildSimpleCourseCard(RecommendedProgram course) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            course.courseName,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF673AB7),
+              fontSize: 13,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "${course.universityName} • ${course.location}",
+            style: TextStyle(fontSize: 11, color: Colors.grey[700]),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "RM ${course.annualFee.toStringAsFixed(0)} / year",
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
+    );
   }
 
   BoxDecoration _cardDecoration() {
@@ -381,56 +521,6 @@ class _ResultScreenState extends State<ResultScreen> {
           offset: const Offset(0, 4),
         ),
       ],
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
-          Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCourseCard(RecommendedProgram course) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-              course.courseName,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF673AB7))
-          ),
-          const SizedBox(height: 4),
-          Text(
-              "${course.universityName} • ${course.location}",
-              style: TextStyle(fontSize: 12, color: Colors.grey[700])
-          ),
-          const SizedBox(height: 4),
-          Text(
-              "RM ${course.annualFee.toStringAsFixed(0)} / year",
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)
-          ),
-        ],
-      ),
     );
   }
 }

@@ -9,6 +9,7 @@ class BudgetInputScreen extends StatefulWidget {
   final Map<String, String> grades;
   final List<String> interests;
   final PlatformFile? resumeFile;
+  final String? stream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
 
   const BudgetInputScreen({
     super.key,
@@ -17,6 +18,7 @@ class BudgetInputScreen extends StatefulWidget {
     required this.grades,
     required this.interests,
     this.resumeFile,
+    this.stream,
   });
 
   @override
@@ -108,8 +110,9 @@ class _BudgetInputScreenState extends State<BudgetInputScreen> {
                         upu: widget.upu,
                         grades: widget.grades,
                         interests: widget.interests,
-                        budget: _budget, // Pass selected budget
+                        budget: _budget,
                         resumeFile: widget.resumeFile,
+                        stream: widget.stream,
                       ),
                     ),
                   );
