@@ -2,6 +2,7 @@ import '../models/course_model.dart';
 import '../models/program_model.dart';
 import '../models/student_profile.dart';
 import 'course_repository.dart';
+import '../services/merit_calculator.dart';
 
 class RecommendedProgram {
   final String courseName;
@@ -13,6 +14,8 @@ class RecommendedProgram {
   final double annualFee;
   final String interestField;
   final int? minMerit;
+  final double? studentMerit; // Student's calculated merit score
+  final bool meetsRequirement; // Whether student meets minimum merit
   final double matchScore;
 
   // New property for test compatibility
@@ -28,6 +31,8 @@ class RecommendedProgram {
     required this.annualFee,
     required this.interestField,
     this.minMerit,
+    this.studentMerit,
+    this.meetsRequirement = true,
     required this.matchScore,
   }) {
     course = CourseModel(
@@ -35,6 +40,7 @@ class RecommendedProgram {
       name: courseName,
       field: interestField,
       level: [level],
+      minMeritRequired: minMerit?.toDouble(),
     );
   }
 }
@@ -48,6 +54,35 @@ class AdmissionEngine {
   List<RecommendedProgram> getRecommendations(StudentProfile student) {
     if (repository == null) {
       return _getMockRecommendations(student);
+    }
+
+    // Calculate student's merit if applicable
+    double? studentMerit;
+    try {
+      if (student.qualification.toLowerCase() == 'spm' && student.isUpu) {
+        studentMerit = MeritCalculator.calculateSpmMerit(
+          compulsoryMarks: student.spmCompulsoryMarks ?? [],
+          electiveMarks: student.spmElectiveMarks ?? [],
+          additionalMarks: student.spmAdditionalMarks ?? [],
+          coCurricularMark: student.coCurricularMark,
+        );
+      } else if ([
+        'stpm',
+        'asasi',
+        'matrikulasi',
+      ].contains(student.qualification.toLowerCase())) {
+        studentMerit = MeritCalculator.calculatePreUniversityMerit(
+          cgpa: student.cgpa ?? 0.0,
+          coCurricularMark: student.coCurricularMark,
+        );
+      } else if (student.qualification.toLowerCase() == 'diploma') {
+        studentMerit = MeritCalculator.calculateDiplomaMerit(
+          cgpa: student.cgpa ?? 0.0,
+        );
+      }
+    } catch (e) {
+      // If merit calculation fails, continue without merit filtering
+      print('Merit calculation error: $e');
     }
 
     final programs = repository!.programs;
@@ -65,15 +100,15 @@ class AdmissionEngine {
 
     // Step 2: Filter by field (interests)
     filtered = filtered.where((p) {
-      return student.interest.any((interest) =>
-          p.interestField.toLowerCase().contains(interest.toLowerCase()));
+      return student.interest.any(
+        (interest) =>
+            p.interestField.toLowerCase().contains(interest.toLowerCase()),
+      );
     }).toList();
 
     // Step 3: Filter by budget if provided
     if (student.budget != null) {
-      filtered = filtered
-          .where((p) => p.annualFee <= student.budget!)
-          .toList();
+      filtered = filtered.where((p) => p.annualFee <= student.budget!).toList();
     }
 
     // Step 4: Filter by stream restrictions (for STPM, Asasi, Matriculation)
@@ -84,8 +119,20 @@ class AdmissionEngine {
     // Step 5: If Diploma, only allow related degree courses in same field
     if (student.qualification == 'Diploma' && student.diplomaField != null) {
       filtered = filtered.where((p) {
-        return p.interestField.toLowerCase() == 
-               student.diplomaField!.toLowerCase();
+        return p.interestField.toLowerCase() ==
+            student.diplomaField!.toLowerCase();
+      }).toList();
+    }
+
+    // Step 6: Filter by merit requirement if merit is calculated and UPU
+    if (studentMerit != null &&
+        student.isUpu &&
+        student.qualification.toLowerCase() == 'spm') {
+      filtered = filtered.where((p) {
+        if (p.minMerit == null || studentMerit == null) {
+          return true; // No merit requirement filter if minMerit or studentMerit is not set
+        }
+        return studentMerit! >= p.minMerit!;
       }).toList();
     }
 
@@ -107,6 +154,12 @@ class AdmissionEngine {
           program.minMerit,
         );
 
+        // Check if student meets merit requirement
+        bool meetsRequirement = true;
+        if (studentMerit != null && program.minMerit != null) {
+          meetsRequirement = studentMerit >= program.minMerit!;
+        }
+
         recommendations.add(
           RecommendedProgram(
             courseName: course.name,
@@ -118,6 +171,8 @@ class AdmissionEngine {
             annualFee: program.annualFee,
             interestField: program.interestField,
             minMerit: program.minMerit,
+            studentMerit: studentMerit,
+            meetsRequirement: meetsRequirement,
             matchScore: matchScore,
           ),
         );
@@ -154,7 +209,11 @@ class AdmissionEngine {
   }
 
   /// Check if course is valid for student's stream
-  bool _isValidCourseForStream(StudentProfile student, String field, String courseId) {
+  bool _isValidCourseForStream(
+    StudentProfile student,
+    String field,
+    String courseId,
+  ) {
     // Only apply stream filtering to STPM, Asasi, Matriculation with Commerce stream
     if (!['STPM', 'Asasi', 'Matrikulasi'].contains(student.qualification)) {
       return true;
@@ -166,14 +225,16 @@ class AdmissionEngine {
     }
 
     // If Commerce/Account/Economy stream, exclude science-only courses
-    if (student.stream == 'Commerce' || student.stream == 'Account' || student.stream == 'Economy') {
+    if (student.stream == 'Commerce' ||
+        student.stream == 'Account' ||
+        student.stream == 'Economy') {
       final scienceOnlyCourses = [
         'CS', 'AI', 'DS', 'CS_SEC', 'SOFTENG', // Computer Science
         'BIOTECH', 'GENETIC', 'MEDIC_BCS', // Biotech/Medical
         'MECH', 'ELEC', 'CIVIL', 'CHEM_ENG', // Engineering (Science-based)
         'BIOMEDIC', 'PHARMA', 'NURSE', // Health Science
       ];
-      
+
       // Only allow if course is NOT in the science-only list
       return !scienceOnlyCourses.contains(courseId);
     }
@@ -181,13 +242,25 @@ class AdmissionEngine {
     // Arts stream - allow specific courses
     if (student.stream == 'Arts') {
       final artsAllowedCourses = [
-        'ART', 'DESIGN', 'COMM', 'ENG', 'HISTORY', 'LANG',
-        'HBP', 'BUS', 'PSYCH', 'LAW', 'SOCIAL',
+        'ART',
+        'DESIGN',
+        'COMM',
+        'ENG',
+        'HISTORY',
+        'LANG',
+        'HBP',
+        'BUS',
+        'PSYCH',
+        'LAW',
+        'SOCIAL',
       ];
-      return artsAllowedCourses.contains(courseId) || 
-             ['Arts', 'Communication', 'Business', 'Law'].any(
-               (field) => field.toLowerCase().contains(field.toLowerCase())
-             );
+      return artsAllowedCourses.contains(courseId) ||
+          [
+            'Arts',
+            'Communication',
+            'Business',
+            'Law',
+          ].any((field) => field.toLowerCase().contains(field.toLowerCase()));
     }
 
     return true;
@@ -214,6 +287,8 @@ class AdmissionEngine {
         annualFee: 5000.0,
         interestField: field,
         minMerit: null,
+        studentMerit: null,
+        meetsRequirement: true,
         matchScore: 100.0,
       ),
     ];
@@ -250,15 +325,20 @@ class AdmissionEngine {
 
     // Check if program field matches interests (exact match = higher score)
     final exactMatch = interests.any(
-      (i) => programField.toLowerCase().contains(i.toLowerCase()) ||
-             i.toLowerCase().contains(programField.toLowerCase())
+      (i) =>
+          programField.toLowerCase().contains(i.toLowerCase()) ||
+          i.toLowerCase().contains(programField.toLowerCase()),
     );
     if (exactMatch) {
       score += 50;
     } else {
       // Partial match for related fields
       final relatedInterests = _getRelatedFields(programField);
-      if (interests.any((i) => relatedInterests.any((ri) => i.toLowerCase().contains(ri.toLowerCase())))) {
+      if (interests.any(
+        (i) => relatedInterests.any(
+          (ri) => i.toLowerCase().contains(ri.toLowerCase()),
+        ),
+      )) {
         score += 30;
       }
     }
@@ -267,8 +347,8 @@ class AdmissionEngine {
     if (level.toLowerCase() == 'degree') {
       score += 20;
     } else if (level.toLowerCase() == 'asasi' ||
-               level.toLowerCase() == 'diploma' ||
-               level.toLowerCase() == 'foundation') {
+        level.toLowerCase() == 'diploma' ||
+        level.toLowerCase() == 'foundation') {
       score += 15;
     }
 
@@ -322,12 +402,28 @@ class AdmissionEngine {
   ) {
     double score = 0.0;
     final gradeValues = {
-      'A+': 4.0, 'A': 3.9, 'A-': 3.7,
-      'B+': 3.3, 'B': 3.0, 'B-': 2.7,
-      'C+': 2.3, 'C': 2.0, 'C-': 1.7,
-      'D': 1.0, 'D+': 1.3, 'E': 0.0,
-      'A1': 4.0, 'A2': 3.8, 'B3': 3.3, 'B4': 3.0, 'B5': 2.7,
-      'B6': 2.5, 'C7': 2.0, 'C8': 1.5, 'F9': 0.0, 'G': 0.5,
+      'A+': 4.0,
+      'A': 3.9,
+      'A-': 3.7,
+      'B+': 3.3,
+      'B': 3.0,
+      'B-': 2.7,
+      'C+': 2.3,
+      'C': 2.0,
+      'C-': 1.7,
+      'D': 1.0,
+      'D+': 1.3,
+      'E': 0.0,
+      'A1': 4.0,
+      'A2': 3.8,
+      'B3': 3.3,
+      'B4': 3.0,
+      'B5': 2.7,
+      'B6': 2.5,
+      'C7': 2.0,
+      'C8': 1.5,
+      'F9': 0.0,
+      'G': 0.5,
     };
 
     // Calculate GPA
@@ -344,13 +440,23 @@ class AdmissionEngine {
 
     // Score based on level
     if (level.toLowerCase() == 'degree') {
-      if (gpa >= 3.5) score += 12;
-      else if (gpa >= 3.0) score += 8;
-      else if (gpa >= 2.5) score += 4;
-    } else if (['asasi', 'foundation', 'diploma'].contains(level.toLowerCase())) {
-      if (gpa >= 3.0) score += 10;
-      else if (gpa >= 2.5) score += 6;
-      else if (gpa >= 2.0) score += 3;
+      if (gpa >= 3.5)
+        score += 12;
+      else if (gpa >= 3.0)
+        score += 8;
+      else if (gpa >= 2.5)
+        score += 4;
+    } else if ([
+      'asasi',
+      'foundation',
+      'diploma',
+    ].contains(level.toLowerCase())) {
+      if (gpa >= 3.0)
+        score += 10;
+      else if (gpa >= 2.5)
+        score += 6;
+      else if (gpa >= 2.0)
+        score += 3;
     }
 
     return score;
@@ -359,12 +465,28 @@ class AdmissionEngine {
   /// Calculate overall student merit based on grades
   int _calculateStudentMerit(Map<String, String> grades) {
     final gradeToNumber = {
-      'A+': 100, 'A': 95, 'A-': 90,
-      'B+': 85, 'B': 80, 'B-': 75,
-      'C+': 70, 'C': 65, 'C-': 60,
-      'D': 50, 'D+': 55, 'E': 40,
-      'A1': 100, 'A2': 95, 'B3': 85, 'B4': 80, 'B5': 75,
-      'B6': 70, 'C7': 65, 'C8': 60, 'F9': 40, 'G': 45,
+      'A+': 100,
+      'A': 95,
+      'A-': 90,
+      'B+': 85,
+      'B': 80,
+      'B-': 75,
+      'C+': 70,
+      'C': 65,
+      'C-': 60,
+      'D': 50,
+      'D+': 55,
+      'E': 40,
+      'A1': 100,
+      'A2': 95,
+      'B3': 85,
+      'B4': 80,
+      'B5': 75,
+      'B6': 70,
+      'C7': 65,
+      'C8': 60,
+      'F9': 40,
+      'G': 45,
     };
 
     double sum = 0;
@@ -377,21 +499,5 @@ class AdmissionEngine {
       }
     }
     return count > 0 ? (sum / count).round() : 0;
-  }
-
-  /// Get entry level based on qualification
-  String _getEntryLevelFromQualification(String qualification) {
-    switch (qualification) {
-      case 'SPM':
-        return 'Diploma';
-      case 'STPM':
-      case 'Matrikulasi':
-      case 'A-Level':
-        return 'Degree';
-      case 'Diploma':
-        return 'Degree';
-      default:
-        return 'Foundation';
-    }
   }
 }

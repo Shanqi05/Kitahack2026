@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'application_mode_screen.dart';
+import 'grade_input_screen.dart';
 
 class ResumeUploadAdmissionScreen extends StatefulWidget {
   final String qualification;
@@ -228,32 +229,72 @@ class _ResumeUploadAdmissionScreenState
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                        return ApplicationModeScreen(
-                                          qualification: widget.qualification,
-                                        );
-                                      },
-                                  transitionsBuilder:
-                                      (
-                                        context,
-                                        animation,
-                                        secondaryAnimation,
-                                        child,
-                                      ) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: child,
-                                        );
-                                      },
-                                  transitionDuration: const Duration(
-                                    milliseconds: 400,
+                              // For Foundation, go directly to GradeInputScreen
+                              if (widget.qualification == 'Foundation') {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) {
+                                          return GradeInputScreen(
+                                            qualification: widget.qualification,
+                                            upu: false,
+                                            resumeFile: selectedFile,
+                                          );
+                                        },
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: const Duration(
+                                      milliseconds: 400,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) {
+                                          return ApplicationModeScreen(
+                                            qualification: widget.qualification,
+                                          );
+                                        },
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: const Duration(
+                                      milliseconds: 400,
+                                    ),
+                                  ),
+                                );
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: const Color(0xFF673AB7),
@@ -278,42 +319,106 @@ class _ResumeUploadAdmissionScreenState
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: selectedFile == null
-                                ? null
-                                : () {
-                                    Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder:
-                                            (
-                                              context,
-                                              animation,
-                                              secondaryAnimation,
-                                            ) {
-                                              return ApplicationModeScreen(
-                                                qualification:
-                                                    widget.qualification,
-                                                resumeFile: selectedFile,
-                                              );
-                                            },
-                                        transitionsBuilder:
-                                            (
-                                              context,
-                                              animation,
-                                              secondaryAnimation,
-                                              child,
-                                            ) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                        transitionDuration: const Duration(
-                                          milliseconds: 400,
-                                        ),
-                                      ),
-                                    );
-                                  },
+                            onPressed: () {
+                              // For Foundation, go directly to GradeInputScreen
+                              if (widget.qualification == 'Foundation') {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) {
+                                          return GradeInputScreen(
+                                            qualification: widget.qualification,
+                                            upu: false,
+                                            resumeFile: selectedFile,
+                                          );
+                                        },
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: const Duration(
+                                      milliseconds: 400,
+                                    ),
+                                  ),
+                                );
+                              } else if (selectedFile == null) {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) {
+                                          return ApplicationModeScreen(
+                                            qualification: widget.qualification,
+                                          );
+                                        },
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: const Duration(
+                                      milliseconds: 400,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) {
+                                          return ApplicationModeScreen(
+                                            qualification: widget.qualification,
+                                            resumeFile: selectedFile,
+                                          );
+                                        },
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: const Duration(
+                                      milliseconds: 400,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF673AB7),
                               foregroundColor: Colors.white,

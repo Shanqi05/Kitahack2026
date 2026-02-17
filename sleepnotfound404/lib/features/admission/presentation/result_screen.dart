@@ -48,6 +48,49 @@ class _ResultScreenState extends State<ResultScreen> {
       final repository = CourseRepository();
       await repository.loadData();
 
+      // Extract CGPA and co-curricular mark from grades map
+      double? cgpa = widget.grades['CGPA'] != null
+          ? double.tryParse(widget.grades['CGPA']!)
+          : null;
+      double coCurricularMark = widget.grades['CocurricularMark'] != null
+          ? double.tryParse(widget.grades['CocurricularMark']!) ?? 0.0
+          : 0.0;
+
+      // Extract subject marks for different qualification types
+      List<int> spmCompulsory = [];
+      List<int> spmElective = [];
+      List<int> spmAdditional = [];
+
+      if (widget.qualification == 'SPM' && widget.upu) {
+        // For SPM UPU, parse subject marks
+        widget.grades.forEach((subject, grade) {
+          if (subject != 'CGPA' && subject != 'CocurricularMark') {
+            // Grade to numeric conversion for SPM calculation
+            final gradeToPoints = {
+              'A+': 18,
+              'A': 17,
+              'A-': 16,
+              'B+': 15,
+              'B': 14,
+              'C+': 13,
+              'C': 12,
+              'D': 11,
+              'E': 10,
+              'G': 0,
+            };
+            final points = gradeToPoints[grade] ?? 0;
+            // Assuming 4 compulsory, 2 elective, rest additional
+            if (spmCompulsory.length < 4) {
+              spmCompulsory.add(points);
+            } else if (spmElective.length < 2) {
+              spmElective.add(points);
+            } else {
+              spmAdditional.add(points);
+            }
+          }
+        });
+      }
+
       final student = StudentProfile(
         qualification: widget.qualification,
         isUpu: widget.upu,
@@ -56,6 +99,11 @@ class _ResultScreenState extends State<ResultScreen> {
         budget: widget.budget,
         stream: widget.stream,
         diplomaField: widget.diplomaField,
+        cgpa: cgpa,
+        coCurricularMark: coCurricularMark,
+        spmCompulsoryMarks: spmCompulsory.isNotEmpty ? spmCompulsory : null,
+        spmElectiveMarks: spmElective.isNotEmpty ? spmElective : null,
+        spmAdditionalMarks: spmAdditional.isNotEmpty ? spmAdditional : null,
       );
 
       final engine = AdmissionEngine(repository: repository);
@@ -118,7 +166,11 @@ class _ResultScreenState extends State<ResultScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.verified, color: Color(0xFF673AB7), size: 24),
+                        const Icon(
+                          Icons.verified,
+                          color: Color(0xFF673AB7),
+                          size: 24,
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           'Your Strength',
@@ -150,7 +202,11 @@ class _ResultScreenState extends State<ResultScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.card_giftcard, color: Color(0xFF673AB7), size: 24),
+                        const Icon(
+                          Icons.card_giftcard,
+                          color: Color(0xFF673AB7),
+                          size: 24,
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           'Scholarship Opportunity',
@@ -190,9 +246,13 @@ class _ResultScreenState extends State<ResultScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                          Row(
+                        Row(
                           children: [
-                            const Icon(Icons.lightbulb, color: Color(0xFF673AB7), size: 24),
+                            const Icon(
+                              Icons.lightbulb,
+                              color: Color(0xFF673AB7),
+                              size: 24,
+                            ),
                             const SizedBox(width: 10),
                             Text(
                               'Career Insights',
@@ -205,36 +265,56 @@ class _ResultScreenState extends State<ResultScreen> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        ...insights.map((insight) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                insight.title,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF673AB7),
+                        ...insights.map(
+                          (insight) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  insight.title,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF673AB7),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                insight.insight,
-                                style: const TextStyle(fontSize: 13, height: 1.5),
-                              ),
-                              const SizedBox(height: 8),
-                              Wrap(
-                                spacing: 6,
-                                children: insight.careers.take(3).map((c) => Chip(
-                                  label: Text(c, style: const TextStyle(fontSize: 11)),
-                                  backgroundColor: const Color(0xFF673AB7).withOpacity(0.15),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                )).toList(),
-                              ),
-                            ],
+                                const SizedBox(height: 6),
+                                Text(
+                                  insight.insight,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 6,
+                                  children: insight.careers
+                                      .take(3)
+                                      .map(
+                                        (c) => Chip(
+                                          label: Text(
+                                            c,
+                                            style: const TextStyle(
+                                              fontSize: 11,
+                                            ),
+                                          ),
+                                          backgroundColor: const Color(
+                                            0xFF673AB7,
+                                          ).withOpacity(0.15),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ],
+                            ),
                           ),
-                        )),
+                        ),
                       ],
                     ),
                   );
@@ -272,7 +352,10 @@ class _ResultScreenState extends State<ResultScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF673AB7),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
                   minimumSize: const Size(double.infinity, 56),
                 ),
               ),
@@ -293,9 +376,14 @@ class _ResultScreenState extends State<ResultScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[400],
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
                   minimumSize: const Size(double.infinity, 56),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
@@ -311,22 +399,28 @@ class _ResultScreenState extends State<ResultScreen> {
   // Generate User Strength Summary
   String _generateUserStrengthSummary() {
     int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
-    int goodGrades = widget.grades.values.where((g) => g == 'A' || g == 'A+' || g == 'B+').length;
+    int goodGrades = widget.grades.values
+        .where((g) => g == 'A' || g == 'A+' || g == 'B+')
+        .length;
 
     String summary = "";
     if (aCount >= 4) {
-      summary = "Excellent academic performance! Your ${aCount} A grades demonstrate strong capability and commitment. ";
+      summary =
+          "Excellent academic performance! Your ${aCount} A grades demonstrate strong capability and commitment. ";
     } else if (aCount >= 2) {
-      summary = "Good academic foundation with ${aCount} A grades. You're well-positioned for your interests. ";
+      summary =
+          "Good academic foundation with ${aCount} A grades. You're well-positioned for your interests. ";
     } else if (goodGrades >= 3) {
-      summary = "Solid grades showing consistent performance. You have potential in your chosen fields. ";
+      summary =
+          "Solid grades showing consistent performance. You have potential in your chosen fields. ";
     } else {
-      summary = "Your grades show ability. Focus on strengthening specific subjects related to your interests. ";
+      summary =
+          "Your grades show ability. Focus on strengthening specific subjects related to your interests. ";
     }
 
-    summary += widget.interests.isNotEmpty 
-      ? "Your interests in ${widget.interests.join(', ')} align well for further specialization."
-      : "";
+    summary += widget.interests.isNotEmpty
+        ? "Your interests in ${widget.interests.join(', ')} align well for further specialization."
+        : "";
 
     return summary;
   }
@@ -352,7 +446,7 @@ class _ResultScreenState extends State<ResultScreen> {
   // Build Grade Validation Alert
   Widget _buildGradeValidationAlert() {
     List<String> alerts = _getGradeValidationAlerts();
-    
+
     if (alerts.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -369,7 +463,11 @@ class _ResultScreenState extends State<ResultScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 24),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.orange,
+                size: 24,
+              ),
               const SizedBox(width: 12),
               const Expanded(
                 child: Text(
@@ -384,16 +482,20 @@ class _ResultScreenState extends State<ResultScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          ...alerts.map((alert) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              children: [
-                const Icon(Icons.check, size: 16, color: Colors.orange),
-                const SizedBox(width: 8),
-                Expanded(child: Text(alert, style: const TextStyle(fontSize: 13))),
-              ],
+          ...alerts.map(
+            (alert) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  const Icon(Icons.check, size: 16, color: Colors.orange),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(alert, style: const TextStyle(fontSize: 13)),
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
         ],
       ),
     );
@@ -403,22 +505,36 @@ class _ResultScreenState extends State<ResultScreen> {
   List<String> _getGradeValidationAlerts() {
     List<String> alerts = [];
     int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
-    int cCount = widget.grades.values.where((g) => g == 'C' || g == 'C+' || g == 'C-').length;
+    int cCount = widget.grades.values
+        .where((g) => g == 'C' || g == 'C+' || g == 'C-')
+        .length;
 
     // Check Math/Science grades for engineering/IT
-    if (widget.interests.contains('Engineering') || widget.interests.contains('IT')) {
+    if (widget.interests.contains('Engineering') ||
+        widget.interests.contains('IT')) {
       final mathGrade = widget.grades['Math'];
-      final scienceGrade = widget.grades['Physics'] ?? widget.grades['Chemistry'];
-      if (mathGrade == 'C' || mathGrade == 'C+' || scienceGrade == 'C' || scienceGrade == 'C+') {
-        alerts.add("⚠ Consider retaking Math/Science for strong Engineering/IT programs, or explore foundational courses.");
+      final scienceGrade =
+          widget.grades['Physics'] ?? widget.grades['Chemistry'];
+      if (mathGrade == 'C' ||
+          mathGrade == 'C+' ||
+          scienceGrade == 'C' ||
+          scienceGrade == 'C+') {
+        alerts.add(
+          "⚠ Consider retaking Math/Science for strong Engineering/IT programs, or explore foundational courses.",
+        );
       }
     }
 
     // Check overall grades
     if (cCount >= 2) {
-      alerts.add("⚠ Your C grades may limit options for competitive programs. Consider retaking or adjusting your path.");
-    } else if (aCount == 0 && widget.grades.values.where((g) => g.startsWith('B')).isEmpty) {
-      alerts.add("⚠ Consider strengthening your grades before applying to highly selective programs.");
+      alerts.add(
+        "⚠ Your C grades may limit options for competitive programs. Consider retaking or adjusting your path.",
+      );
+    } else if (aCount == 0 &&
+        widget.grades.values.where((g) => g.startsWith('B')).isEmpty) {
+      alerts.add(
+        "⚠ Consider strengthening your grades before applying to highly selective programs.",
+      );
     }
 
     return alerts;
@@ -462,12 +578,14 @@ class _ResultScreenState extends State<ResultScreen> {
                   style: TextStyle(color: Colors.grey),
                 )
               else
-                ...recommendations.take(8).map((course) =>
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _buildSimpleCourseCard(course),
-                  )
-                ),
+                ...recommendations
+                    .take(8)
+                    .map(
+                      (course) => Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _buildSimpleCourseCard(course),
+                      ),
+                    ),
             ],
           ),
         );

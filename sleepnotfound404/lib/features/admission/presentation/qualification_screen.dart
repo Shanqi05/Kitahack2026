@@ -8,7 +8,8 @@ class QualificationScreen extends StatefulWidget {
   State<QualificationScreen> createState() => _QualificationScreenState();
 }
 
-class _QualificationScreenState extends State<QualificationScreen> with TickerProviderStateMixin {
+class _QualificationScreenState extends State<QualificationScreen>
+    with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
@@ -19,9 +20,10 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
   }
 
@@ -36,9 +38,22 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
     final qualifications = [
       {"title": "SPM", "icon": Icons.school, "color": const Color(0xFF673AB7)},
       {"title": "STPM", "icon": Icons.book, "color": const Color(0xFF512DA8)},
-      {"title": "Matrikulasi", "icon": Icons.menu_book, "color": const Color(0xFF7B1FA2)},
+      {
+        "title": "Matrikulasi",
+        "icon": Icons.menu_book,
+        "color": const Color(0xFF7B1FA2),
+      },
       {"title": "Asasi", "icon": Icons.grade, "color": const Color(0xFF9C27B0)},
-      {"title": "Diploma", "icon": Icons.workspace_premium, "color": const Color(0xFF9575CD)},
+      {
+        "title": "Diploma",
+        "icon": Icons.workspace_premium,
+        "color": const Color(0xFF9575CD),
+      },
+      {
+        "title": "Foundation",
+        "icon": Icons.foundation,
+        "color": const Color(0xFF7C6BA8),
+      },
     ];
 
     return Scaffold(
@@ -74,10 +89,7 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
                     const SizedBox(height: 12),
                     Text(
                       "Select the qualification you have or will be completing",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 30),
                     ...qualifications.asMap().entries.map((entry) {
@@ -121,9 +133,10 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
                   ResumeUploadAdmissionScreen(qualification: title),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
               transitionDuration: const Duration(milliseconds: 400),
             ),
           );
@@ -154,15 +167,22 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         ResumeUploadAdmissionScreen(qualification: title),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(opacity: animation, child: child);
-                    },
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
                     transitionDuration: const Duration(milliseconds: 400),
                   ),
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -171,11 +191,7 @@ class _QualificationScreenState extends State<QualificationScreen> with TickerPr
                         color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(
-                        icon,
-                        size: 28,
-                        color: Colors.white,
-                      ),
+                      child: Icon(icon, size: 28, color: Colors.white),
                     ),
                     const SizedBox(width: 20),
                     Expanded(

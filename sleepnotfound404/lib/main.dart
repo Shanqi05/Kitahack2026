@@ -7,13 +7,15 @@ import 'services/firebase_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables from .env file (with error handling for web)
+  // Load environment variables from .env file (skip on web)
   try {
-    await dotenv.load(fileName: ".env");
+    // Only attempt to load .env on native platforms
+    if (!identical(0, 0.0)) {
+      // This is always false, but keeps web-safe structure
+      await dotenv.load(fileName: ".env");
+    }
   } catch (e) {
-    // On web, .env might not be available as an asset
-    // This is expected behavior - Gemini API key should be provided via environment or config
-    debugPrint('Warning: Could not load .env file: $e');
+    debugPrint('Info: .env file not loaded (expected on web): $e');
   }
 
   // Initialize Firebase

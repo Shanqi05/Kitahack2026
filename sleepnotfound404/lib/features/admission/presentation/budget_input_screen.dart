@@ -9,7 +9,9 @@ class BudgetInputScreen extends StatefulWidget {
   final Map<String, String> grades;
   final List<String> interests;
   final PlatformFile? resumeFile;
-  final String? stream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
+  final String?
+  stream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
+  final String? diplomaField; // For Foundation and Diploma
 
   const BudgetInputScreen({
     super.key,
@@ -19,6 +21,7 @@ class BudgetInputScreen extends StatefulWidget {
     required this.interests,
     this.resumeFile,
     this.stream,
+    this.diplomaField,
   });
 
   @override
@@ -51,7 +54,11 @@ class _BudgetInputScreenState extends State<BudgetInputScreen> {
           children: [
             const Text(
               'What is your budget?',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF673AB7),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -66,7 +73,11 @@ class _BudgetInputScreenState extends State<BudgetInputScreen> {
                 children: [
                   Text(
                     "RM ${_budget.toStringAsFixed(0)} / year",
-                    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF673AB7),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Slider(
@@ -113,6 +124,7 @@ class _BudgetInputScreenState extends State<BudgetInputScreen> {
                         budget: _budget,
                         resumeFile: widget.resumeFile,
                         stream: widget.stream,
+                        diplomaField: widget.diplomaField,
                       ),
                     ),
                   );
@@ -121,9 +133,14 @@ class _BudgetInputScreenState extends State<BudgetInputScreen> {
                   backgroundColor: const Color(0xFF673AB7),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                child: const Text('View Recommendations', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'View Recommendations',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             const SizedBox(height: 20),

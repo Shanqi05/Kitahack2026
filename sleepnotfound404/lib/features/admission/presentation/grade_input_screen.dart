@@ -25,7 +25,10 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
   final Map<String, String> _grades = {};
   final List<String> _selectedSubjects = [];
   double? _cgpa;
-  String? _selectedStream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
+  double? _cocurricularMark;
+  String?
+  _selectedStream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
+  String? _diplomaField; // For Foundation and Diploma
 
   // Define subjects based on qualification
   final Map<String, List<String>> _subjectsByQualification = {
@@ -34,15 +37,31 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
     'Matriculation': ['Mathematics'],
     'Asasi': [],
     'Diploma': [],
-    'UEC': ['Chinese', 'English', 'Mathematics', 'Advanced Maths', 'Physics', 'Chemistry'],
-    'IGCSE': ['English', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Business Studies'],
+    'Foundation': [],
+    'UEC': [
+      'Chinese',
+      'English',
+      'Mathematics',
+      'Advanced Maths',
+      'Physics',
+      'Chemistry',
+    ],
+    'IGCSE': [
+      'English',
+      'Mathematics',
+      'Physics',
+      'Chemistry',
+      'Biology',
+      'Business Studies',
+    ],
   };
 
   // Get grade options based on qualification
   List<String> get _gradeOptions {
     if (widget.qualification == 'SPM' || widget.qualification == 'IGCSE') {
       return ['A+', 'A', 'A-', 'B+', 'B', 'C+', 'C', 'D', 'E', 'G'];
-    } else if (widget.qualification == 'STPM' || widget.qualification == 'Matriculation') {
+    } else if (widget.qualification == 'STPM' ||
+        widget.qualification == 'Matriculation') {
       return ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'F'];
     } else if (widget.qualification == 'UEC') {
       return ['A1', 'A2', 'B3', 'B4', 'B5', 'B6', 'C7', 'C8', 'F9'];
@@ -57,12 +76,23 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
   bool get _requiresStreamSelection =>
       ['STPM', 'Matriculation', 'Asasi'].contains(widget.qualification);
 
+  // Check if cocurricular mark is required (UPU: SPM, Matriculation, Asasi, STPM)
+  bool get _requiresCocurricularMark =>
+      widget.upu &&
+      ['SPM', 'Matriculation', 'Asasi', 'STPM'].contains(widget.qualification);
+
+  // Check if this is Foundation or Diploma (simplified form)
+  bool get _isFoundationOrDiploma =>
+      ['Foundation', 'Diploma'].contains(widget.qualification);
 
   @override
   void initState() {
     super.initState();
-    final defaultSubjects = _subjectsByQualification[widget.qualification] ?? [];
-    _selectedSubjects.addAll(defaultSubjects.take(5)); // Start with first 5 subjects
+    final defaultSubjects =
+        _subjectsByQualification[widget.qualification] ?? [];
+    _selectedSubjects.addAll(
+      defaultSubjects.take(5),
+    ); // Start with first 5 subjects
   }
 
   void _addSubject() {
@@ -88,7 +118,10 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
                 ),
                 onSubmitted: (value) {
                   if (value.trim().isNotEmpty) {
@@ -162,6 +195,10 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isFoundationOrDiploma) {
+      return _buildFoundationOrDiplomaForm();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.qualification} Grades"),
@@ -183,7 +220,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
             children: [
               const Text(
                 'Enter Your Results',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF673AB7),
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -193,27 +234,29 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
               const SizedBox(height: 24),
 
               // Display selected subjects with grades
-              ..._selectedSubjects.map((subject) => Dismissible(
-                key: ValueKey(subject),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 20),
-                  color: Colors.red.withOpacity(0.7),
-                  child: const Icon(Icons.delete, color: Colors.white),
+              ..._selectedSubjects.map(
+                (subject) => Dismissible(
+                  key: ValueKey(subject),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    color: Colors.red.withOpacity(0.7),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  onDismissed: (_) => _removeSubject(subject),
+                  child: GradeInputField(
+                    subject: subject,
+                    value: _grades[subject],
+                    gradeOptions: _gradeOptions,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) _grades[subject] = value;
+                      });
+                    },
+                  ),
                 ),
-                onDismissed: (_) => _removeSubject(subject),
-                child: GradeInputField(
-                  subject: subject,
-                  value: _grades[subject],
-                  gradeOptions: _gradeOptions,
-                  onChanged: (value) {
-                    setState(() {
-                      if (value != null) _grades[subject] = value;
-                    });
-                  },
-                ),
-              )),
+              ),
 
               // Add button for more subjects
               Padding(
@@ -228,7 +271,10 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(color: Color(0xFF673AB7), width: 1.5),
+                      side: const BorderSide(
+                        color: Color(0xFF673AB7),
+                        width: 1.5,
+                      ),
                     ),
                   ),
                 ),
@@ -240,7 +286,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
               if (_requiresStreamSelection) ...[
                 const Text(
                   'Select Your Academic Stream',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF673AB7),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
@@ -277,14 +327,21 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF673AB7),
+                        width: 2,
+                      ),
                     ),
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                   ),
                   validator: (value) {
-                    if (_requiresStreamSelection && (value == null || value.isEmpty)) {
+                    if (_requiresStreamSelection &&
+                        (value == null || value.isEmpty)) {
                       return 'Please select your academic stream';
                     }
                     return null;
@@ -297,7 +354,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
               if (_requiresCGPA) ...[
                 const Text(
                   'Enter Your CGPA',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF673AB7)),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF673AB7),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
@@ -314,13 +375,21 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF673AB7),
+                        width: 2,
+                      ),
                     ),
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your CGPA';
@@ -337,12 +406,235 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                     });
                   },
                 ),
+                const SizedBox(height: 24),
+              ],
+
+              // Cocurricular Mark (for UPU: SPM, Matriculation, Asasi, STPM)
+              if (_requiresCocurricularMark) ...[
+                const Text(
+                  'Enter Your Co-curricular Mark',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF673AB7),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText:
+                        'Co-curricular Mark (0-10, max: 2 decimal places)',
+                    hintText: 'e.g., 8.50',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF673AB7),
+                        width: 2,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                  ),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your co-curricular mark';
+                    }
+                    final mark = double.tryParse(value);
+                    if (mark == null || mark < 0 || mark > 10) {
+                      return 'Please enter a valid mark (0-10)';
+                    }
+                    // Check for more than 2 decimal places
+                    if (value.contains('.')) {
+                      final decimals = value.split('.')[1];
+                      if (decimals.length > 2) {
+                        return 'Maximum 2 decimal places allowed';
+                      }
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      _cocurricularMark = double.tryParse(value);
+                    });
+                  },
+                ),
                 const SizedBox(height: 30),
               ],
 
               CustomButton(
                 text: "Next: Select Interests",
                 onPressed: _submitGrades,
+                isLoading: false,
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFoundationOrDiplomaForm() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("${widget.qualification} - Enter Details"),
+        backgroundColor: const Color(0xFF673AB7),
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF5F7FA), Color(0xFFEDE7F6)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              const Text(
+                'Enter Your Details',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF673AB7),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Provide your ${widget.qualification.toLowerCase()} information',
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 24),
+
+              // Diploma Field
+              Text(
+                'Enter Your ${widget.qualification} in What Course',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF673AB7),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: '${widget.qualification} Course',
+                  hintText:
+                      'e.g., Information Technology, Business Administration',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF673AB7),
+                      width: 2,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your course';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    _diplomaField = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 24),
+
+              // CGPA Field
+              const Text(
+                'Enter Your CGPA',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF673AB7),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'CGPA (e.g., 3.5)',
+                  hintText: '0.0 - 4.0',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF673AB7),
+                      width: 2,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                ),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your CGPA';
+                  }
+                  final cgpa = double.tryParse(value);
+                  if (cgpa == null || cgpa < 0 || cgpa > 4.0) {
+                    return 'Please enter a valid CGPA (0.0 - 4.0)';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    _cgpa = double.tryParse(value);
+                  });
+                },
+              ),
+              const SizedBox(height: 30),
+
+              CustomButton(
+                text: "Next: Select Interests",
+                onPressed: _submitFoundationOrDiplomaGrades,
                 isLoading: false,
               ),
               const SizedBox(height: 30),
@@ -378,10 +670,22 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
       }
 
       // Validate stream is selected if required
-      if (_requiresStreamSelection && (_selectedStream == null || _selectedStream!.isEmpty)) {
+      if (_requiresStreamSelection &&
+          (_selectedStream == null || _selectedStream!.isEmpty)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Please select your academic stream'),
+            backgroundColor: Colors.red[700],
+          ),
+        );
+        return;
+      }
+
+      // Validate cocurricular mark if required
+      if (_requiresCocurricularMark && (_cocurricularMark == null)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Please enter your co-curricular mark'),
             backgroundColor: Colors.red[700],
           ),
         );
@@ -394,6 +698,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
         finalGrades['CGPA'] = _cgpa.toString();
       }
 
+      // Add cocurricular mark if exists
+      if (_cocurricularMark != null) {
+        finalGrades['CocurricularMark'] = _cocurricularMark.toString();
+      }
+
       // Navigate to InterestSelectionScreen passing the collected grades and stream
       Navigator.push(
         context,
@@ -404,6 +713,54 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
             grades: finalGrades,
             resumeFile: widget.resumeFile,
             stream: _selectedStream,
+          ),
+        ),
+      );
+    }
+  }
+
+  void _submitFoundationOrDiplomaGrades() {
+    if (_formKey.currentState!.validate()) {
+      // Validate diploma field and CGPA
+      if (_diplomaField == null || _diplomaField!.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Please enter your ${widget.qualification.toLowerCase()} course',
+            ),
+            backgroundColor: Colors.red[700],
+          ),
+        );
+        return;
+      }
+
+      if (_cgpa == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Please enter your CGPA'),
+            backgroundColor: Colors.red[700],
+          ),
+        );
+        return;
+      }
+
+      // Build final grades
+      Map<String, String> finalGrades = {
+        'DiplomaField': _diplomaField!,
+        'CGPA': _cgpa.toString(),
+      };
+
+      // Navigate to InterestSelectionScreen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => InterestSelectionScreen(
+            qualification: widget.qualification,
+            upu: false,
+            grades: finalGrades,
+            resumeFile: widget.resumeFile,
+            stream: null,
+            diplomaField: _diplomaField,
           ),
         ),
       );
