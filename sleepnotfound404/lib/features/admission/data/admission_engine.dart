@@ -95,7 +95,8 @@ class AdmissionEngine {
 
     // Step 1: Filter by level based on qualification and mode
     List<ProgramModel> filtered = programs.where((p) {
-      return _isValidLevelForQualification(student, p.level);
+      return _isValidLevelForQualification(student, p.level) &&
+          _isValidEntryMode(student, p.entryMode);
     }).toList();
 
     // Step 2: Filter by field (interests)
@@ -208,6 +209,59 @@ class AdmissionEngine {
     }
   }
 
+  /// Check if the program's entry_mode matches the student's qualification and pathway
+  bool _isValidEntryMode(
+    StudentProfile student,
+    List<String> programEntryModes,
+  ) {
+    // Determine which entry modes are valid for this student
+    List<String> validEntryModes = [];
+
+    switch (student.qualification) {
+      case 'SPM':
+        if (student.isUpu) {
+          validEntryModes = ['SPM_UPU'];
+        } else {
+          validEntryModes = ['SPM_Direct'];
+        }
+        break;
+      case 'STPM':
+        if (student.isUpu) {
+          validEntryModes = ['STPM_UPU'];
+        } else {
+          validEntryModes = ['STPM_Direct'];
+        }
+        break;
+      case 'Matrikulasi':
+        if (student.isUpu) {
+          validEntryModes = ['Matrikulasi_UPU'];
+        } else {
+          validEntryModes = ['Matrikulasi_Direct'];
+        }
+        break;
+      case 'Asasi':
+        if (student.isUpu) {
+          validEntryModes = ['Asasi_UPU'];
+        } else {
+          validEntryModes = ['Asasi_Direct'];
+        }
+        break;
+      case 'Diploma':
+        if (student.isUpu) {
+          validEntryModes = ['Diploma_UPU'];
+        } else {
+          validEntryModes = ['Diploma_Direct'];
+        }
+        break;
+      default:
+        // If no specific pathway, allow all entry modes
+        return true;
+    }
+
+    // Check if any of the program's entry modes match the student's valid modes
+    return programEntryModes.any((mode) => validEntryModes.contains(mode));
+  }
+
   /// Check if course is valid for student's stream
   bool _isValidCourseForStream(
     StudentProfile student,
@@ -300,10 +354,14 @@ class AdmissionEngine {
       case 'SPM':
         return isUpu
             ? ['Asasi', 'Diploma']
-            : ['Diploma', 'Foundation', 'A-Level'];
+            : ['Foundation']; // SPM non-UPU only gets Foundation
       case 'Matrikulasi':
         return ['Degree'];
       case 'STPM':
+        return ['Degree'];
+      case 'Asasi':
+        return ['Degree'];
+      case 'Diploma':
         return ['Degree'];
       case 'A-Level':
         return ['Degree'];

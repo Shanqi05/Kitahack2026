@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:sleepnotfound404/features/chat_guidance/presentation/chat_screen.dart';
 import 'package:sleepnotfound404/features/admission/presentation/qualification_screen.dart';
 import '../../career/presentation/career_list_screen.dart';
@@ -22,9 +23,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
   }
 
@@ -46,7 +48,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           );
         },
         backgroundColor: Colors.white,
-        child: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF673AB7)),
+        child: const Icon(
+          Icons.chat_bubble_outline_rounded,
+          color: Color(0xFF673AB7),
+        ),
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
@@ -55,10 +60,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF673AB7),
-                Color(0xFF512DA8),
-              ],
+              colors: [Color(0xFF673AB7), Color(0xFF512DA8)],
             ),
           ),
           child: CustomScrollView(
@@ -115,7 +117,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.trending_up, size: 60, color: Colors.white.withOpacity(0.9)),
+              Icon(
+                Icons.trending_up,
+                size: 60,
+                color: Colors.white.withOpacity(0.9),
+              ),
               const SizedBox(height: 10),
               Text(
                 'Discover Your Future',
@@ -197,7 +203,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const QualificationScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const QualificationScreen(),
+                    ),
                   );
                 },
               ),
@@ -214,7 +222,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   // Navigate to Career Screen
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CareerListScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const CareerListScreen(),
+                    ),
                   );
                 },
               ),
@@ -231,7 +241,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   // Navigate to Scholarship Screen
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ScholarshipScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const ScholarshipScreen(),
+                    ),
                   );
                 },
               ),
@@ -244,11 +256,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   // Helper widget (Unchanged)
   Widget _buildSmallOptionCard(
-      BuildContext context, {
-        required String title,
-        required IconData icon,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -308,6 +320,65 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           title: 'Personalized Paths',
           description: 'Get courses tailored to your profile and interests',
         ),
+        const SizedBox(height: 24),
+        const Text(
+          'More Info',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildMoreInfoCard(
+                context,
+                title: 'UPU Pocket',
+                icon: Icons.backpack_rounded,
+                onTap: () async {
+                  final Uri url = Uri.parse(
+                    'https://online.mohe.gov.my/epanduan/ProgramPengajian/kategoriCalon/N?jenprog=stpm',
+                  );
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildMoreInfoCard(
+                context,
+                title: 'About Universities',
+                icon: Icons.location_city_rounded,
+                onTap: () async {
+                  final Uri url = Uri.parse(
+                    'https://studymalaysia.com/where/?type=1',
+                  );
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildMoreInfoCard(
+                context,
+                title: 'Scholarships Group',
+                icon: Icons.telegram_rounded,
+                onTap: () async {
+                  final Uri url = Uri.parse('https://t.me/BiasiswaMalaysia');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -353,6 +424,42 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  // More Info Card widget for bottom section
+  Widget _buildMoreInfoCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white.withOpacity(0.3)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white, size: 28),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

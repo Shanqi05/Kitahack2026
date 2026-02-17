@@ -18,10 +18,7 @@ void main() {
       expect(recommendations.length, greaterThanOrEqualTo(1));
 
       for (var r in recommendations) {
-        expect(
-          ['Diploma', 'Foundation', 'A-Level'].contains(r.course.level.first),
-          true,
-        );
+        expect(['Foundation'].contains(r.course.level.first), true);
       }
     });
 
