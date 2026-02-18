@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import '../../../core/widgets/app_header.dart';
 
 class UniversityListScreen extends StatefulWidget {
   const UniversityListScreen({super.key});
@@ -82,28 +84,69 @@ class _UniversityListScreenState extends State<UniversityListScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Malaysian Universities'),
-        backgroundColor: const Color(0xFF673AB7),
-        elevation: 0,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          tabs: const [
-            Tab(icon: Icon(Icons.account_balance), text: 'Public Universities'),
-            Tab(icon: Icon(Icons.school), text: 'Private Universities'),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF673AB7), Color(0xFF512DA8)],
+          ),
+        ),
+        child: Column(
+          children: [
+            // Header
+            const AppHeader(showBackButton: true),
+            // Title
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
+              child: Text(
+                'Malaysian Universities',
+                style: GoogleFonts.poppins(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            // TabBar
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                indicatorColor: Colors.white,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white70,
+                tabs: const [
+                  Tab(
+                    icon: Icon(Icons.account_balance),
+                    text: 'Public Universities',
+                  ),
+                  Tab(icon: Icon(Icons.school), text: 'Private Universities'),
+                ],
+              ),
+            ),
+            // Content
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildUniversityList('Public'),
+                        _buildUniversityList('Private'),
+                      ],
+                    ),
+            ),
           ],
         ),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : TabBarView(
-              controller: _tabController,
-              children: [
-                _buildUniversityList('Public'),
-                _buildUniversityList('Private'),
-              ],
-            ),
     );
   }
 

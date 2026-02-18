@@ -4,6 +4,7 @@ import 'package:sleepnotfound404/features/chat_guidance/presentation/chat_screen
 import 'package:sleepnotfound404/features/admission/presentation/qualification_screen.dart';
 import '../../career/presentation/career_list_screen.dart';
 import '../../scholarship/presentation/scholarship_screen.dart';
+import '../../../core/widgets/app_header.dart';
 import 'university_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,6 +67,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           child: CustomScrollView(
             slivers: [
+              // Header with EduNavigator logo and profile
+              SliverAppBar(
+                pinned: true,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                toolbarHeight: 70,
+                flexibleSpace: const FlexibleSpaceBar(background: AppHeader()),
+              ),
               _buildSliverAppBar(),
               SliverPadding(
                 padding: const EdgeInsets.all(20),
@@ -365,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 },
               ),
             ),
-           
+
             const SizedBox(width: 12),
             Expanded(
               child: _buildMoreInfoCard(

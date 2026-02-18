@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../core/widgets/app_header.dart';
 import '../data/career_service.dart';
 
 class CareerListScreen extends StatefulWidget {
@@ -24,11 +26,33 @@ class _CareerListScreenState extends State<CareerListScreen> {
     final isLargeScreen = MediaQuery.of(context).size.width > 800;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: const Text("Career Insights"),
-        backgroundColor: const Color(0xFF673AB7),
-        elevation: 0,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF673AB7), Color(0xFF512DA8)],
+            ),
+          ),
+          child: Column(
+            children: [
+              const AppHeader(showBackButton: true),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                child: Text(
+                  'Career Insights',
+                  style: GoogleFonts.poppins(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: FutureBuilder<List<CareerModel>>(
         future: _careersFuture,
@@ -36,7 +60,9 @@ class _CareerListScreenState extends State<CareerListScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+          if (snapshot.hasError ||
+              !snapshot.hasData ||
+              snapshot.data!.isEmpty) {
             return const Center(child: Text("No career data available."));
           }
 
@@ -56,7 +82,9 @@ class _CareerListScreenState extends State<CareerListScreen> {
                   flex: 4,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border(right: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                      border: Border(
+                        right: BorderSide(color: Colors.grey.withOpacity(0.2)),
+                      ),
                     ),
                     child: ListView.builder(
                       padding: const EdgeInsets.all(16),
@@ -83,7 +111,9 @@ class _CareerListScreenState extends State<CareerListScreen> {
                   flex: 6,
                   child: _selectedCareer != null
                       ? _buildDetailView(_selectedCareer!)
-                      : const Center(child: Text("Select a career to view details")),
+                      : const Center(
+                          child: Text("Select a career to view details"),
+                        ),
                 ),
               ],
             );
@@ -114,18 +144,22 @@ class _CareerListScreenState extends State<CareerListScreen> {
   // --- Widgets ---
 
   Widget _buildCareerCard(
-      BuildContext context,
-      CareerModel career, {
-        required bool isSelected,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context,
+    CareerModel career, {
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return Card(
       elevation: isSelected ? 4 : 1,
       margin: const EdgeInsets.only(bottom: 12),
-      color: isSelected ? const Color(0xFF673AB7).withOpacity(0.05) : Colors.white,
+      color: isSelected
+          ? const Color(0xFF673AB7).withOpacity(0.05)
+          : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: isSelected ? const BorderSide(color: Color(0xFF673AB7), width: 2) : BorderSide.none,
+        side: isSelected
+            ? const BorderSide(color: Color(0xFF673AB7), width: 2)
+            : BorderSide.none,
       ),
       child: InkWell(
         onTap: onTap,
@@ -137,7 +171,9 @@ class _CareerListScreenState extends State<CareerListScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF673AB7) : const Color(0xFF673AB7).withOpacity(0.1),
+                  color: isSelected
+                      ? const Color(0xFF673AB7)
+                      : const Color(0xFF673AB7).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
@@ -156,14 +192,24 @@ class _CareerListScreenState extends State<CareerListScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? const Color(0xFF673AB7) : Colors.black87,
+                        color: isSelected
+                            ? const Color(0xFF673AB7)
+                            : Colors.black87,
                       ),
                     ),
-                    Text(career.category, style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+                    Text(
+                      career.category,
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                    ),
                   ],
                 ),
               ),
-              if (isSelected) const Icon(Icons.check_circle, color: Color(0xFF673AB7), size: 20),
+              if (isSelected)
+                const Icon(
+                  Icons.check_circle,
+                  color: Color(0xFF673AB7),
+                  size: 20,
+                ),
             ],
           ),
         ),
@@ -187,14 +233,25 @@ class _CareerListScreenState extends State<CareerListScreen> {
                   color: const Color(0xFF673AB7).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Icon(_getIconForCategory(career.category), size: 40, color: const Color(0xFF673AB7)),
+                child: Icon(
+                  _getIconForCategory(career.category),
+                  size: 40,
+                  color: const Color(0xFF673AB7),
+                ),
               ),
               const SizedBox(width: 24),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(career.title, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color(0xFF333333))),
+                    Text(
+                      career.title,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF333333),
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     Chip(
                       label: Text(career.category),
@@ -208,7 +265,14 @@ class _CareerListScreenState extends State<CareerListScreen> {
           const SizedBox(height: 32),
 
           // Description
-          Text(career.description, style: TextStyle(fontSize: 16, color: Colors.grey[700], height: 1.6)),
+          Text(
+            career.description,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[700],
+              height: 1.6,
+            ),
+          ),
           const SizedBox(height: 32),
 
           // Stats Grid
@@ -220,24 +284,49 @@ class _CareerListScreenState extends State<CareerListScreen> {
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
             children: [
-              _buildStatCard(Icons.monetization_on_rounded, "Salary Range", career.salaryRange, Colors.green),
-              _buildStatCard(Icons.trending_up_rounded, "Demand", career.demand, Colors.orange),
-              _buildStatCard(Icons.school_rounded, "Education", career.pathway, Colors.blue),
+              _buildStatCard(
+                Icons.monetization_on_rounded,
+                "Salary Range",
+                career.salaryRange,
+                Colors.green,
+              ),
+              _buildStatCard(
+                Icons.trending_up_rounded,
+                "Demand",
+                career.demand,
+                Colors.orange,
+              ),
+              _buildStatCard(
+                Icons.school_rounded,
+                "Education",
+                career.pathway,
+                Colors.blue,
+              ),
             ],
           ),
           const SizedBox(height: 32),
 
           // Skills Section
-          const Text("Key Skills", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const Text(
+            "Key Skills",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 16),
           Wrap(
             spacing: 12,
             runSpacing: 12,
-            children: career.skills.map((skill) => Chip(
-              label: Text(skill, style: const TextStyle(fontSize: 14)),
-              backgroundColor: const Color(0xFF673AB7).withOpacity(0.1),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            )).toList(),
+            children: career.skills
+                .map(
+                  (skill) => Chip(
+                    label: Text(skill, style: const TextStyle(fontSize: 14)),
+                    backgroundColor: const Color(0xFF673AB7).withOpacity(0.1),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),
@@ -260,8 +349,17 @@ class _CareerListScreenState extends State<CareerListScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(career.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                    IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+                    Text(
+                      career.title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   ],
                 ),
               ),
@@ -275,20 +373,34 @@ class _CareerListScreenState extends State<CareerListScreen> {
     );
   }
 
-  Widget _buildStatCard(IconData icon, String label, String value, Color color) {
+  Widget _buildStatCard(
+    IconData icon,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.withOpacity(0.2)),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.05), blurRadius: 5, offset: const Offset(0, 2))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 12),
@@ -297,8 +409,18 @@ class _CareerListScreenState extends State<CareerListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                Text(
+                  label,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),
@@ -309,12 +431,18 @@ class _CareerListScreenState extends State<CareerListScreen> {
 
   IconData _getIconForCategory(String category) {
     switch (category) {
-      case 'Technology': return Icons.computer_rounded;
-      case 'Healthcare': return Icons.medical_services_rounded;
-      case 'Finance': return Icons.attach_money_rounded;
-      case 'Engineering': return Icons.build_rounded;
-      case 'Business': return Icons.business_center_rounded;
-      default: return Icons.work_rounded;
+      case 'Technology':
+        return Icons.computer_rounded;
+      case 'Healthcare':
+        return Icons.medical_services_rounded;
+      case 'Finance':
+        return Icons.attach_money_rounded;
+      case 'Engineering':
+        return Icons.build_rounded;
+      case 'Business':
+        return Icons.business_center_rounded;
+      default:
+        return Icons.work_rounded;
     }
   }
 }

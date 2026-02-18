@@ -23,9 +23,7 @@ class ProgramModel {
     final field = json['interest_field'];
     if (field is List) {
       // If it's an array, take the first element
-      interestField = (field as List).isNotEmpty
-          ? field[0].toString()
-          : 'General';
+      interestField = field.isNotEmpty ? field[0].toString() : 'General';
     } else {
       // If it's a string, use it directly
       interestField = field.toString();

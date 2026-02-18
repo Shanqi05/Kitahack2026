@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../core/widgets/app_header.dart';
 import '../../../services/gemini_service.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -26,15 +28,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
 
     // Add initial greeting
     _messages.add({
       'role': 'ai',
-      'text': 'Hello! 👋 I\'m your AI Career Counselor. How can I help you today? Feel free to ask about career paths, university programs, or course recommendations!',
+      'text':
+          'Hello! 👋 I\'m your AI Career Counselor. How can I help you today? Feel free to ask about career paths, university programs, or course recommendations!',
       'timestamp': DateTime.now(),
     });
   }
@@ -103,25 +107,46 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AI Career Counselor'),
-        backgroundColor: const Color(0xFF673AB7),
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFF5F7FA), Color(0xFFEDE7F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+      body: Column(
+        children: [
+          // Header + Gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF673AB7), Color(0xFF512DA8)],
+              ),
+            ),
+            child: Column(
+              children: [
+                const AppHeader(showBackButton: true),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+                  child: Text(
+                    'AI Career Counselor',
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Column(
-            children: [
-              Expanded(
+          // Chat Messages
+          Expanded(
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFFF5F7FA), Color(0xFFEDE7F6)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
                 child: _messages.isEmpty
                     ? Center(
                         child: Column(
@@ -152,6 +177,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         ),
                         itemCount: _messages.length + (_isLoading ? 1 : 0),
                         itemBuilder: (context, index) {
+                          // Loading indicator
                           if (index == _messages.length) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -165,10 +191,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                         vertical: 10,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF673AB7)
-                                            .withOpacity(0.1),
-                                        borderRadius:
-                                            BorderRadius.circular(18),
+                                        color: const Color(
+                                          0xFF673AB7,
+                                        ).withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(18),
                                       ),
                                       child: Row(
                                         children: [
@@ -179,8 +205,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                               strokeWidth: 2,
                                               valueColor:
                                                   AlwaysStoppedAnimation<Color>(
-                                                Colors.grey[600]!,
-                                              ),
+                                                    Colors.grey[600]!,
+                                                  ),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
@@ -209,134 +235,122 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                               alignment: isUser
                                   ? Alignment.centerRight
                                   : Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: isUser
-                                    ? CrossAxisAlignment.end
-                                    : CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.75,
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.75,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isUser
+                                      ? const Color(0xFF673AB7)
+                                      : const Color(
+                                          0xFF673AB7,
+                                        ).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(18),
+                                  boxShadow: [
+                                    if (isUser)
+                                      BoxShadow(
+                                        color: const Color(
+                                          0xFF673AB7,
+                                        ).withOpacity(0.2),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      msg['text'] ?? '',
+                                      style: TextStyle(
+                                        color: isUser
+                                            ? Colors.white
+                                            : Colors.grey[800],
+                                        fontSize: 14,
+                                        height: 1.4,
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 12,
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _formatTime(msg['timestamp']),
+                                      style: TextStyle(
+                                        color: isUser
+                                            ? Colors.white.withOpacity(0.6)
+                                            : Colors.grey[600],
+                                        fontSize: 11,
+                                      ),
                                     ),
-                                    decoration: BoxDecoration(
-                                      color: isUser
-                                          ? const Color(0xFF673AB7)
-                                          : const Color(0xFF673AB7)
-                                              .withOpacity(0.1),
-                                      borderRadius:
-                                          BorderRadius.circular(18),
-                                      boxShadow: [
-                                        if (isUser)
-                                          BoxShadow(
-                                            color: const Color(0xFF673AB7)
-                                                .withOpacity(0.2),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          msg['text'] ?? '',
-                                          style: TextStyle(
-                                            color: isUser
-                                                ? Colors.white
-                                                : Colors.grey[800],
-                                            fontSize: 14,
-                                            height: 1.4,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          _formatTime(msg['timestamp']),
-                                          style: TextStyle(
-                                            color: isUser
-                                                ? Colors.white
-                                                    .withOpacity(0.6)
-                                                : Colors.grey[600],
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );
                         },
                       ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    top: BorderSide(color: Colors.grey[200]!),
-                  ),
-                ),
-                padding: EdgeInsets.only(
-                  left: 12,
-                  right: 12,
-                  top: 8,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 8,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        textInputAction: TextInputAction.send,
-                        onSubmitted: (_) => _sendMessage(),
-                        decoration: InputDecoration(
-                          hintText: 'Ask about careers, universities...',
-                          hintStyle: TextStyle(color: Colors.grey[400]),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            borderSide:
-                                BorderSide(color: Colors.grey[300]!),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF673AB7),
-                              width: 2,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
+            ),
+          ),
+          // Input Area
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(top: BorderSide(color: Colors.grey[200]!)),
+            ),
+            padding: EdgeInsets.only(
+              left: 12,
+              right: 12,
+              top: 8,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 8,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (_) => _sendMessage(),
+                    decoration: InputDecoration(
+                      hintText: 'Ask about careers, universities...',
+                      hintStyle: TextStyle(color: Colors.grey[400]),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide(color: Colors.grey[300]!),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF673AB7),
+                          width: 2,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF673AB7),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.send_rounded),
-                        color: Colors.white,
-                        onPressed: _sendMessage,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF673AB7),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.send_rounded),
+                    color: Colors.white,
+                    onPressed: _sendMessage,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

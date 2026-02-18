@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../core/widgets/app_header.dart';
 import '../data/scholarship_service.dart';
 
 class ScholarshipScreen extends StatefulWidget {
@@ -34,10 +36,12 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
         _filteredScholarships = _allScholarships;
       } else {
         _filteredScholarships = _allScholarships
-            .where((s) =>
-        s.name.toLowerCase().contains(query.toLowerCase()) ||
-            s.provider.toLowerCase().contains(query.toLowerCase()) ||
-            s.category.toLowerCase().contains(query.toLowerCase()))
+            .where(
+              (s) =>
+                  s.name.toLowerCase().contains(query.toLowerCase()) ||
+                  s.provider.toLowerCase().contains(query.toLowerCase()) ||
+                  s.category.toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
       }
     });
@@ -46,52 +50,75 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: const Text("Scholarship Finder"),
-        backgroundColor: const Color(0xFF673AB7),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          // Search Bar
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Color(0xFF673AB7),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-            ),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _filterScholarships,
-              decoration: InputDecoration(
-                hintText: "Search by name or provider...",
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF673AB7), Color(0xFF512DA8)],
+          ),
+        ),
+        child: Column(
+          children: [
+            // Header
+            const AppHeader(showBackButton: true),
+            // Title
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
+              child: Text(
+                'Scholarship Finder',
+                style: GoogleFonts.poppins(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               ),
             ),
-          ),
-
-          // List
-          Expanded(
-            child: _filteredScholarships.isEmpty
-                ? const Center(child: Text("No scholarships found."))
-                : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _filteredScholarships.length,
-              itemBuilder: (context, index) {
-                final scholarship = _filteredScholarships[index];
-                return _buildScholarshipCard(scholarship);
-              },
+            // Search Bar
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: TextField(
+                controller: _searchController,
+                onChanged: _filterScholarships,
+                decoration: InputDecoration(
+                  hintText: "Search by name or provider...",
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.95),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+            // List
+            Expanded(
+              child: _filteredScholarships.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "No scholarships found.",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _filteredScholarships.length,
+                      itemBuilder: (context, index) {
+                        final scholarship = _filteredScholarships[index];
+                        return _buildScholarshipCard(scholarship);
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -123,7 +150,10 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
                     children: [
                       Text(
                         scholarship.name,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -134,14 +164,21 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     scholarship.category,
-                    style: const TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -149,9 +186,17 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
             const Divider(height: 30),
             _buildInfoRow(Icons.attach_money, "Amount", scholarship.amount),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.calendar_today, "Deadline", scholarship.deadline),
+            _buildInfoRow(
+              Icons.calendar_today,
+              "Deadline",
+              scholarship.deadline,
+            ),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.check_circle_outline, "Criteria", scholarship.criteria),
+            _buildInfoRow(
+              Icons.check_circle_outline,
+              "Criteria",
+              scholarship.criteria,
+            ),
 
             const SizedBox(height: 20),
             SizedBox(
@@ -167,7 +212,9 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: const Color(0xFF673AB7),
                   side: const BorderSide(color: Color(0xFF673AB7)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: const Text("Apply Now"),
               ),
@@ -184,9 +231,15 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
       children: [
         Icon(icon, size: 16, color: Colors.grey[500]),
         const SizedBox(width: 8),
-        Text("$label: ", style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+        Text(
+          "$label: ",
+          style: TextStyle(color: Colors.grey[600], fontSize: 13),
+        ),
         Expanded(
-          child: Text(value, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
+          child: Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+          ),
         ),
       ],
     );
