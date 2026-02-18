@@ -11,17 +11,315 @@
     ],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": ["IT","AI"]
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
   },
   {
     "university_id": "UM",
-    "course_id": "IT_DIPLOMA",
+    "course_id": "IS",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 100,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "UM",
+    "course_id": "SE",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 100,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "UM",
+    "course_id": "MULTIMEDIA",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 100,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "UM",
+    "course_id": "DS",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 100,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "UUM",
+    "course_id": "CS",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 93.5,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "UM",
+    "course_id": "DS",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 100,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "USM",
+    "course_id": "CS",
+    "level": "Degree",
+    "entry_mode": [
+      "STPM_UPU",
+      "Matrikulasi_UPU",
+      "Asasi_UPU",
+      "Diploma_UPU"
+    ],
+    "min_merit": 100,
+    "annual_fee": 8200,
+    "interest_field": [
+      "IT",
+      "AI"
+    ]
+  },
+  {
+    "university_id": "UPNM",
+    "course_id": "ASASI_KEJURUTERAAN",
+    "level": "Asasi",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 83.91,
+    "annual_fee": 6500,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UPNM",
+    "course_id": "ASASI_PENGURUSAN_DAN_STRATEGI",
+    "level": "Asasi",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 79.03,
+    "annual_fee": 6500,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "UPNM",
+    "course_id": "ASASI_PERUBATAN",
+    "level": "Asasi",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": null,
+    "annual_fee": 6500,
+    "interest_field": "Health Science"
+  },
+  {
+    "university_id": "UPM",
+    "course_id": "ASASI_SAINS_PERTANIAN",
+    "level": "Asasi",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 89.34,
+    "annual_fee": 6500,
+    "interest_field": "Science"
+  },
+  {
+    "university_id": "UKM",
+    "course_id": "ASASI_PINTAR",
+    "level": "Asasi",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 94.99,
+    "annual_fee": 6500,
+    "interest_field": "Science"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_ALAM_SEKITAR",
     "level": "Diploma",
     "entry_mode": [
       "SPM_UPU"
     ],
-    "min_merit": 75,
-    "annual_fee": 7500,
+    "min_merit": 0.01,
+    "annual_fee": 6500,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_ELEKTRIK",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 73.02,
+    "annual_fee": 6500,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_ELEKTRONIK",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 67.95,
+    "annual_fee": 6500,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_KIMIA",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 87.55,
+    "annual_fee": 6500,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_KOMPUTER",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 75.87,
+    "annual_fee": 6500,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_MEKATRONIK",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 71.41,
+    "annual_fee": 6500,
+    "interest_field": "Engineering"
+  },
+  {
+    "university_id": "UMP",
+    "course_id": "DIPLOMA_KEJURUTERAAN_PERUBATAN",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 75.87,
+    "annual_fee": 6500,
+    "interest_field": "Health Science"
+  },
+  {
+    "university_id": "UPM",
+    "course_id": "DIPLOMA_KESIHATAN_HAIWAN_DAN_PENTERNAKAN",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 85.06,
+    "annual_fee": 6500,
+    "interest_field": "Health Science"
+  },
+  {
+    "university_id": "UPSI",
+    "course_id": "DIPLOMA_KESUHAWANAN",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 87.86,
+    "annual_fee": 6500,
+    "interest_field": "IT"
+  },
+  {
+    "university_id": "UPSI",
+    "course_id": "DIPLOMA_MUZIK",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 65.83,
+    "annual_fee": 6500,
+    "interest_field": "Music"
+  },
+  {
+    "university_id": "UPSI",
+    "course_id": "DIPLOMA_PENDIDIKAN_AWAL_KANAK-KANAK",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 78.37,
+    "annual_fee": 6500,
+    "interest_field": "Education"
+  },
+  {
+    "university_id": "UPSI",
+    "course_id": "DIPLOMA_SAINS_KOMPUTER",
+    "level": "Diploma",
+    "entry_mode": [
+      "SPM_UPU"
+    ],
+    "min_merit": 89.22,
+    "annual_fee": 6500,
     "interest_field": "IT"
   },
   {

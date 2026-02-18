@@ -55,6 +55,8 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen>
     {"name": "Communication", "short": "Communication", "icon": Icons.mail},
     {"name": "Arts & Design", "short": "Arts", "icon": Icons.palette},
     {"name": "Law", "short": "Law", "icon": Icons.gavel},
+    {"name": "Music", "short": "Music", "icon": Icons.music_note},
+    {"name": "Education", "short": "Education", "icon": Icons.school},
   ];
 
   final selected = <String>[];

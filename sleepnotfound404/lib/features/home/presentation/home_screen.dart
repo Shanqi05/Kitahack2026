@@ -4,6 +4,7 @@ import 'package:sleepnotfound404/features/chat_guidance/presentation/chat_screen
 import 'package:sleepnotfound404/features/admission/presentation/qualification_screen.dart';
 import '../../career/presentation/career_list_screen.dart';
 import '../../scholarship/presentation/scholarship_screen.dart';
+import 'university_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -335,6 +336,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Expanded(
               child: _buildMoreInfoCard(
                 context,
+                title: 'About Universities',
+                icon: Icons.location_city_rounded,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UniversityListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildMoreInfoCard(
+                context,
                 title: 'UPU Pocket',
                 icon: Icons.backpack_rounded,
                 onTap: () async {
@@ -347,22 +365,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 },
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildMoreInfoCard(
-                context,
-                title: 'About Universities',
-                icon: Icons.location_city_rounded,
-                onTap: () async {
-                  final Uri url = Uri.parse(
-                    'https://studymalaysia.com/where/?type=1',
-                  );
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url, mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
-            ),
+           
             const SizedBox(width: 12),
             Expanded(
               child: _buildMoreInfoCard(

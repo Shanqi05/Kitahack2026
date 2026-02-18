@@ -14,10 +14,23 @@ class CourseModel {
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
+    // Handle field as either string or array
+    String field;
+    final fieldData = json['field'];
+    if (fieldData is List) {
+      // If it's an array, take the first element
+      field = (fieldData as List).isNotEmpty
+          ? fieldData[0].toString()
+          : 'General';
+    } else {
+      // If it's a string, use it directly
+      field = fieldData.toString();
+    }
+
     return CourseModel(
       id: json['id'],
       name: json['name'],
-      field: json['field'],
+      field: field,
       level: List<String>.from(json['level']),
       minMeritRequired: json['minMeritRequired'] != null
           ? (json['minMeritRequired'] as num).toDouble()

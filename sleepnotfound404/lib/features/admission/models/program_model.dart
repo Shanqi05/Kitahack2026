@@ -18,6 +18,19 @@ class ProgramModel {
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
+    // Handle interest_field as either string or array
+    String interestField;
+    final field = json['interest_field'];
+    if (field is List) {
+      // If it's an array, take the first element
+      interestField = (field as List).isNotEmpty
+          ? field[0].toString()
+          : 'General';
+    } else {
+      // If it's a string, use it directly
+      interestField = field.toString();
+    }
+
     return ProgramModel(
       universityId: json['university_id'],
       courseId: json['course_id'],
@@ -25,7 +38,7 @@ class ProgramModel {
       entryMode: List<String>.from(json['entry_mode']),
       minMerit: json['min_merit'],
       annualFee: (json['annual_fee'] as num).toDouble(),
-      interestField: json['interest_field'],
+      interestField: interestField,
     );
   }
 
