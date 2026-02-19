@@ -2,10 +2,11 @@ class ProgramModel {
   final String universityId;
   final String courseId;
   final String level;
-  final List<String> entryMode; // ["UPU"] or ["Private"]
-  final int? minMerit; // null for private
+  final List<String> entryMode;
+  final double? minMerit; // ✅ 变成 double，兼容 83.91 这种分数
   final double annualFee;
   final String interestField;
+  final double? muetBand; // ✅ 变成 double，兼容 2.5 这种 Band
 
   ProgramModel({
     required this.universityId,
@@ -15,17 +16,15 @@ class ProgramModel {
     required this.minMerit,
     required this.annualFee,
     required this.interestField,
+    this.muetBand,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
-    // Handle interest_field as either string or array
     String interestField;
     final field = json['interest_field'];
     if (field is List) {
-      // If it's an array, take the first element
       interestField = field.isNotEmpty ? field[0].toString() : 'General';
     } else {
-      // If it's a string, use it directly
       interestField = field.toString();
     }
 
@@ -34,9 +33,10 @@ class ProgramModel {
       courseId: json['course_id'],
       level: json['level'],
       entryMode: List<String>.from(json['entry_mode']),
-      minMerit: json['min_merit'],
-      annualFee: (json['annual_fee'] as num).toDouble(),
+      minMerit: json['min_merit'] != null ? (json['min_merit'] as num).toDouble() : null,
+      annualFee: json['annual_fee'] != null ? (json['annual_fee'] as num).toDouble() : 0.0,
       interestField: interestField,
+      muetBand: json['muet_band'] != null ? (json['muet_band'] as num).toDouble() : null,
     );
   }
 
@@ -49,6 +49,7 @@ class ProgramModel {
       'min_merit': minMerit,
       'annual_fee': annualFee,
       'interest_field': interestField,
+      'muet_band': muetBand,
     };
   }
 }

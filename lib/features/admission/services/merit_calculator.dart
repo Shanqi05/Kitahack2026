@@ -1,5 +1,3 @@
-
-
 class MeritCalculator {
   // ==============================
   // SPM MERIT CALCULATION (UPU)
@@ -19,41 +17,43 @@ class MeritCalculator {
   // A+ = 18 ... G = 0
 
   static double calculateSpmMerit({
-    required List<int> compulsoryMarks,   // exactly 4 subjects
-    required List<int> electiveMarks,     // exactly 2 subjects
-    required List<int> additionalMarks,   // 0–2 subjects
-    required double coCurricularMark,     // 0–10
+    required List<int> compulsoryMarks,
+    required List<int> electiveMarks,
+    required List<int> additionalMarks,
+    required double coCurricularMark,
   }) {
     // ------------------------------
-    // Validation
+    // 智能容错处理 (Auto-Padding)
     // ------------------------------
     if (coCurricularMark < 0 || coCurricularMark > 10) {
-      throw ArgumentError('Co-curricular mark must be between 0 and 10.');
+      coCurricularMark = 0; // 防止课外活动分数填错导致崩溃
     }
 
-    if (compulsoryMarks.length != 4) {
-      throw ArgumentError('Compulsory subjects must contain exactly 4 marks.');
-    }
+    // 如果科目不够，自动补 0 分 (G)；如果超过，只取需要的前几个
+    List<int> safeCompulsory = List.from(compulsoryMarks);
+    while (safeCompulsory.length < 4) safeCompulsory.add(0);
 
-    if (electiveMarks.length != 2) {
-      throw ArgumentError('Elective subjects must contain exactly 2 marks.');
-    }
+    List<int> safeElective = List.from(electiveMarks);
+    while (safeElective.length < 2) safeElective.add(0);
 
-    if (additionalMarks.length > 2) {
-      throw ArgumentError('Additional subjects can have a maximum of 2 marks.');
+    List<int> safeAdditional = List.from(additionalMarks);
+    if (safeAdditional.length > 2) {
+      // 附加科目如果超过2个，自动选分数最高的2个
+      safeAdditional.sort((a, b) => b.compareTo(a));
+      safeAdditional = safeAdditional.take(2).toList();
     }
 
     // ------------------------------
     // Sum raw marks
     // ------------------------------
     final int compulsoryTotal =
-        compulsoryMarks.fold(0, (sum, mark) => sum + mark);
+    safeCompulsory.take(4).fold(0, (sum, mark) => sum + mark);
 
     final int electiveTotal =
-        electiveMarks.fold(0, (sum, mark) => sum + mark);
+    safeElective.take(2).fold(0, (sum, mark) => sum + mark);
 
     final int additionalTotal =
-        additionalMarks.fold(0, (sum, mark) => sum + mark);
+    safeAdditional.fold(0, (sum, mark) => sum + mark);
 
     // ------------------------------
     // Maximum possible marks
@@ -73,9 +73,9 @@ class MeritCalculator {
         (electiveTotal / electiveMax) * 30;
 
     final double additionalWeighted =
-        additionalMarks.isEmpty
-            ? 0
-            : (additionalTotal / additionalMax) * 10;
+    safeAdditional.isEmpty
+        ? 0
+        : (additionalTotal / additionalMax) * 10;
 
     // Academic total (max 80)
     final double academicTotal =
@@ -102,17 +102,17 @@ class MeritCalculator {
     required double cgpa,               // 0.0 – 4.0
     required double coCurricularMark,   // 0 – 10
   }) {
-    if (cgpa < 0 || cgpa > 4.0) {
-      throw ArgumentError('CGPA must be between 0.0 and 4.0.');
-    }
+    double safeCgpa = cgpa;
+    if (safeCgpa < 0) safeCgpa = 0.0;
+    if (safeCgpa > 4.0) safeCgpa = 4.0;
 
-    if (coCurricularMark < 0 || coCurricularMark > 10) {
-      throw ArgumentError('Co-curricular mark must be between 0 and 10.');
-    }
+    double safeKoko = coCurricularMark;
+    if (safeKoko < 0) safeKoko = 0.0;
+    if (safeKoko > 10) safeKoko = 10.0;
 
-    final double cgpaConverted = (cgpa / 4.0) * 90;
+    final double cgpaConverted = (safeCgpa / 4.0) * 90;
 
-    return cgpaConverted + coCurricularMark;
+    return cgpaConverted + safeKoko;
   }
 
   // ==============================
@@ -124,11 +124,11 @@ class MeritCalculator {
   static double calculateDiplomaMerit({
     required double cgpa, // 0.0 – 4.0
   }) {
-    if (cgpa < 0 || cgpa > 4.0) {
-      throw ArgumentError('CGPA must be between 0.0 and 4.0.');
-    }
+    double safeCgpa = cgpa;
+    if (safeCgpa < 0) safeCgpa = 0.0;
+    if (safeCgpa > 4.0) safeCgpa = 4.0;
 
-    return (cgpa / 4.0) * 100;
+    return (safeCgpa / 4.0) * 100;
   }
 
   // ==================================
@@ -146,11 +146,6 @@ class MeritCalculator {
   }) {
     switch (qualification.toLowerCase()) {
       case 'spm':
-        if (!isUpu) {
-          throw ArgumentError(
-            'SPM merit calculation is only applicable for UPU platform.',
-          );
-        }
         return calculateSpmMerit(
           compulsoryMarks: compulsoryMarks ?? [],
           electiveMarks: electiveMarks ?? [],
@@ -172,7 +167,7 @@ class MeritCalculator {
         );
 
       default:
-        throw ArgumentError('Unknown qualification type: $qualification');
+        return 0.0; // Fail-safe
     }
   }
 

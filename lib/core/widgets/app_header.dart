@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../services/auth_service.dart';
 import '../../features/dashboard/screens/profile_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 
@@ -20,12 +22,16 @@ class AppHeader extends StatelessWidget {
   void _navigateToHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const HomeScreen()),
-      (route) => false,
+          (route) => false,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Get current user and guest status
+    final user = FirebaseAuth.instance.currentUser;
+    final isGuest = AuthService().isGuestMode;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
@@ -68,7 +74,6 @@ class AppHeader extends StatelessWidget {
                     ),
                   ),
                 if (showBackButton) const SizedBox(width: 12),
-                // Logo - Always clickable to go to home
                 GestureDetector(
                   onTap: () => _navigateToHome(context),
                   child: Row(
@@ -132,10 +137,15 @@ class AppHeader extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => const ProfileScreen(),
                       ),
-                    );
+                    ).then((_) {
+                      // Trigger rebuild when returning from profile screen
+                      // to update the header image if it changed
+                      (context as Element).markNeedsBuild();
+                    });
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    width: 42, // Fixed width for circular consistency
+                    height: 42,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white.withOpacity(0.2),
@@ -144,7 +154,28 @@ class AppHeader extends StatelessWidget {
                         width: 1.5,
                       ),
                     ),
-                    child: const Icon(
+                    // Check if not guest, user exists, and has photoURL
+                    child: (!isGuest && user != null)
+                        ? (user.photoURL != null)
+                        ? ClipOval(
+                      child: Image.network(
+                        user.photoURL!,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                        : Center(
+                      child: Text(
+                        user.email != null && user.email!.isNotEmpty
+                            ? user.email![0].toUpperCase()
+                            : 'U',
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                        : const Icon(
                       Icons.person_rounded,
                       size: 24,
                       color: Colors.white,
