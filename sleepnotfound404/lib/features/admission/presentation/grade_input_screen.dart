@@ -26,16 +26,16 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
   final List<String> _selectedSubjects = [];
   double? _cgpa;
   double? _cocurricularMark;
-  String?
-  _selectedStream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
+  String? _selectedStream; // Science, Commerce, Arts (for STPM/Asasi/Matriculation)
   String? _diplomaField; // For Foundation and Diploma
+  String? _muetBand; // For Foundation and Diploma MUET selection
 
-  // Define subjects based on qualification
+  // Define subjects based on qualification (Changed Science to Science/Physics)
   final Map<String, List<String>> _subjectsByQualification = {
-    'SPM': ['Bahasa Melayu', 'English', 'Mathematics', 'History'],
-    'STPM': ['Pengajian Am'],
-    'Matriculation': ['Mathematics'],
-    'Asasi': [],
+    'SPM': ['Bahasa Melayu', 'English', 'Mathematics', 'History', 'Science/Physics', 'MUET'],
+    'STPM': ['Pengajian Am', 'MUET'],
+    'Matriculation': ['Mathematics', 'MUET'],
+    'Asasi': ['MUET'],
     'Diploma': [],
     'Foundation': [],
     'UEC': [
@@ -79,7 +79,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
   // Check if cocurricular mark is required (UPU: SPM, Matriculation, Asasi, STPM)
   bool get _requiresCocurricularMark =>
       widget.upu &&
-      ['SPM', 'Matriculation', 'Asasi', 'STPM'].contains(widget.qualification);
+          ['SPM', 'Matriculation', 'Asasi', 'STPM'].contains(widget.qualification);
 
   // Check if this is Foundation or Diploma (simplified form)
   bool get _isFoundationOrDiploma =>
@@ -88,11 +88,9 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
   @override
   void initState() {
     super.initState();
-    final defaultSubjects =
-        _subjectsByQualification[widget.qualification] ?? [];
-    _selectedSubjects.addAll(
-      defaultSubjects.take(5),
-    ); // Start with first 5 subjects
+    final defaultSubjects = _subjectsByQualification[widget.qualification] ?? [];
+    // Increased from 5 to 8 to accommodate more default subjects like Science and MUET
+    _selectedSubjects.addAll(defaultSubjects.take(8));
   }
 
   void _addSubject() {
@@ -103,7 +101,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Add Subject'),
         content: SingleChildScrollView(
-          child: Column(
+          child: MainAxisSize.min == null ? Container() : Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
@@ -114,7 +112,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
               TextField(
                 controller: subjectController,
                 decoration: InputDecoration(
-                  hintText: 'e.g., English, Physics, Chemistry',
+                  hintText: 'e.g., Physics, Chemistry, MUET',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -235,7 +233,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
 
               // Display selected subjects with grades
               ..._selectedSubjects.map(
-                (subject) => Dismissible(
+                    (subject) => Dismissible(
                   key: ValueKey(subject),
                   direction: DismissDirection.endToStart,
                   background: Container(
@@ -248,7 +246,10 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                   child: GradeInputField(
                     subject: subject,
                     value: _grades[subject],
-                    gradeOptions: _gradeOptions,
+                    // NEW: Updated MUET Bands with decimal options
+                    gradeOptions: subject.toUpperCase().contains('MUET')
+                        ? ['1.0', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5+']
+                        : _gradeOptions,
                     onChanged: (value) {
                       setState(() {
                         if (value != null) _grades[subject] = value;
@@ -423,7 +424,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                 TextFormField(
                   decoration: InputDecoration(
                     labelText:
-                        'Co-curricular Mark (0-10, max: 2 decimal places)',
+                    'Co-curricular Mark (0-10, max: 2 decimal places)',
                     hintText: 'e.g., 8.50',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -458,7 +459,6 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                     if (mark == null || mark < 0 || mark > 10) {
                       return 'Please enter a valid mark (0-10)';
                     }
-                    // Check for more than 2 decimal places
                     if (value.contains('.')) {
                       final decimals = value.split('.')[1];
                       if (decimals.length > 2) {
@@ -537,8 +537,7 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: '${widget.qualification} Course',
-                  hintText:
-                      'e.g., Information Technology, Business Administration',
+                  hintText: 'e.g., Information Technology, Business Administration',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: Colors.grey[300]!),
@@ -549,17 +548,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF673AB7),
-                      width: 2,
-                    ),
+                    borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -599,21 +592,13 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF673AB7),
-                      width: 2,
-                    ),
+                    borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your CGPA';
@@ -629,6 +614,47 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
                     _cgpa = double.tryParse(value);
                   });
                 },
+              ),
+              const SizedBox(height: 24),
+
+              // MUET Band for Diploma/Foundation (Updated Options)
+              const Text(
+                'MUET Band (Optional)',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF673AB7),
+                ),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: _muetBand,
+                items: ['1.0', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5+']
+                    .map((b) => DropdownMenuItem(value: b, child: Text(b)))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _muetBand = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'Select MUET Band',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF673AB7), width: 2),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                ),
               ),
               const SizedBox(height: 30),
 
@@ -656,6 +682,27 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
           ),
         );
         return;
+      }
+
+      // Force SPM students to have either Science or Physics
+      if (widget.qualification == 'SPM') {
+        bool hasScienceOrPhysics = false;
+        for (var subject in _grades.keys) {
+          if (subject.toLowerCase().contains('science') || subject.toLowerCase().contains('physics')) {
+            hasScienceOrPhysics = true;
+            break;
+          }
+        }
+
+        if (!hasScienceOrPhysics) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Please add and select a grade for Science/Physics'),
+              backgroundColor: Colors.red[700],
+            ),
+          );
+          return;
+        }
       }
 
       // For non-SPM, validate CGPA is entered
@@ -749,6 +796,11 @@ class _GradeInputScreenState extends State<GradeInputScreen> {
         'DiplomaField': _diplomaField!,
         'CGPA': _cgpa.toString(),
       };
+
+      // If MUET was selected, add it to finalGrades
+      if (_muetBand != null) {
+        finalGrades['MUET'] = _muetBand!;
+      }
 
       // Navigate to InterestSelectionScreen
       Navigator.push(

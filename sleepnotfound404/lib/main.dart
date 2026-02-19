@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/theme/app_theme.dart';
 import 'features/home/presentation/home_screen.dart';
 import 'services/firebase_service.dart';
+import 'features/auth/screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ class SleepNotFound404App extends StatelessWidget {
       title: 'SleepNotFound404',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }

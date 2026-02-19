@@ -12,7 +12,12 @@
           "package_name": "com.example.sleepnotfound404"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1067526580765-o5mhb1r0e27ison4lh90sg84d1kafu0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAPPgpEP5S4Tond4T-5rhHSdHxtl-bI704"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067526580765-o5mhb1r0e27ison4lh90sg84d1kafu0i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1067526580765-180lcqi47nferv1jg2uvlk989r7hsev8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sleepnotfound404"
+              }
+            }
+          ]
         }
       }
     }
