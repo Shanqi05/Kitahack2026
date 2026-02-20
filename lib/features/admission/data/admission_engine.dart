@@ -94,38 +94,33 @@ class AdmissionEngine {
           _isValidEntryMode(student, p.entryMode);
     }).toList();
 
-    filtered = filtered.where((p) {
-      return student.interest.any(
-            (interest) => p.interestField.toLowerCase().contains(interest.toLowerCase()),
-      );
-    }).toList();
+    //  2.  (Soft Filtering)
+
+    if (student.interest.isNotEmpty) {
+      var intFiltered = filtered.where((p) => student.interest.any((i) => p.interestField.toLowerCase().contains(i.toLowerCase()))).toList();
+      if (intFiltered.isNotEmpty) filtered = intFiltered; // 如果匹配后不为空，才应用过滤
+    }
+
 
     if (student.budget != null) {
-      filtered = filtered.where((p) => p.annualFee <= student.budget!).toList();
+      var bFiltered = filtered.where((p) => p.annualFee <= student.budget!).toList();
+      if (bFiltered.isNotEmpty) filtered = bFiltered;
     }
 
-    filtered = filtered.where((p) {
-      return _isValidCourseForStream(student, p.interestField, p.courseId);
-    }).toList();
 
-    if (student.qualification == 'Diploma' && student.diplomaField != null) {
-      filtered = filtered.where((p) {
-        return p.interestField.toLowerCase() == student.diplomaField!.toLowerCase();
-      }).toList();
+    var sFiltered = filtered.where((p) => _isValidCourseForStream(student, p.interestField, p.courseId)).toList();
+    if (sFiltered.isNotEmpty) filtered = sFiltered;
+
+
+    if (studentMerit != null && student.isUpu) {
+      var mFiltered = filtered.where((p) => p.minMerit == null || studentMerit! >= p.minMerit!).toList();
+      if (mFiltered.isNotEmpty) filtered = mFiltered;
     }
 
-    if (studentMerit != null && student.isUpu && student.qualification.toLowerCase() == 'spm') {
-      filtered = filtered.where((p) {
-        if (p.minMerit == null || studentMerit == null) return true;
-        return studentMerit! >= p.minMerit!;
-      }).toList();
-    }
 
     if (studentMuet != null) {
-      filtered = filtered.where((p) {
-        if (p.muetBand == null) return true;
-        return studentMuet! >= p.muetBand!;
-      }).toList();
+      var muetFiltered = filtered.where((p) => p.muetBand == null || studentMuet! >= p.muetBand!).toList();
+      if (muetFiltered.isNotEmpty) filtered = muetFiltered;
     }
 
     List<RecommendedProgram> recommendations = [];
@@ -157,6 +152,7 @@ class AdmissionEngine {
         );
       }
     }
+
 
     recommendations.sort((a, b) => b.matchScore.compareTo(a.matchScore));
     return recommendations.take(10).toList();
@@ -204,13 +200,10 @@ class AdmissionEngine {
     double score = 0.0;
     final exactMatch = interests.any((i) => programField.toLowerCase().contains(i.toLowerCase()) || i.toLowerCase().contains(programField.toLowerCase()));
     if (exactMatch) score += 50;
-    else score += 30;
-
+    else score += 20;
     if (level.toLowerCase() == 'degree') score += 20;
     else score += 15;
-
     if (budget != null && fee <= budget) score += 15;
-
     return score + 10;
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'package:sleepnotfound404/features/chat_guidance/presentation/chat_screen.dart';
 import 'package:sleepnotfound404/features/admission/presentation/qualification_screen.dart';
 import '../../career/presentation/career_list_screen.dart';
 import '../../scholarship/presentation/scholarship_screen.dart';
 import '../../../core/widgets/app_header.dart';
 import 'university_list_screen.dart';
+import '../../history/presentation/history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // FAB for AI Chatbot
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -67,25 +68,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           child: CustomScrollView(
             slivers: [
-              // Header with EduNavigator logo and profile
               SliverAppBar(
                 pinned: true,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 toolbarHeight: 70,
+                // 把 AppHeader 放回 flexibleSpace 让它正常显示
                 flexibleSpace: const FlexibleSpaceBar(background: AppHeader()),
+                actions: [
+                  // 只有 History 按钮
+                  IconButton(
+                    icon: const Icon(Icons.history, color: Colors.white, size: 28),
+                    tooltip: 'History',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HistoryScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 58),
+                ],
               ),
+
               _buildSliverAppBar(),
+
               SliverPadding(
                 padding: const EdgeInsets.all(20),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     _buildWelcomeSection(),
                     const SizedBox(height: 30),
-
-                    // Updated Grid with Admission, Career, Scholarship
                     _buildSelectionGrid(context),
-
                     const SizedBox(height: 40),
                     _buildFeaturesSection(),
                     const SizedBox(height: 40),
@@ -99,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // AppBar (Unchanged)
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
       expandedHeight: 200,
@@ -148,7 +163,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Welcome section (Unchanged)
   Widget _buildWelcomeSection() {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -188,7 +202,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // ✅ Updated Grid: Admission | Career | Scholarship
   Widget _buildSelectionGrid(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +217,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         const SizedBox(height: 16),
         Row(
           children: [
-            // 1. Admission
             Expanded(
               child: _buildSmallOptionCard(
                 context,
@@ -221,15 +233,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             const SizedBox(width: 12),
-
-            // 2. Career Insights (New)
             Expanded(
               child: _buildSmallOptionCard(
                 context,
                 title: "Career",
                 icon: Icons.work_rounded,
                 onTap: () {
-                  // Navigate to Career Screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -240,15 +249,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             const SizedBox(width: 12),
-
-            // 3. Scholarship (New)
             Expanded(
               child: _buildSmallOptionCard(
                 context,
                 title: "Scholarship",
                 icon: Icons.monetization_on_rounded,
                 onTap: () {
-                  // Navigate to Scholarship Screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -264,13 +270,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Helper widget (Unchanged)
   Widget _buildSmallOptionCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
+      BuildContext context, {
+        required String title,
+        required IconData icon,
+        required VoidCallback onTap,
+      }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -299,7 +304,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Features section (Unchanged)
   Widget _buildFeaturesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,7 +361,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 },
               ),
             ),
-
             const SizedBox(width: 12),
             Expanded(
               child: _buildMoreInfoCard(
@@ -374,7 +377,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 },
               ),
             ),
-
             const SizedBox(width: 12),
             Expanded(
               child: _buildMoreInfoCard(
@@ -439,13 +441,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // More Info Card widget for bottom section
   Widget _buildMoreInfoCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
+      BuildContext context, {
+        required String title,
+        required IconData icon,
+        required VoidCallback onTap,
+      }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
