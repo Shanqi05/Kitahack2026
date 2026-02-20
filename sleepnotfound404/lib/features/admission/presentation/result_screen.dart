@@ -5,6 +5,7 @@ import '../data/admission_engine.dart';
 import '../models/student_profile.dart';
 import 'admission_chat_screen.dart';
 import '../../../services/gemini_service.dart';
+import '../../../services/firebase_service.dart';
 import '../../home/presentation/home_screen.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -37,17 +38,22 @@ class _ResultScreenState extends State<ResultScreen> {
   late Future<List<RecommendedProgram>> _getRecommendations;
   Future<String>? _resumeFeedbackFuture;
 
+  bool _isSaved = false;
+  String _aiFeedbackResult = "Processing...";
+
   @override
   void initState() {
     super.initState();
     _getRecommendations = _loadRecommendations();
 
-    // 🔥 即使没有上传文件，也可以触发 AI 背景分析（基于成绩和兴趣）
     _resumeFeedbackFuture = GeminiService().getResumeFeedback(
       widget.resumeFile,
       widget.grades,
       widget.interests,
-    );
+    ).then((result) {
+      _aiFeedbackResult = result;
+      return result;
+    });
   }
 
   Future<List<RecommendedProgram>> _loadRecommendations() async {
@@ -186,9 +192,46 @@ class _ResultScreenState extends State<ResultScreen> {
               _buildMatchedCoursesSection(),
               const SizedBox(height: 20),
 
-              // --- 4. NEW: AI Resume & Profile Analysis ---
+              // --- 4. AI Resume & Profile Analysis ---
               _buildResumeAnalysisSection(),
               const SizedBox(height: 30),
+
+              // 🌟 手动保存结果按钮（带入了 Budget）
+              ElevatedButton.icon(
+                onPressed: _isSaved ? null : () async {
+                  final courses = await _getRecommendations;
+                  List<String> topCourses = courses.take(3).map((c) => "${c.courseName} (${c.universityName})").toList();
+
+                  await FirebaseService().saveAdmissionResult(
+                    qualification: widget.qualification,
+                    grades: widget.grades,
+                    interests: widget.interests,
+                    topCourses: topCourses,
+                    aiFeedback: _aiFeedbackResult,
+                    budget: widget.budget, // NEW: 存入预算
+                  );
+
+                  setState(() {
+                    _isSaved = true;
+                  });
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('✅ Result saved to History!'), backgroundColor: Colors.green),
+                    );
+                  }
+                },
+                icon: Icon(_isSaved ? Icons.check_circle : Icons.save_alt),
+                label: Text(_isSaved ? 'Saved to History' : 'Save Result to History'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _isSaved ? Colors.green : Colors.orange[600],
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+              const SizedBox(height: 16),
 
               ElevatedButton.icon(
                 onPressed: () {
@@ -225,7 +268,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const HomeScreen()),
-                        (Route<dynamic> route) => false,
+                        (route) => false,
                   );
                 },
                 icon: const Icon(Icons.home),
@@ -249,16 +292,12 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  // ==========================================
-  // AI Resume Analysis Builder (Updated)
-  // ==========================================
   Widget _buildResumeAnalysisSection() {
     if (_resumeFeedbackFuture == null) return const SizedBox.shrink();
 
     return FutureBuilder<String>(
       future: _resumeFeedbackFuture,
       builder: (context, snapshot) {
-        // 1. Loading State
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             padding: const EdgeInsets.all(24),
@@ -283,10 +322,8 @@ class _ResultScreenState extends State<ResultScreen> {
           );
         }
 
-        // 2. Error/Fallback State (Will show even if API fails)
-        String aiText = snapshot.data ?? "⚠️ AI analysis is currently unavailable. Please check your connection.";
+        String aiText = snapshot.data ?? "⚠️ AI analysis is currently unavailable.";
 
-        // 3. Success State
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -339,10 +376,6 @@ class _ResultScreenState extends State<ResultScreen> {
       },
     );
   }
-
-  // ==========================================
-  // EXISTING METHODS
-  // ==========================================
 
   String _getUserStrengthIntro() {
     int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
