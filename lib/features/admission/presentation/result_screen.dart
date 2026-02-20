@@ -4,6 +4,8 @@ import '../data/course_repository.dart';
 import '../data/admission_engine.dart';
 import '../models/student_profile.dart';
 import 'admission_chat_screen.dart';
+import '../../../services/gemini_service.dart';
+import '../../home/presentation/home_screen.dart';
 import '../../dashboard/screens/main_dashboard_shell.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -34,11 +36,19 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   late Future<List<RecommendedProgram>> _getRecommendations;
+  Future<String>? _resumeFeedbackFuture;
 
   @override
   void initState() {
     super.initState();
     _getRecommendations = _loadRecommendations();
+
+    // 🔥 即使没有上传文件，也可以触发 AI 背景分析（基于成绩和兴趣）
+    _resumeFeedbackFuture = GeminiService().getResumeFeedback(
+      widget.resumeFile,
+      widget.grades,
+      widget.interests,
+    );
   }
 
   Future<List<RecommendedProgram>> _loadRecommendations() async {
@@ -46,12 +56,8 @@ class _ResultScreenState extends State<ResultScreen> {
       final repository = CourseRepository();
       await repository.loadData();
 
-      double? cgpa = widget.grades['CGPA'] != null
-          ? double.tryParse(widget.grades['CGPA']!)
-          : null;
-      double coCurricularMark = widget.grades['CocurricularMark'] != null
-          ? double.tryParse(widget.grades['CocurricularMark']!) ?? 0.0
-          : 0.0;
+      double? cgpa = widget.grades['CGPA'] != null ? double.tryParse(widget.grades['CGPA']!) : null;
+      double coCurricularMark = widget.grades['CocurricularMark'] != null ? double.tryParse(widget.grades['CocurricularMark']!) ?? 0.0 : 0.0;
 
       List<int> spmCompulsory = [];
       List<int> spmElective = [];
@@ -65,13 +71,9 @@ class _ResultScreenState extends State<ResultScreen> {
               'C+': 13, 'C': 12, 'D': 11, 'E': 10, 'G': 0,
             };
             final points = gradeToPoints[grade] ?? 0;
-            if (spmCompulsory.length < 4) {
-              spmCompulsory.add(points);
-            } else if (spmElective.length < 2) {
-              spmElective.add(points);
-            } else {
-              spmAdditional.add(points);
-            }
+            if (spmCompulsory.length < 4) spmCompulsory.add(points);
+            else if (spmElective.length < 2) spmElective.add(points);
+            else spmAdditional.add(points);
           }
         });
       }
@@ -123,11 +125,7 @@ class _ResultScreenState extends State<ResultScreen> {
               const SizedBox(height: 10),
               Text(
                 'Your Future Path',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF673AB7),
-                ),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: const Color(0xFF673AB7)),
               ),
               const SizedBox(height: 8),
               Text(
@@ -139,7 +137,7 @@ class _ResultScreenState extends State<ResultScreen> {
               _buildGradeValidationAlert(),
               const SizedBox(height: 24),
 
-              // --- 1. User Strength & Careers (Card UI) ---
+              // --- 1. User Strength & Careers ---
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: _cardDecoration(),
@@ -150,21 +148,11 @@ class _ResultScreenState extends State<ResultScreen> {
                       children: [
                         const Icon(Icons.verified, color: Color(0xFF673AB7), size: 24),
                         const SizedBox(width: 10),
-                        Text(
-                          'Strength & Recommended Careers',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF673AB7),
-                          ),
-                        ),
+                        Text('Strength & Recommended Careers', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: const Color(0xFF673AB7))),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      _getUserStrengthIntro(),
-                      style: const TextStyle(fontSize: 14, height: 1.5),
-                    ),
+                    Text(_getUserStrengthIntro(), style: const TextStyle(fontSize: 14, height: 1.5)),
                     const SizedBox(height: 16),
                     ..._getRecommendedCareers().map((career) => _buildCareerCard(career)).toList(),
                   ],
@@ -172,7 +160,7 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
               const SizedBox(height: 20),
 
-              // --- 2. Scholarship Opportunity (Card UI with Apply Button) ---
+              // --- 2. Scholarship Opportunity ---
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: _cardDecoration(),
@@ -183,21 +171,11 @@ class _ResultScreenState extends State<ResultScreen> {
                       children: [
                         const Icon(Icons.card_giftcard, color: Color(0xFF673AB7), size: 24),
                         const SizedBox(width: 10),
-                        Text(
-                          'Scholarship Matches',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF673AB7),
-                          ),
-                        ),
+                        Text('Scholarship Matches', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color(0xFF673AB7))),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      _getScholarshipIntro(),
-                      style: const TextStyle(fontSize: 14, height: 1.5),
-                    ),
+                    Text(_getScholarshipIntro(), style: const TextStyle(fontSize: 14, height: 1.5)),
                     const SizedBox(height: 16),
                     ..._getRecommendedScholarships().map((scholarship) => _buildScholarshipCard(scholarship)).toList(),
                   ],
@@ -207,6 +185,10 @@ class _ResultScreenState extends State<ResultScreen> {
 
               // --- 3. Matched Courses ---
               _buildMatchedCoursesSection(),
+              const SizedBox(height: 20),
+
+              // --- 4. NEW: AI Resume & Profile Analysis ---
+              _buildResumeAnalysisSection(),
               const SizedBox(height: 30),
 
               ElevatedButton.icon(
@@ -268,6 +250,101 @@ class _ResultScreenState extends State<ResultScreen> {
       ),
     );
   }
+
+  // ==========================================
+  // AI Resume Analysis Builder (Updated)
+  // ==========================================
+  Widget _buildResumeAnalysisSection() {
+    if (_resumeFeedbackFuture == null) return const SizedBox.shrink();
+
+    return FutureBuilder<String>(
+      future: _resumeFeedbackFuture,
+      builder: (context, snapshot) {
+        // 1. Loading State
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            padding: const EdgeInsets.all(24),
+            decoration: _cardDecoration(),
+            child: Row(
+              children: [
+                const SizedBox(
+                    width: 24, height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF673AB7))
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    widget.resumeFile != null
+                        ? "AI is analyzing your resume and profile..."
+                        : "AI is analyzing your profile...",
+                    style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // 2. Error/Fallback State (Will show even if API fails)
+        String aiText = snapshot.data ?? "⚠️ AI analysis is currently unavailable. Please check your connection.";
+
+        // 3. Success State
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFF673AB7).withOpacity(0.3), width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF673AB7).withOpacity(0.1),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF673AB7).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.document_scanner, color: Color(0xFF673AB7), size: 24),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'AI Profile & Resume Feedback',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF673AB7),
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Divider(height: 1),
+              ),
+              Text(
+                aiText,
+                style: const TextStyle(fontSize: 14, height: 1.6, color: Colors.black87),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ==========================================
+  // EXISTING METHODS
+  // ==========================================
 
   String _getUserStrengthIntro() {
     int aCount = widget.grades.values.where((g) => g.startsWith('A')).length;
