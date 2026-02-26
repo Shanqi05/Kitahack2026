@@ -26,34 +26,7 @@ class _CareerListScreenState extends State<CareerListScreen> {
     final isLargeScreen = MediaQuery.of(context).size.width > 800;
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF673AB7), Color(0xFF512DA8)],
-            ),
-          ),
-          child: Column(
-            children: [
-              const AppHeader(showBackButton: true),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                child: Text(
-                  'Career Insights',
-                  style: GoogleFonts.poppins(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      backgroundColor: Colors.transparent,
       body: FutureBuilder<List<CareerModel>>(
         future: _careersFuture,
         builder: (context, snapshot) {

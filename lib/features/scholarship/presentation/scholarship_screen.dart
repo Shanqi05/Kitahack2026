@@ -50,6 +50,7 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -60,8 +61,6 @@ class _ScholarshipScreenState extends State<ScholarshipScreen> {
         ),
         child: Column(
           children: [
-            // Header
-            const AppHeader(showBackButton: true),
             // Title
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),

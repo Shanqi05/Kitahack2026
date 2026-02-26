@@ -57,11 +57,7 @@ class _QualificationScreenState extends State<QualificationScreen>
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Select Qualification"),
-        backgroundColor: const Color(0xFF673AB7),
-        elevation: 0,
-      ),
+      backgroundColor: Colors.transparent,
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Container(

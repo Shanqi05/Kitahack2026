@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart'; // Added Provider
+
 import 'core/theme/app_theme.dart';
-import 'features/home/presentation/home_screen.dart';
+import 'core/models/user_session_model.dart'; // Added User Session
 import 'services/firebase_service.dart';
+
+// The new Front Door!
+import 'features/dashboard/screens/main_dashboard_shell.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables from .env file (skip on web)
   try {
-    // Only attempt to load .env on native platforms
     if (!identical(0, 0.0)) {
-      // This is always false, but keeps web-safe structure
       await dotenv.load(fileName: ".env");
     }
   } catch (e) {
@@ -29,11 +32,18 @@ class SleepNotFound404App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SleepNotFound404',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+    // We MUST wrap the app in a Provider so Warren's dashboard can read the user data!
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserSessionModel()),
+      ],
+      child: MaterialApp(
+        title: 'SleepNotFound404',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        // Bypass the old HomeScreen and load the new Dashboard Shell
+        home: const MainDashboardShell(),
+      ),
     );
   }
 }
