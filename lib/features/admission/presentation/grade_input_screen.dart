@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import '../../../../widgets/grade_input_field.dart';
-import '../../../../widgets/custom_button.dart';
+import '../../../widgets/grade_input_field.dart';
+import '../../../widgets/custom_button.dart';
 import 'interest_selection_screen.dart';
 
 class GradeInputScreen extends StatefulWidget {
