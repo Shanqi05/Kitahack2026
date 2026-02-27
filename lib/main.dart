@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart'; // Added Provider
-
+import 'features/auth/screens/login_screen.dart';
 import 'core/theme/app_theme.dart';
 import 'core/models/user_session_model.dart'; // Added User Session
 import 'services/firebase_service.dart';
@@ -42,7 +42,7 @@ class SleepNotFound404App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         // Bypass the old HomeScreen and load the new Dashboard Shell
-        home: const MainDashboardShell(),
+        home: const LoginScreen(),
       ),
     );
   }

@@ -176,6 +176,41 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
             isSelected: _selectedIndex == 4,
             onTap: () => setState(() => _selectedIndex = 4),
           ),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () async {
+                // 1. Sign out of Firebase
+                await FirebaseAuth.instance.signOut();
+
+                // 2. Route back to the Login Screen
+                if (context.mounted) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        (route) => false,
+                  );
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Row(
+                  children: [
+                    const Icon(Icons.logout, color: Colors.redAccent),
+                    const SizedBox(width: 16),
+                    Text(
+                      'Log Out',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
