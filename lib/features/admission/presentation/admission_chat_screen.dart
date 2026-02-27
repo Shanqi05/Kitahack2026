@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 // Use relative import to ensure the file is found
 import '../../../services/gemini_service.dart';
@@ -250,14 +251,22 @@ Keep responses concise and actionable.
                                   ),
                                 ],
                               ),
-                              child: Text(
-                                message.text,
-                                style: TextStyle(
-                                  color: message.isUser
-                                      ? Colors.white
-                                      : Colors.black87,
-                                  fontSize: 14,
-                                  height: 1.5,
+                              child: MarkdownBody(
+                                data: message.text,
+                                selectable: true,
+                                styleSheet: MarkdownStyleSheet(
+                                  p: TextStyle(
+                                    color: message.isUser ? Colors.white : Colors.black87,
+                                    fontSize: 14,
+                                    height: 1.5,
+                                  ),
+                                  strong: TextStyle( // This controls the **bold** text
+                                    color: message.isUser ? Colors.white : Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  listBullet: TextStyle( // This fixes the bullet points
+                                    color: message.isUser ? Colors.white : Colors.black87,
+                                  ),
                                 ),
                               ),
                             ),

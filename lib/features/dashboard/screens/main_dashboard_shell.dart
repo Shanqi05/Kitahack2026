@@ -24,12 +24,11 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text("Analysis Dashboard (Your Profile Analysis)")),
-    const AiChatTab(),
     const QualificationScreen(), // Index 0: Admission
-    const CareerListScreen(),      // Index 1: Career
-    const ScholarshipScreen(),     // Index 2: Scholarships
-    const ProfileSettingsScreen(), // Index 3: Profile (Warren's)
+    const AiChatTab(),
+    const ScholarshipScreen(),     // Index 1: Scholarships
+    const CareerListScreen(),      // Index 2: Career
+    const ProfileSettingsScreen(), // Index 3: Profile
   ];
 
   @override
@@ -139,7 +138,7 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
           const SizedBox(height: 48),
           _SideBarItem(
             icon: Icons.analytics_outlined,
-            label: "Analysis",
+            label: "Course Analysis",
             isSelected: _selectedIndex == 0,
             onTap: () => setState(() => _selectedIndex = 0),
           ),
@@ -157,7 +156,7 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
           ),
           _SideBarItem(
             icon: Icons.article_outlined,
-            label: "News & Info",
+            label: "Career Info",
             isSelected: _selectedIndex == 3,
             onTap: () => setState(() => _selectedIndex = 3),
           ),
