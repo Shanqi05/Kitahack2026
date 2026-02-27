@@ -1,0 +1,626 @@
+[
+  {
+    "id": "CS",
+    "name": "Computer Science",
+    "field": [
+      "IT",
+      "AI"
+    ],
+    "level": [
+      "Diploma",
+      "Degree",
+      "Foundation",
+      "Asasi"
+    ]
+  },
+  {
+    "id": "AI",
+    "name": "Artificial Intelligence",
+    "field": [
+      "AI"
+    ],
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "DS",
+    "name": "Data Science",
+    "field": [
+      "AI",
+      "Data Science"
+    ],
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "CYBER",
+    "name": "Computer Science with Cybersecurity",
+    "field": [
+      "AI",
+      "IT"
+    ],
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "SE",
+    "name": "Software Engineering",
+    "field": [
+      "AI",
+      "IT"
+    ],
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "IT",
+    "name": "Information Technology",
+    "field": "IT",
+    "level": [
+      "Diploma",
+      "Degree",
+      "Foundation",
+      "Asasi"
+    ]
+  },
+  {
+    "id": "IS",
+    "name": "Information Systems",
+    "field": "IT",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "MULTIMEDIA",
+    "name": "Multimedia Technology",
+    "field": "IT",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "MECH",
+    "name": "Mechanical Engineering",
+    "field": "Engineering",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "ELEC",
+    "name": "Electrical Engineering",
+    "field": "Engineering",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "CIVIL",
+    "name": "Civil Engineering",
+    "field": "Engineering",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "CHEM_ENG",
+    "name": "Chemical Engineering",
+    "field": "Engineering",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "ARCH",
+    "name": "Architecture",
+    "field": "Engineering",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "ART",
+    "name": "Fine Arts",
+    "field": "Arts",
+    "level": [
+      "Degree",
+      "Foundation",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DESIGN",
+    "name": "Graphic Design",
+    "field": "Arts",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "HBP",
+    "name": "Hospitality & Business Professional",
+    "field": "Business",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "BUS",
+    "name": "Business Administration",
+    "field": "Business",
+    "level": [
+      "Diploma",
+      "Degree",
+      "Foundation"
+    ]
+  },
+  {
+    "id": "ACC",
+    "name": "Accounting",
+    "field": "Finance",
+    "level": [
+      "Diploma",
+      "Degree",
+      "Foundation"
+    ]
+  },
+  {
+    "id": "HM",
+    "name": "Hotel Management",
+    "field": "Business",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "FINC",
+    "name": "Finance",
+    "field": "Finance",
+    "level": [
+      "Diploma",
+      "Degree",
+      "Foundation"
+    ]
+  },
+  {
+    "id": "ECON",
+    "name": "Economics",
+    "field": "Finance",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "BIO",
+    "name": "Biotechnology",
+    "field": "Science",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "CHEM",
+    "name": "Chemistry",
+    "field": "Science",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "PHYS",
+    "name": "Physics",
+    "field": "Science",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "ASASI_IT",
+    "name": "Asasi Information Technology",
+    "field": "IT",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_ENG",
+    "name": "Asasi Engineering",
+    "field": "Engineering",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_SCI",
+    "name": "Asasi Science",
+    "field": "Science",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_KEJURUTERAAN",
+    "name": "Asasi Kejuruteraan",
+    "field": "Engineering",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_PENGURUSAN_DAN_STRATEGI",
+    "name": "Asasi Pengurusan dan Strategi",
+    "field": "Business",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_PERUBATAN",
+    "name": "Asasi Perubatan",
+    "field": "Health Science",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_SAINS_PERTANIAN",
+    "name": "Asasi Sains Pertanian",
+    "field": "Science",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_PINTAR",
+    "name": "Asasi PINTAR",
+    "field": "Engineering",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_SCIENCE",
+    "name": "Asasi Science",
+    "field": "Science",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_BIO",
+    "name": "Asasi Biotechnology",
+    "field": "Science",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "ASASI_HEALTH",
+    "name": "Asasi Health Science",
+    "field": "Health Science",
+    "level": [
+      "Asasi"
+    ]
+  },
+  {
+    "id": "IT_DIPLOMA",
+    "name": "Diploma Information Technology",
+    "field": "IT",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "IT_FOUND",
+    "name": "Foundation Information Technology",
+    "field": "IT",
+    "level": [
+      "Foundation"
+    ]
+  },
+  {
+    "id": "IT_DEGREE",
+    "name": "Degree Information Technology",
+    "field": "IT",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "ENG",
+    "name": "Engineering",
+    "field": "Engineering",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "ENG_DIPLOMA",
+    "name": "Diploma Engineering",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "ENG_FOUND",
+    "name": "Foundation Engineering",
+    "field": "Engineering",
+    "level": [
+      "Foundation"
+    ]
+  },
+  {
+    "id": "ENGINEERING",
+    "name": "Engineering Programme",
+    "field": "Engineering",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_ALAM_SEKITAR",
+    "name": "Diploma Kejuruteraan Alam Sekitar",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_ELEKTRIK",
+    "name": "Diploma Kejuruteraan Elektrik",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_ELEKTRONIK",
+    "name": "Diploma Kejuruteraan Elektronik",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_KIMIA",
+    "name": "Diploma Kejuruteraan Kimia",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_KOMPUTER",
+    "name": "Diploma Kejuruteraan Komputer",
+    "field": "IT",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_MEKATRONIK",
+    "name": "Diploma Kejuruteraan Mekatronik",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KEJURUTERAAN_PERUBATAN",
+    "name": "Diploma Kejuruteraan Perubatan",
+    "field": "Engineering",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KESIHATAN_HAIWAN_DAN_PENTERNAKAN",
+    "name": "Diploma Kesihatan Haiwan dan Penternakan",
+    "field": "Science",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_KESUHAWANAN",
+    "name": "Diploma Kesuhawanan",
+    "field": "Sports",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_MUZIK",
+    "name": "Diploma Muzik",
+    "field": "Music",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_PENDIDIKAN_AWAL_KANAK-KANAK",
+    "name": "Diploma Pendidikan Awal Kanak-kanak",
+    "field": "Education",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "DIPLOMA_SAINS_KOMPUTER",
+    "name": "Diploma Sains Komputer",
+    "field": "IT",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "BUS_DIPLOMA",
+    "name": "Diploma Business Administration",
+    "field": "Business",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "BUS_DEGREE",
+    "name": "Degree Business Administration",
+    "field": "Business",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "BUS_FOUND",
+    "name": "Foundation Business",
+    "field": "Business",
+    "level": [
+      "Foundation"
+    ]
+  },
+  {
+    "id": "BUSINESS",
+    "name": "Business Programme",
+    "field": "Business",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "COMM",
+    "name": "Communication",
+    "field": "Communication",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "COMM_DIPLOMA",
+    "name": "Diploma Communication",
+    "field": "Communication",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "COMM_DEGREE",
+    "name": "Degree Communication",
+    "field": "Communication",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "PSY",
+    "name": "Psychology",
+    "field": "Psychology",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "PSY_DEGREE",
+    "name": "Degree Psychology",
+    "field": "Psychology",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "HEALTH_FOUND",
+    "name": "Foundation Health Science",
+    "field": "Health Science",
+    "level": [
+      "Foundation"
+    ]
+  },
+  {
+    "id": "HEALTH_DIPLOMA",
+    "name": "Diploma Health Science",
+    "field": "Health Science",
+    "level": [
+      "Diploma"
+    ]
+  },
+  {
+    "id": "NURS",
+    "name": "Nursing",
+    "field": "Health Science",
+    "level": [
+      "Diploma",
+      "Degree"
+    ]
+  },
+  {
+    "id": "MECH_FOUND",
+    "name": "Foundation Mechanical Engineering",
+    "field": "Engineering",
+    "level": [
+      "Foundation"
+    ]
+  },
+  {
+    "id": "DESIGN_DEGREE",
+    "name": "Degree Graphic Design",
+    "field": "Arts",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "SOFTENG",
+    "name": "Software Engineering",
+    "field": "IT",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "CS_SEC",
+    "name": "Computer Science with Cybersecurity",
+    "field": "IT",
+    "level": [
+      "Degree"
+    ]
+  },
+  {
+    "id": "ENVR",
+    "name": "Environmental Science",
+    "field": "Science",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  },
+  {
+    "id": "AGRI",
+    "name": "Agriculture",
+    "field": "Science",
+    "level": [
+      "Degree",
+      "Diploma"
+    ]
+  }
+]
