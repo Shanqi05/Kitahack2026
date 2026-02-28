@@ -44,4 +44,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Sensitive Environment Variables and API Keys
 .env
+lib/core/constants/secrets.dart
+
+# Firebase Native Configs
+google-services.json
+GoogleService-Info.plist
