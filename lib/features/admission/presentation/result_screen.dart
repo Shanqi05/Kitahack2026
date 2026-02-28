@@ -5,6 +5,7 @@ import '../data/admission_engine.dart';
 import '../models/student_profile.dart';
 import '../data/career_insight_service.dart';
 import 'admission_chat_screen.dart';
+import '../../dashboard/screens/main_dashboard_shell.dart';
 
 class ResultScreen extends StatefulWidget {
   final String qualification;
@@ -365,10 +366,10 @@ class _ResultScreenState extends State<ResultScreen> {
               // Back to Home Button
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
+                  Navigator.pushAndRemoveUntil(
                     context,
-                    '/',
-                    (route) => false,
+                    MaterialPageRoute(builder: (context) => const MainDashboardShell()),
+                        (route) => false,
                   );
                 },
                 icon: const Icon(Icons.home),
