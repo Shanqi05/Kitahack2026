@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../admission/presentation/qualification_screen.dart';
 import '../../career/presentation/career_list_screen.dart';
 import '../../scholarship/presentation/scholarship_screen.dart';
+import '../../history/presentation/history_screen.dart';
 
 import '../../auth/screens/login_screen.dart';
 // import 'package:flutter_animate/flutter_animate.dart'; // Ensure this package is added or remove if unused
@@ -24,11 +25,12 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const QualificationScreen(), // Index 0: Admission
-    const AiChatTab(),
-    const ScholarshipScreen(),     // Index 1: Scholarships
-    const CareerListScreen(),      // Index 2: Career
-    const ProfileSettingsScreen(), // Index 3: Profile
+    const QualificationScreen(),   // Index 0: Admission
+    const AiChatTab(),             // Index 1: AI Chat
+    const ScholarshipScreen(),     // Index 2: Scholarships
+    const CareerListScreen(),      // Index 3: Career
+    const HistoryScreen(),         // Index 4: History (NEW)
+    const ProfileSettingsScreen(), // Index 5: Profile (Moved from 4 to 5)
   ];
 
   @override
@@ -71,35 +73,21 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
       bottomNavigationBar: isDesktop
           ? null
           : NavigationBar(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              destinations: const [
-                NavigationDestination(
-                  icon: Icon(Icons.analytics_outlined),
-                  label: 'Analysis',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.chat_bubble_outline),
-                  label: 'AI Chat',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.school_outlined),
-                  label: 'Scholarships',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.article_outlined),
-                  label: 'News',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.person_outline),
-                  label: 'Profile',
-                ),
-              ],
-            ),
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.analytics_outlined), label: 'Analysis'),
+          NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'AI Chat'),
+          NavigationDestination(icon: Icon(Icons.school_outlined), label: 'Scholarships'),
+          NavigationDestination(icon: Icon(Icons.article_outlined), label: 'Careers'),
+          NavigationDestination(icon: Icon(Icons.history), label: 'History'), // 👇 NEW HISTORY TAB 👇
+          NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profile'),
+        ],
+      ),
     );
   }
 
@@ -161,10 +149,16 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
             onTap: () => setState(() => _selectedIndex = 3),
           ),
           _SideBarItem(
-            icon: Icons.person_outline,
-            label: "Profile",
+            icon: Icons.history,
+            label: "History",
             isSelected: _selectedIndex == 4,
             onTap: () => setState(() => _selectedIndex = 4),
+          ),
+          _SideBarItem(
+            icon: Icons.person_outline,
+            label: "Profile",
+            isSelected: _selectedIndex == 5,
+            onTap: () => setState(() => _selectedIndex = 5),
           ),
           const Spacer(),
           const Divider(),
@@ -173,8 +167,8 @@ class _MainDashboardShellState extends State<MainDashboardShell> {
             label: userModel.fullName.isNotEmpty
                 ? userModel.fullName
                 : 'Guest User',
-            isSelected: _selectedIndex == 4,
-            onTap: () => setState(() => _selectedIndex = 4),
+            isSelected: _selectedIndex == 5,
+            onTap: () => setState(() => _selectedIndex = 5),
           ),
           Material(
             color: Colors.transparent,
