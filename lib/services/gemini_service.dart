@@ -3,156 +3,147 @@ import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 
 class GeminiService {
-  // API Key from new setup
   final String apiKey = "AIzaSyD_uZ5GiImGwscC0Ow7PD7HqWTfpwn4-ks";
-  
-  // REST API endpoint - using models that definitely work
   final String baseUrl = "https://generativelanguage.googleapis.com/v1beta/models";
-  
-  // Try these models in order
+
   final List<String> modelsToTry = [
     'gemini-1.5-flash',
-    'gemini-1.5-pro', 
+    'gemini-1.5-pro',
     'gemini-pro',
     'gemini-2.0-flash',
   ];
 
   GeminiService();
 
-  /// Sends a message to the Gemini API and returns the text response
-  Future<String> sendMessage(String message) async {
+  Future<String> sendMessage(String message, {PlatformFile? file}) async {
     try {
-      // Check if API Key is valid
       if (apiKey.isEmpty || apiKey == "YOUR_API_KEY_HERE") {
         return "⚠️ Error: API Key is missing. Please check gemini_service.dart";
       }
 
-      // Try each model until one works
+      // Step 1: Try sending with the file
       for (String model in modelsToTry) {
-        final result = await _tryModel(model, message);
+        final result = await _tryModel(model, message, file: file);
         if (result != null && !result.contains('Error')) {
-          return result;
+          // 🔥 NEW: Explicitly tell the user the file was successfully read!
+          if (file != null) {
+            return "✅ **[Success: Resume file read & analyzed by AI]**\n\n$result";
+          }
+          return result; // Normal text-only response (if no file was uploaded)
         }
       }
-      
+
+      // Step 2: INTELLIGENT FALLBACK
+      // 如果带文件发送失败，剥离文件，单纯发送文字！
+      if (file != null) {
+        print("File upload failed, retrying with text only (Fallback)...");
+        for (String model in modelsToTry) {
+          final result = await _tryModel(model, message, file: null);
+          if (result != null && !result.contains('Error')) {
+            // 🔥 NEW: Tell the user it fell back to Profile-only mode
+            return "⚠️ **[Notice: Resume file unreadable (format/size issue). Analysis is based on your Grades & Interests instead]**\n\n$result";
+          }
+        }
+      }
+
       return "⚠️ Unable to reach AI service. Please try again in a moment.";
     } catch (e) {
       return "Connection Error: $e";
     }
   }
 
-  /// Try to send message with a specific model
-  Future<String?> _tryModel(String model, String message) async {
+  Future<String?> _tryModel(String model, String message, {PlatformFile? file}) async {
     try {
-      final url = Uri.parse(
-        "$baseUrl/$model:generateContent?key=$apiKey"
-      );
+      final url = Uri.parse("$baseUrl/$model:generateContent?key=$apiKey");
+
+      List<Map<String, dynamic>> parts = [
+        {"text": message}
+      ];
+
+      if (file != null && file.bytes != null) {
+        String base64Data = base64Encode(file.bytes!);
+        String mimeType = 'application/pdf';
+
+        final ext = file.extension?.toLowerCase();
+        if (ext == 'png') mimeType = 'image/png';
+        else if (ext == 'jpg' || ext == 'jpeg') mimeType = 'image/jpeg';
+
+        parts.add({
+          "inlineData": {
+            "mimeType": mimeType,
+            "data": base64Data
+          }
+        });
+      }
 
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "contents": [
-            {
-              "parts": [
-                {"text": message}
-              ]
-            }
-          ]
+          "contents": [{"parts": parts}]
         }),
-      ).timeout(const Duration(seconds: 30));
+      ).timeout(const Duration(seconds: 40));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        
         if (data['candidates'] != null &&
             data['candidates'].isNotEmpty &&
             data['candidates'][0]['content'] != null &&
             data['candidates'][0]['content']['parts'] != null) {
-          
           final text = data['candidates'][0]['content']['parts'][0]['text'];
           return text ?? "Empty response";
         }
       } else if (response.statusCode == 404) {
-        // Model not found, try next one
         return null;
       } else {
-        return "Error (${response.statusCode})";
+        return "Error (${response.statusCode}): ${response.body}";
       }
     } catch (e) {
-      // Connection error, try next model
       return null;
     }
     return null;
   }
 
-  /// Get career recommendations based on student profile
+  // =========================================================================
+  // Resume Analysis
+  // =========================================================================
+  Future<String> getResumeFeedback(PlatformFile? file, Map<String, String> grades, List<String> interests) async {
+    String fileNameInfo = file != null ? "The student uploaded a resume named '${file.name}'." : "No resume file was attached.";
+
+    final prompt = """
+You are an expert university admission officer and career counselor. 
+$fileNameInfo
+Here is the student's background profile:
+- Academic Grades: ${grades.entries.map((e) => "${e.key}: ${e.value}").join(", ")}
+- Career Interests: ${interests.join(", ")}
+
+Based on this academic profile (and the resume if readable), provide a direct, concise analysis structured EXACTLY like this (use the emojis):
+
+🌟 **Profile & Resume Strengths**
+(List 2 strong points about their grades or how their interests align with their background)
+
+📈 **Areas for Improvement**
+(List 2 specific things they should add to their resume or skills they should learn based on their interests)
+
+💡 **Admission Advice**
+(Give 1 short paragraph of highly practical advice on how they can stand out in university applications)
+
+Be encouraging but highly practical. Do not include introductory or concluding pleasantries.
+""";
+
+    return await sendMessage(prompt, file: file);
+  }
+
   Future<String> getCareerRecommendations({
-    required String qualification,
-    required bool upu,
-    required Map<String, String> grades,
-    required List<String> interests,
-    double? budget,
-    PlatformFile? resumeFile,
+    required String qualification, required bool upu, required Map<String, String> grades, required List<String> interests, double? budget, PlatformFile? resumeFile,
   }) async {
-    // Format grades into a readable string
     String gradesSummary = grades.entries.map((e) => "${e.key}: ${e.value}").join(", ");
-
-    // Format resume info
     String resumeInfo = resumeFile != null ? "Resume: ${resumeFile.name}" : "No resume";
-
-    // Construct the prompt for the AI
-    final prompt = """
-You are a career counselor. Profile:
-- Qualification: $qualification
-- Mode: ${upu ? 'UPU' : 'Private'}
-- Grades: $gradesSummary
-- Interests: ${interests.join(', ')}
-- Budget: ${budget ?? 'No limit'}
-- $resumeInfo
-
-Suggest 3 courses and 2 universities in Malaysia. Keep it short.
-""";
-
+    final prompt = "You are a career counselor. Profile:\n- Qualification: $qualification\n- Mode: ${upu ? 'UPU' : 'Private'}\n- Grades: $gradesSummary\n- Interests: ${interests.join(', ')}\n- Budget: ${budget ?? 'No limit'}\n- $resumeInfo\nSuggest 3 courses and 2 universities in Malaysia. Keep it short.";
     return await sendMessage(prompt);
   }
 
-  /// Analyze uploaded resume and extract key information
   Future<String> analyzeResume(PlatformFile file) async {
-    final prompt = """
-The student has uploaded a resume/CV: "${file.name}"
-
-Please analyze this student's resume and extract:
-1. Key skills mentioned in the resume
-2. Academic strengths
-3. Extracurricular activities or achievements
-4. Recommended fields of study based on their background
-5. University program suggestions in Malaysia
-
-Format the response clearly with sections.
-""";
-    return await sendMessage(prompt);
-  }
-
-  /// Extract resume skills and profile summary
-  Future<String> extractResumeSkills(PlatformFile file, {
-    required String qualification,
-    required List<String> interests,
-  }) async {
-    final prompt = """
-Student has uploaded resume: "${file.name}"
-- Qualification: $qualification
-- Interests: ${interests.join(', ')}
-
-Extract and list:
-1. Technical skills found in resume
-2. Soft skills demonstrated
-3. Relevant work experience or projects
-4. How resume aligns with their interests: ${interests.join(', ')}
-5. Top 3 course recommendations in Malaysia universities
-
-Be specific and concise.
-""";
-    return await sendMessage(prompt);
+    return await sendMessage("Analyze this resume and extract key skills, strengths, and recommended study fields.", file: file);
   }
 }

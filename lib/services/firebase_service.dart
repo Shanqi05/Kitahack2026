@@ -22,13 +22,11 @@ class FirebaseService {
   FirebaseAuth get auth => FirebaseAuth.instance;
   FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
-  // Example: Sign in anonymously
   Future<User?> signInAnonymously() async {
     final userCredential = await auth.signInAnonymously();
     return userCredential.user;
   }
 
-  // Example: Save message to Firestore
   Future<void> saveChatMessage(String uid, String message, String role) async {
     await firestore.collection('chats').add({
       'uid': uid,
@@ -36,5 +34,36 @@ class FirebaseService {
       'role': role,
       'timestamp': FieldValue.serverTimestamp(),
     });
+  }
+
+  Future<void> saveAdmissionResult({
+    required String qualification,
+    required Map<String, String> grades,
+    required List<String> interests,
+    required List<String> topCourses,
+    String? aiFeedback,
+    double? budget, // NEW
+  }) async {
+    try {
+      final user = auth.currentUser;
+      if (user == null) return;
+
+      await firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('admission_history')
+          .add({
+        'qualification': qualification,
+        'grades': grades,
+        'interests': interests,
+        'top_courses': topCourses,
+        'ai_feedback': aiFeedback ?? "No AI feedback generated.",
+        'budget': budget, // NEW
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+      print("✅ Result saved to history successfully!");
+    } catch (e) {
+      print("❌ Failed to save history: $e");
+    }
   }
 }

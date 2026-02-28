@@ -3,1173 +3,920 @@
     "university_id": "UM",
     "course_id": "AI",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "IS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "SE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "MULTIMEDIA",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "DS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "UUM",
     "course_id": "CS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 93.5,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
-  },
-  {
-    "university_id": "UM",
-    "course_id": "DS",
-    "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
-    "min_merit": 100,
-    "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "USM",
     "course_id": "CS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 100,
     "annual_fee": 8200,
-    "interest_field": [
-      "IT",
-      "AI"
-    ]
+    "interest_field": ["IT", "AI"],
+    "muet_band": 3
   },
   {
     "university_id": "UPNM",
     "course_id": "ASASI_KEJURUTERAAN",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 83.91,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UPNM",
     "course_id": "ASASI_PENGURUSAN_DAN_STRATEGI",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 79.03,
     "annual_fee": 6500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UPNM",
     "course_id": "ASASI_PERUBATAN",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6500,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 2
   },
   {
     "university_id": "UPM",
     "course_id": "ASASI_SAINS_PERTANIAN",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 89.34,
     "annual_fee": 6500,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 2
   },
   {
     "university_id": "UKM",
     "course_id": "ASASI_PINTAR",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 94.99,
     "annual_fee": 6500,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_ALAM_SEKITAR",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 0.01,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_ELEKTRIK",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 73.02,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_ELEKTRONIK",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 67.95,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_KIMIA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 87.55,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_KOMPUTER",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 75.87,
     "annual_fee": 6500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_MEKATRONIK",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 71.41,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UMP",
     "course_id": "DIPLOMA_KEJURUTERAAN_PERUBATAN",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 75.87,
     "annual_fee": 6500,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 2
   },
   {
     "university_id": "UPM",
     "course_id": "DIPLOMA_KESIHATAN_HAIWAN_DAN_PENTERNAKAN",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 85.06,
     "annual_fee": 6500,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 2
   },
   {
     "university_id": "UPSI",
     "course_id": "DIPLOMA_KESUHAWANAN",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 87.86,
     "annual_fee": 6500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UPSI",
     "course_id": "DIPLOMA_MUZIK",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 65.83,
     "annual_fee": 6500,
-    "interest_field": "Music"
+    "interest_field": "Music",
+    "muet_band": 2
   },
   {
     "university_id": "UPSI",
     "course_id": "DIPLOMA_PENDIDIKAN_AWAL_KANAK-KANAK",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 78.37,
     "annual_fee": 6500,
-    "interest_field": "Education"
+    "interest_field": "Education",
+    "muet_band": 2
   },
   {
     "university_id": "UPSI",
     "course_id": "DIPLOMA_SAINS_KOMPUTER",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 89.22,
     "annual_fee": 6500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UM",
     "course_id": "MECH",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 88,
     "annual_fee": 8200,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "ELEC",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 87,
     "annual_fee": 8200,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "CIVIL",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 86,
     "annual_fee": 8000,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "UM",
     "course_id": "ASASI_IT",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UM",
     "course_id": "ASASI_ENG",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6500,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UM",
     "course_id": "ASASI_SCI",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6500,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 2
   },
   {
     "university_id": "UKM",
     "course_id": "CS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 91,
     "annual_fee": 7800,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "UKM",
     "course_id": "SOFTENG",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 89,
     "annual_fee": 7800,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "UKM",
     "course_id": "MECH",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 86,
     "annual_fee": 8000,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "UKM",
     "course_id": "ASASI_IT",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6300,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UKM",
     "course_id": "IT_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 70,
     "annual_fee": 7200,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "USM",
     "course_id": "DS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 90,
     "annual_fee": 7500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "USM",
     "course_id": "CS_SEC",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 88,
     "annual_fee": 7500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "USM",
     "course_id": "ART",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 80,
     "annual_fee": 8500,
-    "interest_field": "Arts"
+    "interest_field": "Arts",
+    "muet_band": 3
   },
   {
     "university_id": "USM",
     "course_id": "ASASI_SCIENCE",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6200,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 2
   },
   {
     "university_id": "UPM",
     "course_id": "BIO",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 82,
     "annual_fee": 7500,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 3
   },
   {
     "university_id": "UPM",
     "course_id": "CHEM",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 81,
     "annual_fee": 7300,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 3
   },
   {
     "university_id": "UPM",
     "course_id": "ENVR",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 80,
     "annual_fee": 7400,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 3
   },
   {
     "university_id": "UPM",
     "course_id": "AGRI",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 78,
     "annual_fee": 7200,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 3
   },
   {
     "university_id": "UPM",
     "course_id": "ASASI_BIO",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 6400,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 2
   },
   {
     "university_id": "UITM",
     "course_id": "COMM_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 65,
     "annual_fee": 4800,
-    "interest_field": "Communication"
+    "interest_field": "Communication",
+    "muet_band": 2
   },
   {
     "university_id": "UITM",
     "course_id": "BUS_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 68,
     "annual_fee": 5000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 2
   },
   {
     "university_id": "UITM",
     "course_id": "IT_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 70,
     "annual_fee": 5200,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UITM",
     "course_id": "ACC",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 75,
     "annual_fee": 6500,
-    "interest_field": "Finance"
+    "interest_field": "Finance",
+    "muet_band": 3
   },
   {
     "university_id": "UITM",
     "course_id": "HM",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 72,
     "annual_fee": 6200,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 3
   },
   {
     "university_id": "UNIMAS",
     "course_id": "IT",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 80,
     "annual_fee": 7000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "UNIMAS",
     "course_id": "ENG",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 78,
     "annual_fee": 7200,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "UNIMAS",
     "course_id": "IT_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 65,
     "annual_fee": 6000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UNIMAS",
     "course_id": "ASASI_IT",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 5500,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UNIMAS",
     "course_id": "ASASI_ENG",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 5600,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UNIMAP",
     "course_id": "ENG",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 75,
     "annual_fee": 7100,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "UNIMAP",
     "course_id": "IT",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 80,
     "annual_fee": 7000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "UNIMAP",
     "course_id": "ENG_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 60,
     "annual_fee": 5800,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "UNIMAP",
     "course_id": "ASASI_ENG",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 5400,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "TAY",
     "course_id": "CS",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 40000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "TAY",
     "course_id": "MECH_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 42000,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "TAY",
     "course_id": "DESIGN",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 42000,
-    "interest_field": "Arts"
+    "interest_field": "Arts",
+    "muet_band": 2
   },
   {
     "university_id": "TAY",
     "course_id": "ENGINEERING",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 48000,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 3
   },
   {
     "university_id": "HELP",
     "course_id": "HBP",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 30000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 2
   },
   {
     "university_id": "HELP",
     "course_id": "HEALTH_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 32000,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 2
   },
   {
     "university_id": "HELP",
     "course_id": "BUS_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 38000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 3
   },
   {
     "university_id": "MONASH",
     "course_id": "MECH",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 40000,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "MONASH",
     "course_id": "IT_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 38000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "MONASH",
     "course_id": "BUSINESS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 45000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 4
   },
   {
     "university_id": "SUNWAY",
     "course_id": "COMM",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 38000,
-    "interest_field": "Communication"
+    "interest_field": "Communication",
+    "muet_band": 2
   },
   {
     "university_id": "SUNWAY",
     "course_id": "COMM_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 44000,
-    "interest_field": "Communication"
+    "interest_field": "Communication",
+    "muet_band": 3
   },
   {
     "university_id": "SUNWAY",
     "course_id": "BUSINESS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 42000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 3
   },
   {
     "university_id": "INTI",
     "course_id": "PSY",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 36000,
-    "interest_field": "Psychology"
+    "interest_field": "Psychology",
+    "muet_band": 3
   },
   {
     "university_id": "INTI",
     "course_id": "ENG_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 35000,
-    "interest_field": "Engineering"
+    "interest_field": "Engineering",
+    "muet_band": 2
   },
   {
     "university_id": "INTI",
     "course_id": "IT_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 34000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UCSI",
     "course_id": "PSY",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 30000,
-    "interest_field": "Psychology"
+    "interest_field": "Psychology",
+    "muet_band": 2
   },
   {
     "university_id": "UCSI",
     "course_id": "PSY_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 38000,
-    "interest_field": "Psychology"
+    "interest_field": "Psychology",
+    "muet_band": 3
   },
   {
     "university_id": "UCSI",
     "course_id": "IT_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 32000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "UMS",
     "course_id": "NURS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 85,
     "annual_fee": 7200,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 3
   },
   {
     "university_id": "UMS",
     "course_id": "PHYS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_UPU",
-      "Matrikulasi_UPU",
-      "Asasi_UPU",
-      "Diploma_UPU"
-    ],
+    "entry_mode": ["STPM_UPU", "Matrikulasi_UPU", "Asasi_UPU", "Diploma_UPU"],
     "min_merit": 81,
     "annual_fee": 7500,
-    "interest_field": "Science"
+    "interest_field": "Science",
+    "muet_band": 3
   },
   {
     "university_id": "UMS",
     "course_id": "HEALTH_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": 72,
     "annual_fee": 6800,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 2
   },
   {
     "university_id": "UMS",
     "course_id": "ASASI_HEALTH",
     "level": "Asasi",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 5800,
-    "interest_field": "Health Science"
+    "interest_field": "Health Science",
+    "muet_band": 2
   },
   {
     "university_id": "KDU",
     "course_id": "DESIGN",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 32000,
-    "interest_field": "Arts"
+    "interest_field": "Arts",
+    "muet_band": 2
   },
   {
     "university_id": "KDU",
     "course_id": "DESIGN_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 40000,
-    "interest_field": "Arts"
+    "interest_field": "Arts",
+    "muet_band": 3
   },
   {
     "university_id": "TAYLOR",
     "course_id": "BUS_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 36000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 2
   },
   {
     "university_id": "TAYLOR",
     "course_id": "BUS_FOUND",
     "level": "Foundation",
-    "entry_mode": [
-      "SPM_Direct"
-    ],
+    "entry_mode": ["SPM_Direct"],
     "min_merit": null,
     "annual_fee": 32000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 2
   },
   {
     "university_id": "TAYLOR",
     "course_id": "IT_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 42000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "APU",
     "course_id": "IT_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 28000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "APU",
     "course_id": "IT_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 36000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "APU",
     "course_id": "BUSINESS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 34000,
-    "interest_field": "Business"
+    "interest_field": "Business",
+    "muet_band": 3
   },
   {
     "university_id": "MMU",
     "course_id": "IT_DIPLOMA",
     "level": "Diploma",
-    "entry_mode": [
-      "SPM_UPU"
-    ],
+    "entry_mode": ["SPM_UPU"],
     "min_merit": null,
     "annual_fee": 26000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 2
   },
   {
     "university_id": "MMU",
     "course_id": "IT_DEGREE",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 32000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   },
   {
     "university_id": "MMU",
     "course_id": "CS",
     "level": "Degree",
-    "entry_mode": [
-      "STPM_Direct",
-      "Matrikulasi_Direct",
-      "Asasi_Direct",
-      "Diploma_Direct"
-    ],
+    "entry_mode": ["STPM_Direct", "Matrikulasi_Direct", "Asasi_Direct", "Diploma_Direct"],
     "min_merit": null,
     "annual_fee": 33000,
-    "interest_field": "IT"
+    "interest_field": "IT",
+    "muet_band": 3
   }
 ]
