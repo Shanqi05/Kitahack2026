@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -133,7 +134,32 @@ class HistoryScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(color: Colors.orange.withOpacity(0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orange.withOpacity(0.3))),
-                            child: Text(aiFeedback, style: const TextStyle(fontSize: 13, height: 1.5, color: Colors.black87)),
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(color: Colors.orange.withOpacity(0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orange.withOpacity(0.3))),
+
+
+                              child: MarkdownBody(
+                                data: aiFeedback,
+                                selectable: true,
+                                styleSheet: MarkdownStyleSheet(
+                                  p: const TextStyle(
+                                    fontSize: 13,
+                                    height: 1.5,
+                                    color: Colors.black87,
+                                  ),
+                                  strong: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                  listBullet: const TextStyle(
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              // 👆 END OF MARKDOWNBODY 👆
+
+                            ),
                           ),
                         ],
                       ),

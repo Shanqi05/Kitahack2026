@@ -8,6 +8,7 @@ import '../../../services/gemini_service.dart';
 import '../../../services/firebase_service.dart';
 import '../../home/presentation/home_screen.dart';
 import '../../dashboard/screens/main_dashboard_shell.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ResultScreen extends StatefulWidget {
   final String qualification;
@@ -368,9 +369,23 @@ class _ResultScreenState extends State<ResultScreen> {
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Divider(height: 1),
               ),
-              Text(
-                aiText,
-                style: const TextStyle(fontSize: 14, height: 1.6, color: Colors.black87),
+              MarkdownBody(
+                data: aiText,
+                selectable: true,
+                styleSheet: MarkdownStyleSheet(
+                  p: const TextStyle(
+                    fontSize: 14,
+                    height: 1.6,
+                    color: Colors.black87,
+                  ),
+                  strong: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  listBullet: const TextStyle(
+                    color: Colors.black87,
+                  ),
+                ),
               ),
             ],
           ),

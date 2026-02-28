@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
+import '../core/constants/secrets.dart'; // Ensure this points to your secrets file!
 
 class GeminiService {
-  final String apiKey = "AIzaSyD_uZ5GiImGwscC0Ow7PD7HqWTfpwn4-ks";
+  // ✅ SECURELY PULLING KEY FROM SECRETS.DART
+  static const String _apiKey = Secrets.geminiApiKey;
   final String baseUrl = "https://generativelanguage.googleapis.com/v1beta/models";
 
   final List<String> modelsToTry = [
+    'gemini-2.5-flash',
     'gemini-1.5-flash',
     'gemini-1.5-pro',
     'gemini-pro',
@@ -17,30 +20,28 @@ class GeminiService {
 
   Future<String> sendMessage(String message, {PlatformFile? file}) async {
     try {
-      if (apiKey.isEmpty || apiKey == "YOUR_API_KEY_HERE") {
-        return "⚠️ Error: API Key is missing. Please check gemini_service.dart";
+      if (_apiKey.isEmpty || _apiKey == "YOUR_ACTUAL_API_KEY_HERE") {
+        return "⚠️ Error: API Key is missing. Please check secrets.dart";
       }
 
       // Step 1: Try sending with the file
       for (String model in modelsToTry) {
         final result = await _tryModel(model, message, file: file);
         if (result != null && !result.contains('Error')) {
-          // 🔥 NEW: Explicitly tell the user the file was successfully read!
+          // Explicitly tell the user the file was successfully read
           if (file != null) {
             return "✅ **[Success: Resume file read & analyzed by AI]**\n\n$result";
           }
-          return result; // Normal text-only response (if no file was uploaded)
+          return result; // Normal text-only response
         }
       }
 
-      // Step 2: INTELLIGENT FALLBACK
-      // 如果带文件发送失败，剥离文件，单纯发送文字！
+      // Step 2: INTELLIGENT FALLBACK (If file upload fails, retry with text only)
       if (file != null) {
         print("File upload failed, retrying with text only (Fallback)...");
         for (String model in modelsToTry) {
           final result = await _tryModel(model, message, file: null);
           if (result != null && !result.contains('Error')) {
-            // 🔥 NEW: Tell the user it fell back to Profile-only mode
             return "⚠️ **[Notice: Resume file unreadable (format/size issue). Analysis is based on your Grades & Interests instead]**\n\n$result";
           }
         }
@@ -54,7 +55,7 @@ class GeminiService {
 
   Future<String?> _tryModel(String model, String message, {PlatformFile? file}) async {
     try {
-      final url = Uri.parse("$baseUrl/$model:generateContent?key=$apiKey");
+      final url = Uri.parse("$baseUrl/$model:generateContent?key=$_apiKey");
 
       List<Map<String, dynamic>> parts = [
         {"text": message}
@@ -145,5 +146,61 @@ Be encouraging but highly practical. Do not include introductory or concluding p
 
   Future<String> analyzeResume(PlatformFile file) async {
     return await sendMessage("Analyze this resume and extract key skills, strengths, and recommended study fields.", file: file);
+  }
+
+  Future<Map<String, dynamic>> scanDocument(String imagePathOrBase64) async {
+    if (imagePathOrBase64 == "dummy_path") {
+      await Future.delayed(const Duration(seconds: 2));
+      return {
+        "subjects": [
+          {"name": "Bahasa Melayu", "grade": "A+"},
+          {"name": "English", "grade": "A"},
+          {"name": "Mathematics", "grade": "A-"},
+        ],
+      };
+    }
+
+    try {
+      final url = Uri.parse('$baseUrl/gemini-2.5-flash:generateContent?key=$_apiKey');
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "contents": [
+            {
+              "parts": [
+                {
+                  "text": "Analyze this SPM result slip. Extract ALL subjects and grades. Return JSON object with key 'subjects' which is a list. Rules: 1. Map Malay names to English/Standard names: 'Matematik'->'Mathematics', 'Fizik'->'Physics', 'Kimia'->'Chemistry', 'Biologi'->'Biology', 'Matematik Tambahan'->'Additional Mathematics', 'Prinsip Perakaunan'->'Principles of Accounting', 'Pendidikan Seni Visual'->'Visual Arts', 'Pendidikan Al-Quran dan Al-Sunnah'->'Al-Quran and Al-Sunnah Education', 'Pendidikan Syariah Islamiah'->'Syariah Islamiah Education', 'Tasawwur Islam'->'Islamic Worldview'. 2. Keep these names AS IS: 'Bahasa Melayu', 'Bahasa Inggeris', 'Sejarah', 'Pendidikan Islam', 'Pendidikan Moral', 'Bahasa Arab', 'Bahasa Cina', 'Bahasa Tamil'. 3. If 'English' is found, map to 'Bahasa Inggeris'. 4. Grade format: A+, A, A-, B+, B, C+, C, D, E, G. Example: {\"subjects\": [{\"name\": \"Bahasa Melayu\", \"grade\": \"A+\"}]}",
+                },
+                {
+                  "inline_data": {
+                    "mime_type": "image/jpeg",
+                    "data": imagePathOrBase64,
+                  },
+                },
+              ],
+            },
+          ],
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final candidates = data['candidates'] as List?;
+        if (candidates == null || candidates.isEmpty) throw Exception('No candidates.');
+        final text = candidates.first['content']?['parts']?.first['text'] as String?;
+        if (text == null) throw Exception('No text in response.');
+
+        final jsonStart = text.indexOf('{');
+        final jsonEnd = text.lastIndexOf('}');
+        if (jsonStart != -1 && jsonEnd != -1) {
+          return jsonDecode(text.substring(jsonStart, jsonEnd + 1));
+        }
+        throw Exception('Failed to parse JSON.');
+      }
+      throw Exception('HTTP ${response.statusCode}');
+    } catch (e) {
+      throw Exception('Gemini scan error: $e');
+    }
   }
 }
