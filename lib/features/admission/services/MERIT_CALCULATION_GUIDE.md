@@ -517,5 +517,5 @@ A: Yes. Each course/program can have different minimum merit requirements stored
 - [StudentProfile Model](../models/student_profile.dart)
 - [CourseModel](../models/course_model.dart)
 - [AdmissionEngine](./admission_engine.dart)
-- [MeritUtility](./merit_utility.dart)
+- [MeritUtility](merit_utility.dart)
 - [Test Suite](../../test/merit_calculator_test.dart)
